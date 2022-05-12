@@ -10,69 +10,78 @@
 </head>
 
 <body>
-  <h2 class="m-4 ">Sprint board</h2>
-
-  <div class="container" id="controlBoard">
-	<div class="row">
-	  <div class="col border">
-		<h4 class="text-center"> To Do </h4>
-		<div id="TODO" ondrop="drop(event)" ondragover="allowDrop(event)">
-		  <!-- Card da inserire automaticaticamente da query -->
-		  <div class="border border-primary p-2 mb-2 mt-2" draggable="true" ondragstart="drag(event)" id="drag1" width="100%" height="100%">
-		      <strong><p class="p-0 m-0"> Titolo della sub-task 1</p></strong>
-			  <p class="p-0 m-0"> Tempo stimato </p>
-			  <p class="p-0 m-0"> Tempo svolto </p>
-			  <p class="p-0 m-0"> Diff T stimato - T. Svolto </p>
-		  </div>
-		  <!-- Fine Card-->
-
-		  <!-- Card da inserire automaticaticamente da query -->
-		  <div class="border border-primary p-2 mb-2 mt-2" draggable="true" ondragstart="drag(event)" id="drag2" width="100%" height="100%">
-			<strong><p class="p-0 m-0"> Titolo della sub-task 2</p></strong>
-			<p class="p-0 m-0"> Tempo stimato </p>
-			<p class="p-0 m-0"> Tempo svolto </p>
-			<p class="p-0 m-0"> Diff T stimato - T. Svolto </p>
-			</div>
-			<!-- Fine Card-->
-
-			<!-- Card da inserire automaticaticamente da query -->
-			<div class="border border-primary p-2 mb-2 mt-2" draggable="true" ondragstart="drag(event)" id="drag3" width="100%" height="100%">
-				<strong><p class="p-0 m-0"> Titolo della sub-task 3</p></strong>
-				<p class="p-0 m-0"> Tempo stimato </p>
-				<p class="p-0 m-0"> Tempo svolto </p>
-				<p class="p-0 m-0"> Diff T stimato - T. Svolto </p>
-			</div>
-			<!-- Fine Card-->
-
-			<!-- Card da inserire automaticaticamente da query -->
-			<div class="border border-primary p-2 mb-2 mt-2" draggable="true" ondragstart="drag(event)" id="drag4" width="100%" height="100%">
-				<strong><p class="p-0 m-0"> Titolo della sub-task 4</p></strong>
-				<p class="p-0 m-0"> Tempo stimato </p>
-				<p class="p-0 m-0"> Tempo svolto </p>
-				<p class="p-0 m-0"> Diff T stimato - T. Svolto </p>
-			</div>
-			<!-- Fine Card-->
-
-			<!-- Card da inserire automaticaticamente da query -->
-			<div class="border border-primary p-2 mb-2 mt-2" draggable="true" ondragstart="drag(event)" id="drag5" width="100%" height="100%">
-				<strong><p class="p-0 m-0"> Titolo della sub-task 5</p></strong>
-				<p class="p-0 m-0"> Tempo stimato </p>
-				<p class="p-0 m-0"> Tempo svolto </p>
-				<p class="p-0 m-0"> Diff T stimato - T. Svolto </p>
-			</div>
-			<!-- Fine Card-->
-		</div>
-      </div>
-	  <div class="col border">
-		<h4 class="text-center"> In progress </h4>
-	    <div id="INPROGRESS" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-	  </div>
-	  <div class="col border">
-		<h4 class="text-center"> Done </h4>
-        <div id="DONE" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-	  </div>
-    </div>
+  <div class="sidebar" id="SideBar">
+	<a class="active" href="#SprintBoard">Sprint board</a>
+	<a href="#BackLog">Backlog</a>
+	<a href="#Profile">Profile</a>
+	<a href="#LogOut">Log Out</a>
   </div>
+
+  <div class="content">
+
+  <h2 class="m-4 text-center">Sprint board</h2>
+
+  <div class="container " id="controlBoard">
+	  <div class="row border p-2 m-1">
+		  <div class="col">
+			<h4 class="text-center"> To Do </h4>
+		  </div>
+		  <div class="col">
+			<h4 class="text-center"> In progress </h4>
+		  </div>
+		  <div class="col">
+			<h4 class="text-center"> Done </h4>
+		  </div>
+	  </div>
+
+	  <!-- Generato automaticamente da query -->
+	  <div class="container" id="Task">
+		<div class="row border p-2 m-1">
+		  <div class="text-center p-2">
+			<h5>Titolo della Task</h5> 
+		  </div>
+		  <div class="col border">
+			<div id="TODO" ondrop="drop(event)" ondragover="allowDrop(event)">
+			  <!-- Card da inserire automaticaticamente da query -->
+			  <div class="border border-primary p-2 mb-3 mt-3" draggable="true" ondragstart="drag(event)" id="drag1" width="100%" height="100%">
+				  <strong><p class="p-0 m-0"> Titolo della sub-task 1</p></strong>
+				  <p class="p-0 m-0"> Tempo stimato </p>
+				  <p class="p-0 m-0"> Tempo svolto </p>
+				  <p class="p-0 m-0"> Diff T stimato - T. Svolto </p>
+			  </div>
+			  <!-- Fine Card-->
+	
+			  <!-- Card da inserire automaticaticamente da query -->
+			  <div class="border border-primary p-2 mb-3 mt-3" draggable="true" ondragstart="drag(event)" id="drag2" width="100%" height="100%">
+				<strong><p class="p-0 m-0"> Titolo della sub-task 2</p></strong>
+				<p class="p-0 m-0"> Tempo stimato </p>
+				<p class="p-0 m-0"> Tempo svolto </p>
+				<p class="p-0 m-0"> Diff T stimato - T. Svolto </p>
+				</div>
+				<!-- Fine Card-->
+	
+				<!-- Card da inserire automaticaticamente da query -->
+				<div class="border border-primary p-2 mb-3 mt-3" draggable="true" ondragstart="drag(event)" id="drag3" width="100%" height="100%">
+					<strong><p class="p-0 m-0"> Titolo della sub-task 3</p></strong>
+					<p class="p-0 m-0"> Tempo stimato </p>
+					<p class="p-0 m-0"> Tempo svolto </p>
+					<p class="p-0 m-0"> Diff T stimato - T. Svolto </p>
+				</div>
+				<!-- Fine Card-->
+			</div>
+		  </div>
+		  <div class="col border">
+
+			<div id="INPROGRESS" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+		  </div>
+		  <div class="col border">
+
+			<div id="DONE" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+		  </div>
+		</div>
+	  </div>
+  </div>
+</div>
 </body>
 </html>
 
