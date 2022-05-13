@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Date
+from sqlalchemy import Column, Integer, String, Date, null
 from .database import Base
 
 class Sprint(Base):
@@ -8,9 +8,8 @@ class Sprint(Base):
     start_date = Column(Date)
     end_date = Column(Date)
 
-    def __init__(self, name=None, email=None):
+    def __init__(self, name):
         self.name = name
-        self.email = email
 
     def __repr__(self):
         return f'<Sprint {self.name!r}>'
