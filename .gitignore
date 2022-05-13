@@ -17,9 +17,11 @@ build/
 .idea/
 docs/_build/
 .vscode
+.cfg
 
 # Coverage reports
 htmlcov/
 .coverage
 .coverage.*
 *,cover
+pyvenv.cfg
