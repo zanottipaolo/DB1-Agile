@@ -19,25 +19,32 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@2.14.3/dist/full.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-    
+
+    {% if active_page != "login" %}
     <!-- Sidebar -->
     <div class="drawer drawer-mobile">
         <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
         <div class="drawer-content flex flex-col items-center justify-center">
-          <!-- Page content -->
-          <label for="my-drawer-2" class="btn btn-primary drawer-button lg:hidden">Open drawer</label>
-          {% block body %}{% endblock %}
+            <!-- Page content -->
+            <label for="my-drawer-2" class="btn btn-primary drawer-button lg:hidden">
+                X
+            </label>
+            {% block body %}{% endblock %}
         </div> 
         <div class="drawer-side">
-          <label for="my-drawer-2" class="drawer-overlay"></label> 
-          <ul class="menu p-4 overflow-y-auto w-80 bg-blue-100 text-base-content">
-            <!-- Sidebar content -->
-            <li><a>Sidebar Item 1</a></li>
-            <li><a>Sidebar Item 2</a></li>
-          </ul>
-        
+            <label for="my-drawer-2" class="drawer-overlay"></label> 
+            <ul class="menu p-4 overflow-y-auto w-80 bg-blue-100 text-base-content">
+                <!-- Sidebar content -->
+                <li><a>Sidebar Item 1</a></li>
+                <li><a>Sidebar Item 2</a></li>
+            </ul>
         </div>
-      </div>
+     </div>
+
+    {% else %}
+        {% block content %}{% endblock %}
+        
+    {% endif %}
 
     
 </body>
