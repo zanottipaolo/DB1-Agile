@@ -9,5 +9,5 @@ Made by:
 ### How to run
 
 1. Enable virtual enviroment with `<venv>/Scripts/activate`
-2. Set debug mode with `$env:FLASK_ENV = "development"` (on PowerShell)
+2. Set debug mode with `$env:FLASK_ENV = "development"` (on PowerShell) `set FLASK_ENV=development` (on CMD)
 3. Run with `flask run`
