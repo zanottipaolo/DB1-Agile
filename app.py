@@ -3,6 +3,9 @@ from flask import Flask, render_template, request
 # Database
 from backend.database import db_session
 
+# Models
+from backend.models import Sprint
+
 app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
@@ -14,7 +17,8 @@ def login():
 
 @app.route('/sprint', methods=['POST', 'GET'])
 def sprint():
-    return render_template('sprint.html')
+    sprint = Sprint.query.all()
+    return render_template('sprint.html', sprint=sprint)
 
 @app.route('/backlog', methods=['POST', 'GET'])
 def backlog():
