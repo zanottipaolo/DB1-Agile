@@ -1,10 +1,13 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-@app.route('/', methods=['POST', 'GET'])
-def index():
-    return render_template('login.html')
+@app.route('/', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        return render_template('login.html')
+    else:
+        return render_template('login.html')
 
 @app.route('/sprint', methods=['POST', 'GET'])
 def sprint():
