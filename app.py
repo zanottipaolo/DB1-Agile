@@ -1,5 +1,8 @@
 from flask import Flask, render_template, request
 
+# Database
+from backend.database import db_session
+
 app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
@@ -16,6 +19,11 @@ def sprint():
 @app.route('/backlog', methods=['POST', 'GET'])
 def backlog():
     return render_template('backlog.html')
+
+# Close connection to database when shutting down
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    db_session.remove()
 
 if __name__ == '__main__': 
      app.run(debug=True)
