@@ -1,19 +1,44 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="cupcake">
 <head>
+    <title>{% block title %}{% endblock %} - Gira</title>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Style -->
+    <link href="{{ url_for('static', filename='style/style.css') }}" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico">
 
     <!-- CDN Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- CDN DaisyUI-->
     <link href="https://cdn.jsdelivr.net/npm/daisyui@2.14.3/dist/full.css" rel="stylesheet" type="text/css" />
-    
-    {% block head %}{% endblock %}
 </head>
 <body>
-    {% block body %}{% endblock %}
+    
+    <!-- Sidebar -->
+    <div class="drawer drawer-mobile">
+        <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
+        <div class="drawer-content flex flex-col items-center justify-center">
+          <!-- Page content -->
+          <label for="my-drawer-2" class="btn btn-primary drawer-button lg:hidden">Open drawer</label>
+          {% block body %}{% endblock %}
+        </div> 
+        <div class="drawer-side">
+          <label for="my-drawer-2" class="drawer-overlay"></label> 
+          <ul class="menu p-4 overflow-y-auto w-80 bg-blue-100 text-base-content">
+            <!-- Sidebar content -->
+            <li><a>Sidebar Item 1</a></li>
+            <li><a>Sidebar Item 2</a></li>
+          </ul>
+        
+        </div>
+      </div>
+
+    
 </body>
 </html>
