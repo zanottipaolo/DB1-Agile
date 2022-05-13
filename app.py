@@ -10,5 +10,9 @@ def index():
 def sprint():
     return render_template('sprint.html')
 
+@app.route('/backlog', methods=['POST', 'GET'])
+def backlog():
+    return render_template('backlog.html')
+
 if __name__ == '__main__': 
      app.run(debug=True)
