@@ -38,10 +38,16 @@
             <label for="my-drawer-2" class="drawer-overlay"></label> 
             <ul class="menu p-4 overflow-y-auto w-80 bg-base-300 border-r-2 border-primary">
                 <!-- Sidebar content -->
-                <li><a>Active sprint</a></li>
-                <li><a>Backlog</a></li>
-                <li><a>Statistics</a></li>
-                <li><a>Profile</a></li>
+                <li class="disabled">
+                    <div class="avatar">
+                        <div class="w-24 rounded-full">
+                            <a href="#"><img src="https://api.lorem.space/image/face?hash=92310" /></a>
+                        </div>
+                    </div>
+                </li>
+                <li><a href="{{ url_for('sprint') }}">Active sprint</a></li>
+                <li><a href="{{ url_for('backlog') }}"> Backlog</a></li>
+                <li><a href="#">Statistics</a></li>
             </ul>
         </div>
      </div>
