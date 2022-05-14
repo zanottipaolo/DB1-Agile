@@ -205,7 +205,6 @@
                         <li>Subtask 2</li>
                         <li>Subtask 3</li>
                     </ul>
-                    <a href="#modalNewSubTask" class="btn btn-sm modal-button btn-secondary">Add new subtask</a>
                     <div class="modal-action">
                         <a href="#" class="btn btn-primary">Save and close</a>
                     </div>
@@ -215,7 +214,7 @@
             <!-- Put this part before </body> tag -->
             <div class="modal" id="modalNewTask">
                 <div class="modal-box w-100">
-
+                    <a href="#" class="btn btn-sm btn-circle absolute btn-error right-2 top-2">✕</a>
                     <div class="mb-2 form-control w-full max-w-xs">
                         <input type="text" placeholder="Task name" class="input input-bordered w-full max-w-xs" />
                     </div>
@@ -252,37 +251,6 @@
 
                     <div class="mt-0 modal-action">
                         <a href="#" class="btn btn-primary">Add new task</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal" id="modalNewSubTask">
-                <div class="modal-box w-100">
-
-                    <div class="mb-2 form-control w-full max-w-xs">
-                        <input type="text" placeholder="Subtask name" class="input input-bordered w-full max-w-xs" />
-                    </div>
-
-                    <div class="mb-2 form-control w-full max-w-xs">
-                        <input type="text" placeholder="Subtask description" class="input input-bordered w-full max-w-xs" />
-                    </div>
-
-                    <div class="m-2 form-control w-full max-w-xs">
-                        <p>Weight in hours:</p>
-                        <input type="number" min="0" max="400" class="input input-bordered w-full max-w-xs" />
-                    </div>
-
-                    <div class="m-2 form-control w-full max-w-xs">
-                        Assigned to:  
-                        <select class="mt-2 select select-primary w-auto max-w-xs">
-                            <option>Federico De Duro</option>
-                            <option>Paolo Zanotti</option>
-                            <option>Matteo Soldini</option>
-                        </select><br>
-                    </div>
-
-                    <div class="mt-0 modal-action">
-                        <a href="#modalInfo" class="btn btn-primary">Add new subtask</a>
                     </div>
                 </div>
             </div>
