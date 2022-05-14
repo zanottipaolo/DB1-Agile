@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="cupcake">
+<html lang="en" data-theme="cupcake" class="scroll-smooth">
 <head>
     <title>{% block title %}{% endblock %} - Gira</title>
     <meta charset="UTF-8">
@@ -24,10 +24,13 @@
     <!-- Sidebar -->
     <div class="drawer drawer-mobile">
         <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
-        <div class="drawer-content flex flex-col items-center justify-center">
+        <div class="drawer-content flex flex-col items-start justify-start lg:items-center lg:justify-center">
             <!-- Page content -->
-            <label for="my-drawer-2" class="btn btn-primary drawer-button lg:hidden">
-                Open Sidebar
+            <label for="my-drawer-2" class="btn btn-primary btn-circle drawer-button lg:hidden">
+                    
+                <!-- hamburger icon -->
+                <svg class="swap-off fill-current" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512"><path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"/></svg>  
+                    
             </label>
             {% block body %}{% endblock %}
         </div> 
@@ -49,9 +52,9 @@
      <!-- Footer -->
     <footer class="footer footer-center p-10 bg-primary text-primary-content">
         <div>
-          <img src="static/img/logo.png" alt="Logo" class="w-16">
+          <a href="#"><img src="static/img/logo.png" alt="Logo" class="w-16"></a>
           <p class="font-bold">Gira, just another project management tool</p>
-          <p>Developed by <a href="https://github.com/zanottipaolo" target="_blank" rel="noopener noreferrer" class="link">Paolo Zanotti</a>, <a href="https://github.com/Jfkmdd" target="_blank" rel="noopener noreferrer" class="link">Federico De Duro</a> && <a href="https://github.com/matteosoldini" target="_blank" rel="noopener noreferrer" class="link">Matteo Soldini</a> | <span id="year"></span></p>
+          <p>Developed by <a href="https://github.com/zanottipaolo" target="_blank" rel="noopener noreferrer" class="link">Paolo Zanotti</a>, <a href="https://github.com/Jfkmdd" target="_blank" rel="noopener noreferrer" class="link">Federico De Duro</a> && <a href="https://github.com/matteosoldini" target="_blank" rel="noopener noreferrer" class="link">Matteo Soldini</a> | 2022</p>
           <p>I'm Open Source, check out my code on <a href="https://github.com/zanottipaolo/DB1-Project" target="_blank" rel="noopener noreferrer" class="link">Github</a></p>
         </div> 
       </footer>
