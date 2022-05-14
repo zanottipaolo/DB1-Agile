@@ -3,24 +3,69 @@
 {% block title %}Backlog{% endblock %}
 
 {% block body %}
-<div>
-    <div class="w-48 text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-        <button type="button" class="relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-b border-gray-200 rounded-t-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
-            <svg class="w-4 h-4 mr-2 fill-current" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd"></path></svg>
-            Task
-        </button>
-        <button type="button" class="relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
-            <svg class="w-4 h-4 mr-2 fill-current" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z"></path></svg>
-            Task
-        </button>
-        <button type="button" class="relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
-            <svg class="w-4 h-4 mr-2 fill-current" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h10v7h-2l-1 2H8l-1-2H5V5z" clip-rule="evenodd"></path></svg>
-            Task
-        </button>
-        <button type="button" class="relative inline-flex items-center w-full px-4 py-2 text-sm font-medium rounded-b-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
-            <svg class="w-4 h-4 mr-2 fill-current" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M2 9.5A3.5 3.5 0 005.5 13H9v2.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 15.586V13h2.5a4.5 4.5 0 10-.616-8.958 4.002 4.002 0 10-7.753 1.977A3.5 3.5 0 002 9.5zm9 3.5H9V8a1 1 0 012 0v5z" clip-rule="evenodd"></path></svg>
-            Task
-        </button>
+<div class="container mx-auto p-8">
+    <div id="pageTop">
+        <div class="grid grid-cols-2 gap-2">
+            <div>
+                <p class="text-2xl p-4">Active Sprint: 10/10/2020 - 30/10/2020</p>
+                
+                <div class="avatar-group -space-x-6">
+                    <div class="avatar">
+                        <div class="w-9">
+                            <img src="https://api.lorem.space/image/face?hash=53273" />
+                        </div>
+                    </div>
+                    <div class="avatar">
+                        <div class="w-9">
+                            <img src="https://api.lorem.space/image/face?hash=91831" />
+                        </div>
+                    </div>
+                    <div class="avatar">
+                        <div class="w-9">
+                            <img src="https://api.lorem.space/image/face?hash=27312" />
+                        </div>
+                    </div>
+                    <div class="avatar">
+                        <div class="w-9">
+                            <img src="https://api.lorem.space/image/face?hash=26448" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="place-self-end items-center text-right inline-block align-middle">
+                <button class="p-2 bg-secondary rounded-lg transition ease-in-out delay-10 hover:-translate-y-1 hover:scale-110 hover:bg-primary duration-50">
+                    Close Sprint
+                </button>
+                <p class="m-3">Total point: <span class="w-auto h-auto py-1 px-2 rounded bg-info py-auto my-auto text-center inline-block align-middle">40</span></p>
+            </div>
+        </div>
+
+        <div class="p-4 grid" id="currentSprint">
+
+            <div class="p-2 mb-1 base-100 rounded border-solid border-2 border-primary my-0" id="card">
+                <div class="text-neutral grid grid-cols-2">
+                    <div class="">
+                        <p class="w-auto inline-block align-middle">Nome della task</p>
+                    </div>
+                    <div class="flex justify-end">
+                        <span class="w-auto h-auto py-1 px-2 rounded bg-secondary py-auto my-auto text-center inline-block align-middle">EPICA</span>
+                        <span class="mx-2 my-auto inline-block align-middle">idTask</span>
+                        <img class="mx-2 flex justify-end inline-block align-middle h-8 w-8 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+                        <span class="w-auto h-auto py-1 px-2 rounded bg-info py-auto my-auto text-center inline-block align-middle">4</span>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <div id="pageBottom">
+        <p class="text-2xl p-4">Backlog:</p>
+        <div class="p-4 bg-sky-500/100" id="currentSprint">
+            <div id="card">
+                
+            </div>
+        </div>
     </div>
 </div>
-{% endblock %}
+{% endblock %} 
