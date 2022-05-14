@@ -34,9 +34,9 @@
             </label>
             {% block body %}{% endblock %}
         </div> 
-        <div class="drawer-side">
+        <div class="drawer-side bg-base-300 border-r-2 border-primary">
             <label for="my-drawer-2" class="drawer-overlay"></label> 
-            <ul class="menu p-4 overflow-y-auto w-80 bg-base-300 border-r-2 border-primary">
+            <ul class="menu p-4 h-auto w-80">
                 <!-- Sidebar content -->
                 <li class="disabled">
                     <div class="avatar">
@@ -49,6 +49,11 @@
                 <li><a href="{{ url_for('backlog') }}"> Backlog</a></li>
                 <li><a href="#">Statistics</a></li>
             </ul>
+            <div class="footer my-4 bg-base-300 self-end flex justify-center content-end">
+                <div class="self-center">
+                    <button class="btn btn-error">Logout</button>
+                </div>
+            </div>
         </div>
      </div>
 
