@@ -90,8 +90,22 @@
     </div>
 
     <div id="pageBottom">
-        <p class="text-2xl px-4 pt-4">Backlog:</p>
-        <span class="ml-4">5 issues</span>
+
+        <div class="grid grid-cols-2 gap-2">
+            <div>
+                <p class="text-2xl px-4 pt-4">Backlog:</p>
+                <span class="ml-4">5 issues</span>
+            </div>
+            <div class="place-self-end items-center text-right inline-block align-middle">
+                <a href="#modalNewTask">
+                    <button class="p-2 bg-secondary rounded-lg transition ease-in-out delay-10 hover:-translate-y-1 hover:scale-110 hover:bg-primary duration-50">
+                        Add Task
+                    </button>
+                </a>
+            </div>
+        </div>
+
+        
         <div class="p-4" id="currentSprint">
             
             <div class="p-2 mb-1 base-100 rounded border-solid border-2 border-primary my-0" id="card">
@@ -152,27 +166,92 @@
 
             <!-- Put this part before </body> tag -->
             <div class="modal" id="modalInfo">
-            <div class="modal-box">
-                <h3 class="font-bold text-lg">Nome della task - Id</h3>
-                <p class="py-4">Descrizione</p>
-                <p class="">
-                    Assigned to: Nome utente <br>
-                    Reported by: Nome utente <br>
-                    Fibonacci points: 4<br>
-                </p>
-                <p class="mt-1">Subtask:</p>
-                <ul class="ml-6 list-disc">
-                    <li>Subtask 1</li>
-                    <li>Subtask 2</li>
-                    <li>Subtask 3</li>
-                </ul>
-                <div class="modal-action">
-                <a href="#" class="btn">Close</a>
+                <div class="modal-box w-100">
+                    <h3 class="font-bold text-lg">Nome della task - Id</h3>
+                    <p class="py-4">Descrizione</p>
+                    <p class="">
+                        Assigned to:  
+                        <select class="mt-2 select select-primary w-auto max-w-xs">
+                            <option disabled selected>Federico De Duro</option>
+                            <option>Paolo Zanotti</option>
+                            <option>Matteo Soldini</option>
+                        </select><br>
+                        Reported by: 
+                        <select class="mt-2 select select-primary w-auto max-w-xs">
+                            <option disabled selected>Federico De Duro</option>
+                            <option>Paolo Zanotti</option>
+                            <option>Matteo Soldini</option>
+                        </select><br>
+                        Fibonacci points:
+                        <input type="range" min="0" max="8" value="1" class="range range-xs range-primary" step="1" />
+                        <div class="w-full flex justify-between text-xs px-2">
+                            <span>0</span>
+                            <span>0.5</span>
+                            <span>1</span>
+                            <span>2</span>
+                            <span>3</span>
+                            <span>5</span>
+                            <span>8</span>
+                            <span>13</span>
+                            <span>21</span>
+                        </div>
+                        <br>
+                    </p>
+                    <p class="mt-1">Subtask:</p>
+                    <ul class="ml-6 list-disc">
+                        <li>Subtask 1</li>
+                        <li>Subtask 2</li>
+                        <li>Subtask 3</li>
+                    </ul>
+                    <div class="modal-action">
+                        <a href="#" class="btn btn-primary">Save and close</a>
+                    </div>
                 </div>
             </div>
-            </div>
-            
 
+            <!-- Put this part before </body> tag -->
+            <div class="modal" id="modalNewTask">
+                <div class="modal-box w-100">
+
+                    <div class="mb-2 form-control w-full max-w-xs">
+                        <input type="text" placeholder="Task name" class="input input-bordered w-full max-w-xs" />
+                    </div>
+
+                    <div class="mb-2 form-control w-full max-w-xs">
+                        <input type="text" placeholder="Task description" class="input input-bordered w-full max-w-xs" />
+                    </div>
+
+                    <div class="m-2 form-control w-full max-w-xs">
+                        Fibonacci points:</p>
+                        <input type="range" min="0" max="8" value="1" class="range range-xs range-primary" step="1" />
+                        <div class="w-full flex justify-between text-xs px-2">
+                            <span>0</span>
+                            <span>0.5</span>
+                            <span>1</span>
+                            <span>2</span>
+                            <span>3</span>
+                            <span>5</span>
+                            <span>8</span>
+                            <span>13</span>
+                            <span>21</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-2 form-control w-full max-w-xs">
+                        <label class="label">
+                            <span class="mb-0 label-text">Epic:</span>
+                        </label>  
+                        <select class="mt-2 select select-primary w-auto max-w-xs">
+                            <option>Maintenance</option>
+                            <option>New product</option>
+                        </select><br>
+                    </div>
+
+                    <div class="mt-0 modal-action">
+                        <a href="#" class="btn btn-primary">Add new task</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
