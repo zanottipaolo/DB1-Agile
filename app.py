@@ -24,7 +24,8 @@ def sprint():
 def backlog():
     if request.method == 'GET':
         tasks = Task.query.all()
-        return render_template('backlog/backlog.html',tasks=tasks)
+        sprints = Sprint.query.all()
+        return render_template('backlog/backlog.html',tasks=tasks, sprints=sprints)
     else:
         # add new task
         new_task = Task(request.form.get('name'), request.form.get('description'))
