@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, Date, null
+from typing import Collection
+from sqlalchemy import Column, Integer, String, Date, Text, ForeignKey
 from .database import Base
 
 class Sprint(Base):
@@ -13,3 +14,17 @@ class Sprint(Base):
 
     def __repr__(self):
         return f'<Sprint {self.name!r}>'
+
+class Task(Base):
+    __tablename__ = 'tasks'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50))
+    description = Column(Text())
+    sprint = Column(Integer, ForeignKey('sprints.id'), nullable=True)
+
+    def __init__(self, name, description):
+        self.name = name
+        self.description = description
+
+    def __repr__(self):
+        return f'<Task {self.name!r}>'

@@ -1,10 +1,10 @@
-from flask import Flask, render_template, request
+from flask import Flask, redirect, render_template, request
 
 # Database
 from backend.database import db_session
 
 # Models
-from backend.models import Sprint
+from backend.models import Sprint, Task
 
 app = Flask(__name__)
 
@@ -22,7 +22,15 @@ def sprint():
 
 @app.route('/backlog', methods=['POST', 'GET'])
 def backlog():
-    return render_template('backlog.html')
+    if request.method == 'GET':
+        tasks = Task.query.all()
+        return render_template('backlog/backlog.html',tasks=tasks)
+    else:
+        # add new task
+        new_task = Task(request.form.get('name'), request.form.get('description'))
+        db_session.add(new_task)
+        db_session.commit()
+        return redirect('/backlog')
 
 # Close connection to database when shutting down
 @app.teardown_appcontext

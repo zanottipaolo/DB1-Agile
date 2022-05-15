@@ -107,62 +107,21 @@
 
         
         <div class="p-4" id="currentSprint">
-            
+            {% for task in tasks %}
             <div class="p-2 mb-1 base-100 rounded border-solid border-2 border-primary my-0" id="card">
                 <div class=" grid grid-cols-2">
                     <div class="">
-                        <p class="w-auto inline-block align-middle">Nome della task</p>
+                        <p class="w-auto inline-block align-middle">{{task.name}}</p>
                     </div>
                     <div class="flex justify-end">
                         <span class="w-auto h-auto py-1 px-2 rounded bg-secondary py-auto my-auto text-center inline-block align-middle">EPICA</span>
-                        <span class="mx-2 my-auto inline-block align-middle">idTask</span>
+                        <span class="mx-2 my-auto inline-block align-middle">{{task.id}}</span>
                         <img class="mx-2 flex justify-end inline-block align-middle h-8 w-8 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
                         <span class="w-auto h-auto py-1 px-2 rounded bg-info text-info-content py-auto my-auto text-center inline-block align-middle">0</span>
                     </div>
                 </div>
             </div>
-
-            <div class="p-2 mb-1 base-100 rounded border-solid border-2 border-primary my-0" id="card">
-                <div class="grid grid-cols-2">
-                    <div class="">
-                        <p class="w-auto inline-block align-middle">Nome della task</p>
-                    </div>
-                    <div class="flex justify-end">
-                        <span class="w-auto h-auto py-1 px-2 rounded bg-secondary py-auto my-auto text-center inline-block align-middle">EPICA</span>
-                        <span class="mx-2 my-auto inline-block align-middle">idTask</span>
-                        <img class="mx-2 flex justify-end inline-block align-middle h-8 w-8 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
-                        <span class="w-auto h-auto py-1 px-2 rounded bg-info text-info-content py-auto my-auto text-center inline-block align-middle">0</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="p-2 mb-1 base-100 rounded border-solid border-2 border-primary my-0" id="card">
-                <div class="grid grid-cols-2">
-                    <div class="">
-                        <p class="w-auto inline-block align-middle">Nome della task</p>
-                    </div>
-                    <div class="flex justify-end">
-                        <span class="w-auto h-auto py-1 px-2 rounded bg-secondary py-auto my-auto text-center inline-block align-middle">EPICA</span>
-                        <span class="mx-2 my-auto inline-block align-middle">idTask</span>
-                        <img class="mx-2 flex justify-end inline-block align-middle h-8 w-8 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
-                        <span class="w-auto h-auto py-1 px-2 rounded bg-info text-info-content py-auto my-auto text-center inline-block align-middle">0</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="p-2 mb-1 base-100 rounded border-solid border-2 border-primary my-0" id="card">
-                <div class="grid grid-cols-2">
-                    <div class="">
-                        <p class="w-auto inline-block align-middle">Nome della task</p>
-                    </div>
-                    <div class="flex justify-end">
-                        <span class="w-auto h-auto py-1 px-2 rounded bg-secondary py-auto my-auto text-center inline-block align-middle">EPICA</span>
-                        <span class="mx-2 my-auto inline-block align-middle">idTask</span>
-                        <img class="mx-2 flex justify-end inline-block align-middle h-8 w-8 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
-                        <span class="w-auto h-auto py-1 px-2 rounded bg-info text-info-content py-auto my-auto text-center inline-block align-middle">0</span>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
 
             <!-- Put this part before </body> tag -->
 
@@ -213,14 +172,14 @@
 
             <!-- Put this part before </body> tag -->
             <div class="modal" id="modalNewTask">
-                <div class="modal-box w-100">
+                <form class="modal-box w-100" id="create-new-task-form" action="backlog" method="post">
                     <a href="#" class="btn btn-sm btn-circle absolute btn-error right-2 top-2">✕</a>
                     <div class="mb-2 form-control w-full max-w-xs">
-                        <input type="text" placeholder="Task name" class="input input-bordered w-full max-w-xs" />
+                        <input type="text" name="name" placeholder="Task name" class="input input-bordered w-full max-w-xs" />
                     </div>
 
                     <div class="mb-2 form-control w-full max-w-xs">
-                        <input type="text" placeholder="Task description" class="input input-bordered w-full max-w-xs" />
+                        <input type="text" name="name" placeholder="Task description" class="input input-bordered w-full max-w-xs" />
                     </div>
 
                     <div class="m-2 form-control w-full max-w-xs">
@@ -250,9 +209,9 @@
                     </div>
 
                     <div class="mt-0 modal-action">
-                        <a href="#" class="btn btn-primary">Add new task</a>
+                        <button class="btn btn-primary" type="submit">Add new task</button>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
