@@ -3,5 +3,28 @@
 {% block title %}Sprint{% endblock %}
 
 {% block body %}
-<a href="" class="link">Hi! I am Sprint</a>
+
+<div class="flex flex-col w-5/6 lg:flex-row  m-6">
+
+    <!-- TODO -->
+    <div id="sprint-todo" ondragover="onDragOver(event);" ondrop="onDrop(event, this);" class="grid flex-grow h-32 card bg-base-300 rounded-box place-items-center m-4">
+        <div id="drag1" draggable="true" ondragstart="onDragStart(event);" class="bg-white p-2 rounded mt-1 border-b border-grey cursor-pointer hover:bg-grey-lighter">
+            Check the meta 1
+        </div> 
+
+        <div id="drag2" draggable="true" ondragstart="onDragStart(event);" class="bg-white p-2 rounded mt-1 border-b border-grey cursor-pointer hover:bg-grey-lighter">
+            Check the meta 2
+        </div>  
+        
+    </div>
+
+    <!-- IN PROGRESS -->
+    <div id="sprint-progress" ondragover="onDragOver(event);" ondrop="onDrop(event, this);" class="grid flex-grow h-32 card bg-base-300 rounded-box place-items-center m-4">
+    </div>
+
+    <!-- DONE -->
+    <div id="sprint-done" ondragover="onDragOver(event);" ondrop="onDrop(event, this);" class="grid flex-grow h-32 card bg-base-300 rounded-box place-items-center m-4">
+    </div>
+</div>
+
 {% endblock %}
