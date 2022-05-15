@@ -1,83 +1,144 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth" data-theme="cupcake">
-<head>
-    <title>{% block title %}{% endblock %} - Gira</title>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<head>
+		<title>{% block title %}{% endblock %} - Gira</title>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Style -->
-    <link href="{{ url_for('static', filename='style/style.css') }}" rel="stylesheet">
+		<!-- Style -->
+		<link
+			href="{{ url_for('static', filename='style/style.css') }}"
+			rel="stylesheet"
+		/>
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico">
+		<!-- Favicon -->
+		<link rel="icon" type="image/x-icon" href="/static/img/favicon.ico" />
 
-    <!-- CDN Tailwind -->
-    <script src="https://cdn.tailwindcss.com"></script>
+		<!-- CDN Tailwind -->
+		<script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- CDN DaisyUI-->
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@2.14.3/dist/full.css" rel="stylesheet" type="text/css" />
-</head>
-<body>
-    {# Comment: Not render Sidebar component on Login page #}
-    {% if active_page != "login" %}
-    <!-- Sidebar -->
-    <div class="drawer drawer-mobile">
-        <input id="sidebar" type="checkbox" class="drawer-toggle" />
-        <div class="drawer-content bg-base-100 text-base-content flex flex-col items-start justify-start">
-            <label for="sidebar" class="btn btn-primary btn-circle drawer-button lg:hidden">    
-                <!-- hamburger icon -->
-                <svg class="swap-off fill-current" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512"><path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"/></svg>   
-            </label>
-            <!-- Page content -->
-            {% block body %}{% endblock %}
-        </div> 
-        <div class="drawer-side">
-            <label for="sidebar" class="drawer-overlay"></label>
-            <div class="p-4 overflow-y-auto w-80 bg-base-300 border-r-2 border-primary flex flex-col">
+		<!-- CDN DaisyUI-->
+		<link
+			href="https://cdn.jsdelivr.net/npm/daisyui@2.14.3/dist/full.css"
+			rel="stylesheet"
+			type="text/css"
+		/>
+	</head>
+	<body>
+		{# Comment: Not render Sidebar component on Login page #} {% if active_page
+		!= "login" %}
+		<!-- Sidebar -->
+		<div class="drawer drawer-mobile">
+			<input id="sidebar" type="checkbox" class="drawer-toggle" />
+			<div
+				class="drawer-content bg-base-100 text-base-content flex flex-col items-start justify-start"
+			>
+				<label
+					for="sidebar"
+					class="btn btn-primary btn-circle drawer-button lg:hidden"
+				>
+					<!-- hamburger icon -->
+					<svg
+						class="swap-off fill-current"
+						xmlns="http://www.w3.org/2000/svg"
+						width="32"
+						height="32"
+						viewBox="0 0 512 512"
+					>
+						<path
+							d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"
+						/>
+					</svg>
+				</label>
+				<!-- Page content -->
+				{% block body %}{% endblock %}
+			</div>
+			<div class="drawer-side">
+				<label for="sidebar" class="drawer-overlay"></label>
+				<div
+					class="p-4 overflow-y-auto w-80 bg-base-100 text-base-content flex flex-col"
+				>
+					<!-- Avatar profile -->
+					<div class="avatar">
+						<div
+							class="w-24 rounded-full m-5 ring ring-primary ring-offset-1 hover:ring-offset-4 transition duration-500 ease-in-out"
+						>
+							<a href="#">
+								<img src="https://api.lorem.space/image/face?hash=92310" />
+							</a>
+						</div>
+						<p class="flex items-center font-bold">Ciao Elon 👋</p>
+					</div>
 
-                <!-- Avatar profile -->
-                <div class="avatar">
-                    <div class="w-24 rounded-full m-5 ring ring-primary ring-offset-1 hover:ring-offset-4 transition duration-500 ease-in-out">
-                        <a href="#">
-                            <img src="https://api.lorem.space/image/face?hash=92310" />
-                        </a>
-                    </div>
-                    <p class="flex items-center font-bold">Ciao Elon 👋</p>
-                </div>
+					<!-- Menu -->
+					<ul class="menu">
+						<li><a href="{{ url_for('sprint') }}">Active sprint</a></li>
+						<li><a href="{{ url_for('backlog') }}"> Backlog</a></li>
+						<li><a href="#">Statistics</a></li>
+					</ul>
 
-                <!-- Menu -->
-                <ul class="menu">
-                    <li><a href="{{ url_for('sprint') }}">Active sprint</a></li>
-                    <li><a href="{{ url_for('backlog') }}"> Backlog</a></li>
-                    <li><a href="#">Statistics</a></li>
-                </ul>
-                
-                <!-- Logout -->
-                <div class="my-4 flex justify-center mt-auto">
-                    <button class="btn btn-outline btn-error btn-md transition duration-300 ease-in-out">Logout</button>
-                </div>
+					<!-- Logout -->
+					<div class="my-4 flex justify-center mt-auto">
+						<button
+							class="btn btn-outline btn-error btn-md transition duration-300 ease-in-out"
+						>
+							Logout
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
 
-            </div>
-        </div>
-    </div>
-    
-    {% else %}
-        {# Comment: Login content #}
-        {% block content %}{% endblock %}
-        
-    {% endif %}
+		{% else %} {# Comment: Login content #} {% block content %}{% endblock %} {%
+		endif %}
 
-    <!-- Footer -->
-    <footer class="footer footer-center p-6 bg-primary text-primary-content">
-        <div>
-          <a href="#"><img src="static/img/logo.png" alt="Logo" class="w-16"></a>
-          <p class="font-bold">Gira, just another project management tool</p>
-          <p>Developed by <a href="https://github.com/zanottipaolo" target="_blank" rel="noopener noreferrer" class="link">Paolo Zanotti</a>, <a href="https://github.com/Jfkmdd" target="_blank" rel="noopener noreferrer" class="link">Federico De Duro</a> && <a href="https://github.com/matteosoldini" target="_blank" rel="noopener noreferrer" class="link">Matteo Soldini</a> | 2022</p>
-          <p>I'm Open Source, check out my code on <a href="https://github.com/zanottipaolo/DB1-Project" target="_blank" rel="noopener noreferrer" class="link">Github</a></p>
-        </div> 
-      </footer>
+		<!-- Footer -->
+		<footer class="footer footer-center p-6 bg-primary text-primary-content">
+			<div>
+				<a href="#"
+					><img src="static/img/logo.png" alt="Logo" class="w-16"
+				/></a>
+				<p class="font-bold">Gira, just another project management tool</p>
+				<p>
+					Developed by
+					<a
+						href="https://github.com/zanottipaolo"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="link"
+						>Paolo Zanotti</a
+					>,
+					<a
+						href="https://github.com/Jfkmdd"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="link"
+						>Federico De Duro</a
+					>
+					&&
+					<a
+						href="https://github.com/matteosoldini"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="link"
+						>Matteo Soldini</a
+					>
+					| 2022
+				</p>
+				<p>
+					I'm Open Source, check out my code on
+					<a
+						href="https://github.com/zanottipaolo/DB1-Project"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="link"
+						>Github</a
+					>
+				</p>
+			</div>
+		</footer>
 
-    <script src="{{ url_for('static', filename='script/script.js') }}"></script>
-</body>
+		<script src="{{ url_for('static', filename='script/script.js') }}"></script>
+	</body>
 </html>
