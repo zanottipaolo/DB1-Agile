@@ -9,6 +9,7 @@ class Sprint(Base):
     name = Column(String(50))
     start_date = Column(Date)
     end_date = Column(Date)
+    is_active = Column(Integer)
 
     def __init__(self, name):
         self.name = name
@@ -23,6 +24,10 @@ class Task(Base):
     name = Column(String(50))
     description = Column(Text())
     sprint = Column(Integer, ForeignKey('sprints.id'), nullable=True)
+    monitorer = Column(Integer)  # diventa chiave esterna
+    epic = Column(Integer, ForeignKey('epics.id'), nullable=True)
+    signaler = Column(Integer)  # diventa chiave esterna
+    fibonacci_points = Column(Integer)
 
     def __init__(self, name, description):
         self.name = name
