@@ -1,3 +1,5 @@
+from datetime import date
+import datetime
 from webbrowser import get
 from flask import Flask, redirect, render_template, request
 from sqlalchemy import desc
@@ -42,11 +44,14 @@ def backlog():
         current_sprint = Sprint.query.filter_by(
             is_active=1).first()
         is_closable = 1
+        days_remaning = None
+        today = date.today()
         if current_sprint != None:
             sprint_task = Task.query.filter_by(
                 sprint=current_sprint.id).order_by(Task.status)
             task_in_sprint_done = Task.query.filter_by(
                 sprint=current_sprint.id, status='DONE').count()
+            days_remaning = abs(current_sprint.end_date - today).days
             if task_in_sprint_done == sprint_task.count():
                 is_closable = 0
         else:
@@ -56,7 +61,7 @@ def backlog():
 
         epics = Epic.query.all()
         total_points_of_sprint = 100  # Fare SUM di sprint_task.fibonacci_points
-        return render_template('backlog/backlog.html', tasks=tasks, sprints=sprints, current_sprint=current_sprint, backlog_task=backlog_task, sprint_task=sprint_task, epics=epics, total_points_of_sprint=total_points_of_sprint, is_closable=is_closable)
+        return render_template('backlog/backlog.html', tasks=tasks, sprints=sprints, current_sprint=current_sprint, backlog_task=backlog_task, sprint_task=sprint_task, epics=epics, total_points_of_sprint=total_points_of_sprint, is_closable=is_closable, today=today, days_remaning=days_remaning)
     if request.method == 'POST' and 'create-new-task' in request.form:
         # add new task
         new_task = Task(request.form.get('name'),
