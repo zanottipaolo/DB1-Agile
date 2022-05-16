@@ -358,6 +358,18 @@
                 </div>
             </div>
         </div>
+
+        <div class="form-control w-full max-w-xs">
+            <label class="label">
+              <span class="label-text">Task in sprint:</span>
+            </label>
+            <ul class="ml-8 list-disc">
+                {% for sprint_task in sprint_task %}
+                <li>{{ sprint_task.name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
         <div class="modal-action">
             <a class="btn btn-error" href="#">Back</a>
             <button class="btn btn-info" name="update-sprint" type="submit">Update sprint</button>
