@@ -5,17 +5,15 @@
 {% block body %}
 <div class="container mx-auto p-8">
     <div id="pageTop">
-        <div class="grid grid-cols-2 gap-2">
-            <div class="place-self-end items-center text-right inline-block align-middle">
-                <button class="p-2 bg-secondary rounded-lg transition ease-in-out delay-10 hover:-translate-y-1 hover:scale-110 hover:bg-primary duration-50">
-                    Close Sprint
-                </button>
-                <p class="m-3">Total point: <span class="w-auto h-auto py-1 px-2 rounded bg-info text-info-content py-auto my-auto text-center inline-block align-middle">40</span></p>
-            </div>
-        </div>
-
         <div id="currentSprint">
-            <p class="text-2xl p-4">Sprint</p>
+            <div class="grid grid-cols-2">
+                <div>
+                    <p class="text-2xl p-4">Sprint</p>
+                </div>
+                <div class="place-self-end items-center text-right inline-block align-middle">
+                    <p class="m-3">Total points: <span class="w-auto h-auto py-1 px-2 rounded bg-info text-info-content py-auto my-auto text-center inline-block align-middle">{{total_points_of_sprint}}</span></p>
+                </div>
+            </div>
             <div class="p-4 mx-1 bg-base-200 rounded-lg">
                 <div class="mb-2" style="display: flex; flex-direction: row; align-items: center;">
                     <span class="py-1 px-2 rounded-lg bg-primary text-primary-content" class="bg-info">Active</span>
@@ -63,7 +61,9 @@
                     </div>
                 {% endfor %}
             </div>
-            
+            <button class="ml-2 mt-2 py-1 px-2 bg-secondary text-secondary-content rounded-lg">
+                Close Sprint
+            </button>
         </div>
     </div>
 
@@ -111,10 +111,23 @@
 {% for task in tasks %}
 <div class="modal" id="modalInfo{{task.id}}">
     <form class="modal-box w-100" name="taskChanged" action="backlog" method="post">
-        <input type="hidden" name="idTaskToDelete" value="{{ task.id }}"/>
+        <input type="hidden" name="idTask" value="{{ task.id }}"/>
         <a href="#" class="btn btn-sm btn-circle absolute btn-error right-2 top-2">✕</a>
-        <h3 class="font-bold text-lg">{{task.name}} - {{task.id}}</h3>
-        <p class="py-4">{{task.description}}</p>
+        
+        <div class="form-control">
+            <label class="label">
+                <span class="mt-2 label-text">Task title:</span>
+            </label> 
+            <input type="text" name="name" value="{{task.name}}" class="input input-bordered input-primary w-full max-w-xs" />
+        </div>
+
+        <div class="form-control">
+            <label class="label">
+                <span class="mt-2 label-text">Description:</span>
+            </label> 
+            <textarea class="textarea textarea-primary" name="description">{{task.description}}</textarea>
+        </div>
+
         <p class="">
             Assigned to:  
             <select class="mt-2 select select-primary w-auto max-w-xs">
@@ -155,9 +168,9 @@
         <div class="modal-action">
             <button class="btn btn-error" name="task-delete" type="submit">Delete</button>
             {% if task.sprint == None %}
-                <button class="btn btn-info" name="task-move-in-sprint" type="submit">Move in sprint</button> 
+                <button class="btn btn-info text-info-content" name="task-move-in-sprint" type="submit">Move in sprint</button> 
             {% else %}
-                <button class="btn btn-info text-info-content" name="task-move-in-sprint" type="submit">Remove from sprint</button> 
+                <button class="btn btn-info text-info-content" name="remove-from-sprint" type="submit">Remove from sprint</button> 
             {% endif %}
             <button class="btn btn-primary text-base-content hover:text-primary-content" name="task-changed" type="submit">Save and close</button> 
         </div>
