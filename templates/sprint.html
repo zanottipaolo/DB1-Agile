@@ -2,7 +2,15 @@
 
 {% block title %}Sprint{% endblock %}
 
+{% block head %}
+    <!-- JQuery -->
+    <script src="{{ url_for('static', filename='lib/jquery-3.6.0.js') }}"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+{% endblock %}
+
 {% block body %}
+
+
 
     {% if current_sprint != None %}
     <h1 class="font-bold leading-tight text-3xl mt-6 ml-6">Active Sprint: <span class="italic">{{ current_sprint.name }} ({{current_sprint.start_date}} / {{current_sprint.end_date}})</span></h1>
@@ -14,7 +22,7 @@
         <div class="flex flex-col w-5/6 lg:w-full lg:flex-row m-6 items-center mx-auto">
 
             <!-- TODO -->
-            <div id="task{{ loop.index }}-todo" ondragover="onDragOver(event);" ondrop="onDrop(event, this);" class="grid w-full lg:w-1/3 h-64 bg-red-700 bg-opacity-25 rounded-box place-items-center m-4 overflow-auto" >
+            <div id="task{{ loop.index }}-todo" ondragover="onDragOver(event);" ondrop="onDrop(event, this);" class="flex flex-col w-full lg:w-1/3 h-64 bg-red-700 bg-opacity-25 rounded-box place-items-center m-4 overflow-auto subtask-todo" >
                 
                 <div id="task{{ loop.index }}-sub1" draggable="true" ondragstart="onDragStart(event);" class="bg-base-100 p-2 m-5 rounded-box cursor-pointer w-4/5 text-center whitespace-nowrap">
                     Subtask 1
@@ -35,11 +43,11 @@
             </div>
 
             <!-- IN PROGRESS -->
-            <div id="task{{ loop.index }}-progress" ondragover="onDragOver(event);" ondrop="onDrop(event, this);" class="grid w-full lg:w-1/3 h-64 bg-yellow-700 bg-opacity-25 rounded-box place-items-center m-4 overflow-auto" >
+            <div id="task{{ loop.index }}-progress" ondragover="onDragOver(event);" ondrop="onDrop(event, this);" class="flex flex-col w-full lg:w-1/3 h-64 bg-yellow-700 bg-opacity-25 rounded-box place-items-center m-4 overflow-auto subtask-progress" >
             </div>
 
             <!-- DONE -->
-            <div id="task{{ loop.index }}-done" ondragover="onDragOver(event);" ondrop="onDrop(event, this);" class="grid w-full lg:w-1/3 h-64 bg-emerald-700 bg-opacity-25 rounded-box place-items-center m-4 overflow-auto">
+            <div id="task{{ loop.index }}-done" ondragover="onDragOver(event);" ondrop="onDrop(event, this);" class="flex flex-col w-full lg:w-1/3 h-64 bg-emerald-700 bg-opacity-25 rounded-box place-items-center m-4 overflow-auto subtask-done">
             </div>
 
         </div>
@@ -47,6 +55,12 @@
             {% if not loop.last %}
             <div class="divider"></div>
             {% endif %}
+
+        <script>
+            $( "#task{{ loop.index }}-todo, #task{{ loop.index }}-progress, #task{{ loop.index }}-done" ).sortable({
+            connectWith: "#task{{ loop.index }}-todo, #task{{ loop.index }}-progress, #task{{ loop.index }}-done"
+            });
+        </script>
 
         {% endfor %}
 
@@ -56,8 +70,4 @@
 
     {% endif %}
 
-{% endblock %}
-
-{% block footer_link %}
-<script src="{{ url_for('static', filename='script/sprint-js.js') }}"></script>
 {% endblock %}
