@@ -29,9 +29,14 @@ class Task(Base):
     signaler = Column(Integer)  # diventa chiave esterna
     fibonacci_points = Column(Integer)
 
-    def __init__(self, name, description):
+    def __init__(self, name, description, sprint, monitorer, epic, signaler, fibonacci_points):
         self.name = name
         self.description = description
+        self.sprint = sprint
+        self.monitorer = monitorer
+        self.epic = epic
+        self.signaler = signaler
+        self.fibonacci_points = fibonacci_points
 
     def __repr__(self):
         return f'<Task {self.name!r}>'

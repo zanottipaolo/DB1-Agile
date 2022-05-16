@@ -1,3 +1,4 @@
+from webbrowser import get
 from flask import Flask, redirect, render_template, request
 
 # Database
@@ -31,11 +32,17 @@ def backlog():
         current_sprint = Sprint.query.filter_by(is_active=1).first()
         backlog_task = Task.query.filter_by(sprint=None)
         sprint_task = Task.query.filter_by(sprint=current_sprint.id)
-        return render_template('backlog/backlog.html', tasks=tasks, sprints=sprints, current_sprint=current_sprint, backlog_task=backlog_task, sprint_task=sprint_task)
+        epics = Epic.query.all()
+        return render_template('backlog/backlog.html', tasks=tasks, sprints=sprints, current_sprint=current_sprint, backlog_task=backlog_task, sprint_task=sprint_task, epics=epics)
     if request.method == 'POST' and 'create-new-task' in request.form:
         # add new task
         new_task = Task(request.form.get('name'),
-                        request.form.get('description'))
+                        request.form.get('description'),
+                        None,
+                        None,
+                        request.form.get('epic'),
+                        request.form.get('signaler'),
+                        request.form.get('fibonacci_points'))
         db_session.add(new_task)
         db_session.commit()
         return redirect('/backlog')
