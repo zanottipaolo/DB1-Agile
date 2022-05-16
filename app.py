@@ -2,8 +2,9 @@ from datetime import date
 import datetime
 from time import strptime
 from webbrowser import get
-from flask import Flask, redirect, render_template, request
+from flask import Flask, flash, redirect, render_template, request, url_for
 from sqlalchemy import desc
+from werkzeug.security import generate_password_hash, check_password_hash
 
 # Database
 from backend.database import db_session
@@ -17,14 +18,24 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        return render_template('login.html')
+        email = request.form.get('email')
+        password = request.form.get('password')
+
+        user = User.query.filter_by(email=email).first()
+
+        if not user or not check_password_hash(user.password, password):
+            flash('Please check your login details and try again.')
+            return redirect(url_for('login'))
+            
+        return redirect(url_for('profile'))
     else:
         return render_template('login.html')
 
 @app.route('/profile', methods=['POST', 'GET'])
 def profile():
     if request.method == 'GET':
-        return render_template('profile.html')
+        user = User.query.all()
+        return render_template('profile.html', user=user)
 
 
 @app.route('/sprint', methods=['POST', 'GET'])
