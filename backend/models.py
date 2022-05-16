@@ -11,8 +11,11 @@ class Sprint(Base):
     end_date = Column(Date)
     is_active = Column(Integer)
 
-    def __init__(self, name):
+    def __init__(self, name, start_date, end_date, is_active):
         self.name = name
+        self.start_date = start_date
+        self.end_date = end_date
+        self.is_active = is_active
 
     def __repr__(self):
         return f'<Sprint {self.name!r}>'
