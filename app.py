@@ -25,9 +25,12 @@ def sprint():
         tasks = Task.query.all()
         sprints = Sprint.query.all()
         current_sprint = Sprint.query.filter_by(
-            is_active=1).one()
-        sprint_task = Task.query.filter_by(
-            sprint=current_sprint.id).order_by(Task.status)
+            is_active=1).first()
+        if current_sprint != None:
+            sprint_task = Task.query.filter_by(
+                sprint=current_sprint.id).order_by(Task.status)
+        else:
+            sprint_task = None
         return render_template('sprint.html', tasks=tasks, sprints=sprints, current_sprint=current_sprint, sprint_task=sprint_task)
 
 

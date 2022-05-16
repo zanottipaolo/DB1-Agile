@@ -4,6 +4,7 @@
 
 {% block body %}
 
+{% if current_sprint != None %}
 <h1 class="font-bold leading-tight text-4xl mt-6 ml-6">Active Sprint: <span class="italic">{{ current_sprint.name }}</span></h1>
 
 <!-- Task 1 -->
@@ -77,6 +78,11 @@
     </div>
 
 </div>
+
+{% else %}
+<p class="font-bold leading-tight text-4xl mt-6 ml-6">No active sprint, start a <a class="link" href="{{ url_for('backlog', _anchor='createSprint' )}}">new one</a></p>
+
+{% endif %}
 
 {% endblock %}
 
