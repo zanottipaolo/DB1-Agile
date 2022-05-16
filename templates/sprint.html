@@ -10,19 +10,50 @@
 
 {% block body %}
 
-
-
     {% if current_sprint != None %}
     <h1 class="font-bold leading-tight text-3xl mt-6 ml-6">Active Sprint: <span class="italic">{{ current_sprint.name }} ({{current_sprint.start_date}} / {{current_sprint.end_date}})</span></h1>
+
+
+    <div class="flex flex-col w-5/6 lg:w-full lg:flex-row items-center mx-auto">
+
+        <!-- TODO -->
+        <div id="todo" ondragover="onDragOver(event);" ondrop="onDrop(event, this);" class="flex flex-col w-full lg:w-1/3 h-10 bg-red-700 bg-opacity-25 rounded-box place-items-center m-4 justify-center" >
+            TODO
+        </div>
+
+        <!-- IN PROGRESS -->
+        <div id="progress" ondragover="onDragOver(event);" ondrop="onDrop(event, this);" class="flex flex-col w-full lg:w-1/3 h-10 bg-yellow-700 bg-opacity-25 rounded-box place-items-center m-4 justify-center" >
+            IN PROGRESS
+        </div>
+
+        <!-- DONE -->
+        <div id="done" ondragover="onDragOver(event);" ondrop="onDrop(event, this);" class="flex flex-col w-full lg:w-1/3 h-10 bg-emerald-700 bg-opacity-25 rounded-box place-items-center m-4 justify-center">
+            DONE
+        </div>
+
+    </div>
 
         {% for task in sprint_task %}
 
         <!-- Task -->
-        <h2 class="font-medium leading-tight text-2xl mt-6 ml-6 underline">{{ task.name }}</h2>
+        <h2 class="font-medium leading-tight text-2xl mt-6 ml-6">
+            {% if task.status == 'TODO' %}
+            <span class="badge badge-error">{{task.status}}</span>
+            {% elif task.status == 'INPROGRESS' %}
+            <span class="badge badge-warning">{{task.status}}</span>
+            {% elif task.status == 'DONE' %}
+            <span class="badge badge-success">{{task.status}}</span>
+            {% endif %}
+
+            {{ task.name }}:
+
+            <span class="text-lg">{{ task.description }}</span>
+        </h2>
+
         <div class="flex flex-col w-5/6 lg:w-full lg:flex-row m-6 items-center mx-auto">
 
             <!-- TODO -->
-            <div id="task{{ loop.index }}-todo" ondragover="onDragOver(event);" ondrop="onDrop(event, this);" class="flex flex-col w-full lg:w-1/3 h-64 bg-red-700 bg-opacity-25 rounded-box place-items-center m-4 overflow-auto subtask-todo" >
+            <div id="task{{ loop.index }}-todo" ondragover="onDragOver(event);" ondrop="onDrop(event, this);" class="flex flex-col w-full lg:w-1/3 h-64 bg-red-700 bg-opacity-25 rounded-box place-items-center m-4 overflow-auto" >
                 
                 <div id="task{{ loop.index }}-sub1" draggable="true" ondragstart="onDragStart(event);" class="bg-base-100 p-2 m-5 rounded-box cursor-pointer w-4/5 text-center whitespace-nowrap">
                     Subtask 1
@@ -43,11 +74,11 @@
             </div>
 
             <!-- IN PROGRESS -->
-            <div id="task{{ loop.index }}-progress" ondragover="onDragOver(event);" ondrop="onDrop(event, this);" class="flex flex-col w-full lg:w-1/3 h-64 bg-yellow-700 bg-opacity-25 rounded-box place-items-center m-4 overflow-auto subtask-progress" >
+            <div id="task{{ loop.index }}-progress" ondragover="onDragOver(event);" ondrop="onDrop(event, this);" class="flex flex-col w-full lg:w-1/3 h-64 bg-yellow-700 bg-opacity-25 rounded-box place-items-center m-4 overflow-auto" >
             </div>
 
             <!-- DONE -->
-            <div id="task{{ loop.index }}-done" ondragover="onDragOver(event);" ondrop="onDrop(event, this);" class="flex flex-col w-full lg:w-1/3 h-64 bg-emerald-700 bg-opacity-25 rounded-box place-items-center m-4 overflow-auto subtask-done">
+            <div id="task{{ loop.index }}-done" ondragover="onDragOver(event);" ondrop="onDrop(event, this);" class="flex flex-col w-full lg:w-1/3 h-64 bg-emerald-700 bg-opacity-25 rounded-box place-items-center m-4 overflow-auto">
             </div>
 
         </div>
@@ -58,7 +89,10 @@
 
         <script>
             $( "#task{{ loop.index }}-todo, #task{{ loop.index }}-progress, #task{{ loop.index }}-done" ).sortable({
-            connectWith: "#task{{ loop.index }}-todo, #task{{ loop.index }}-progress, #task{{ loop.index }}-done"
+                connectWith: "#task{{ loop.index }}-todo, #task{{ loop.index }}-progress, #task{{ loop.index }}-done",
+                revert: true,
+                cursor: "move",
+                scrollSpeed: 5
             });
         </script>
 
