@@ -150,10 +150,9 @@
 
 {% for task in tasks %}
 <div class="modal" id="modalInfo{{task.id}}">
-    <form class="modal-box w-100" name="taskChanged" action="backlog" method="post">
+    <form class="max-w-3xl modal-box w-100" name="taskChanged" action="backlog" method="post">
         <input type="hidden" name="idTask" value="{{ task.id }}"/>
         <a href="#" class="btn btn-sm btn-circle absolute btn-error right-2 top-2">✕</a>
-        
             <select name="status" class="py-auto my-auto inline-block align-middle select select-secondary text-base-content w-full max-w-xs
                 {% if task.status == 'TODO'%}
                 select-error">
@@ -238,7 +237,7 @@
 {% endfor %}
             
 <div class="modal" id="modalNewTask">
-    <form class="modal-box w-100" id="create-new-task-form" action="backlog" method="post">
+    <form class="modal-box w-100 px-8" id="create-new-task-form" action="backlog" method="post">
         <a href="#" class="btn btn-sm btn-circle absolute btn-error right-2 top-2">✕</a>
         <h3 class="mb-2 font-bold text-lg">New task</h3>
         <div class="mb-2 form-control w-full max-w-xs">
