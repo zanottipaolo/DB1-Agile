@@ -28,8 +28,9 @@ class Task(Base):
     epic = Column(Integer, ForeignKey('epics.id'), nullable=True)
     signaler = Column(Integer)  # diventa chiave esterna
     fibonacci_points = Column(Integer)
+    status = Column(String(15))
 
-    def __init__(self, name, description, sprint, monitorer, epic, signaler, fibonacci_points):
+    def __init__(self, name, description, sprint, monitorer, epic, signaler, fibonacci_points, status):
         self.name = name
         self.description = description
         self.sprint = sprint
@@ -37,6 +38,7 @@ class Task(Base):
         self.epic = epic
         self.signaler = signaler
         self.fibonacci_points = fibonacci_points
+        self.status = status
 
     def __repr__(self):
         return f'<Task {self.name!r}>'
