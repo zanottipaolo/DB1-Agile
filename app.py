@@ -37,14 +37,23 @@ def backlog():
         tasks = Task.query.all()
         sprints = Sprint.query.all()
         current_sprint = Sprint.query.filter_by(
-            is_active=1).one()
+            is_active=1).first()
+        is_closable = 1
+        if current_sprint != None:
+            sprint_task = Task.query.filter_by(
+                sprint=current_sprint.id).order_by(Task.status)
+            task_in_sprint_done = Task.query.filter_by(
+                sprint=current_sprint.id, status='DONE').count()
+            if task_in_sprint_done == sprint_task.count():
+                is_closable = 0
+        else:
+            sprint_task = None
         backlog_task = Task.query.filter_by(
             sprint=None).order_by(Task.status)
-        sprint_task = Task.query.filter_by(
-            sprint=current_sprint.id).order_by(Task.status)
+
         epics = Epic.query.all()
         total_points_of_sprint = 100  # Fare SUM di sprint_task.fibonacci_points
-        return render_template('backlog/backlog.html', tasks=tasks, sprints=sprints, current_sprint=current_sprint, backlog_task=backlog_task, sprint_task=sprint_task, epics=epics, total_points_of_sprint=total_points_of_sprint)
+        return render_template('backlog/backlog.html', tasks=tasks, sprints=sprints, current_sprint=current_sprint, backlog_task=backlog_task, sprint_task=sprint_task, epics=epics, total_points_of_sprint=total_points_of_sprint, is_closable=is_closable)
     if request.method == 'POST' and 'create-new-task' in request.form:
         # add new task
         new_task = Task(request.form.get('name'),
@@ -89,6 +98,14 @@ def backlog():
         task_to_move = Task.query.get(request.form.get('idTask'))
         current_sprint = Sprint.query.filter_by(is_active=1).one()
         task_to_move.sprint = current_sprint.id
+        db_session.commit()
+        return redirect('/backlog')
+    if request.method == 'POST' and 'close-sprint' in request.form:
+        app.logger.info("CLOSE SPRINT")
+        current_sprint = Sprint.query.filter_by(is_active=1).one()
+        sprint_task = Task.query.filter_by(
+            sprint=current_sprint.id).update(dict(status='DONE'))
+        current_sprint.is_active = 0
         db_session.commit()
         return redirect('/backlog')
     # Close connection to database when shutting down

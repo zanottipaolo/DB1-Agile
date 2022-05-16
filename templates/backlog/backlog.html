@@ -16,8 +16,16 @@
             </div>
             <div class="p-4 mx-1 bg-base-200 rounded-lg">
                 <div class="mb-2" style="display: flex; flex-direction: row; align-items: center;">
+                    {% if current_sprint != None %}
                     <span class="py-1 px-2 rounded-lg bg-primary text-primary-content" class="bg-info">Active</span>
                     <span class="px-2 text-xl">{{current_sprint.name}}  ({{current_sprint.start_date}} / {{current_sprint.end_date}})</span>
+                    {% if is_closable == 0 %}
+                    <span class="px-2 text-base">All Tasks are done! Do you want to close the sprint?</span>
+                    {% endif %}
+                    {% else %}
+                    <span class="py-1 px-2 rounded-lg bg-error text-error-content" class="bg-info">No active sprint</span>
+                    {% endif %}
+                    
                     
                     <div style="margin-left: auto;"></div>
                     <div class="avatar-group -space-x-6">
@@ -43,6 +51,7 @@
                         </div>
                     </div>
                 </div>
+                {% if current_sprint != None %}
                 {% for task in sprint_task %}
                     <div class="p-2 mb-1 base-100 rounded bg-base-100 border-solid border-2 border-primary my-0" id="card">
                         <a href="#modalInfo{{task.id}}">
@@ -71,10 +80,18 @@
                         </a>
                     </div>
                 {% endfor %}
+                {% endif %}
+
+                {% if current_sprint != None %}
+                <form class="mt-3" action="backlog" method="POST">
+                    <a href="#closeSprint">Close sprint</a>
+                </form>
+                {% else %}
+                <form class="mt-3" action="backlog" method="POST">
+                    <a href="#createSprint">Create sprint</a>
+                </form>
+                {% endif %}
             </div>
-            <button class="ml-2 mt-2 py-1 px-2 bg-secondary text-secondary-content rounded-lg">
-                Close Sprint
-            </button>
         </div>
     </div>
 
@@ -215,8 +232,8 @@
             {% endif %}
             <button class="btn btn-primary text-base-content hover:text-primary-content" name="task-changed" type="submit">Save and close</button> 
         </div>
-        </form>     
-    </div>
+    </form>     
+</div>
 {% endfor %}
             
 <div class="modal" id="modalNewTask">
@@ -264,6 +281,30 @@
             <button class="btn btn-primary" name="create-new-task" type="submit">Add new task</button>
         </div>
     </form>
+</div>
+
+<div class="modal" id="closeSprint">
+    <form class="modal-box w-100" name="taskChanged" action="backlog" method="post">
+        <h3 class="font-bold text-lg">Are you sure?</h3>
+        {% if is_closable != 0 %} <!-- Ci sono task ancora in progress / to do e si vuole chiudere lo sprint -->
+        <p class="py-4">By closing the sprint, all activities will go into "DONE" status</p>
+        {% endif %}
+        <div class="modal-action">
+            <a class="btn btn-error" href="#">Back</a>
+            <button class="btn btn-warning" name="close-sprint" type="submit">Close sprint</button>
+        </div>
+    </form>     
+</div>
+
+<div class="modal" id="createSprint">
+    <form class="modal-box w-100" name="taskChanged" action="backlog" method="post">
+        <h3 class="font-bold text-lg">New Sprint</h3>
+        <p class="py-4">form</p>
+        <div class="modal-action">
+            <a class="btn btn-error" href="#">Back</a>
+            <button class="btn btn-success" name="close-sprint" type="submit">Create sprint</button>
+        </div>
+    </form>     
 </div>
 
 {% endblock %} 
