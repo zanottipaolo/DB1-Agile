@@ -53,7 +53,7 @@
                                     <span class="w-auto inline-block align-middle">{{task.name}}</span>
                                 </div>
                                 <div class="flex justify-end">
-                                    <span class="w-auto h-auto py-1 px-2 rounded bg-secondary py-auto my-auto text-center inline-block align-middle">{{task.epic}}</span>
+                                    <span class="w-auto h-auto py-1 px-2 rounded bg-secondary py-auto my-auto text-center inline-block align-middle">{{ task.epic}}</span>
                                     <span class="mx-2 my-auto inline-block align-middle">{{task.id}}</span>
                                     <img class="mx-2 flex justify-end inline-block align-middle h-8 w-8 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
                                     <span class="w-auto h-auto py-1 px-2 rounded bg-info text-info-content py-auto my-auto text-center inline-block align-middle">{{task.fibonacci_points}}</span>
@@ -129,7 +129,7 @@
                 <option>Matteo Soldini</option>
             </select><br><br>
             Fibonacci points:
-            <input type="range" min="0" max="8" value="{{task.fibonacciPoints}}" class="range range-xs range-primary" step="1" />
+            <input id="fibonacci_points_info" type="range" min="0" max="8" value="{{task.fibonacci_points}}" class="range range-xs range-primary" step="1" />
             <div class="w-full flex justify-between text-xs px-2">
                 <span>0</span>
                 <span>0.5</span>
@@ -168,6 +168,7 @@
 <div class="modal" id="modalNewTask">
     <form class="modal-box w-100" id="create-new-task-form" action="backlog" method="post">
         <a href="#" class="btn btn-sm btn-circle absolute btn-error right-2 top-2">✕</a>
+        <h3 class="mb-2 font-bold text-lg">New task</h3>
         <div class="mb-2 form-control w-full max-w-xs">
             <input type="text" name="name" placeholder="Task name" class="input input-bordered w-full max-w-xs" />
         </div>
@@ -176,9 +177,11 @@
             <input type="text" name="description" placeholder="Task description" class="input input-bordered w-full max-w-xs" />
         </div>
 
+        <input type="hidden" name="signaler" value="1"/> <!-- ID DELL'Utente in sessione-->
+        
         <div class="m-2 form-control w-full max-w-xs">
             Fibonacci points:</p>
-            <input type="range" min="0" max="8" value="1" class="range range-xs range-primary" step="1" />
+            <input name="fibonacci_points" type="range" min="0" max="8" value="0" class="range range-xs range-primary" step="1" />
             <div class="w-full flex justify-between text-xs px-2">
                 <span>0</span>
                 <span>0.5</span>
@@ -196,9 +199,10 @@
             <label class="label">
                 <span class="mb-0 label-text">Epic:</span>
             </label>  
-            <select class="mt-2 select select-primary w-auto max-w-xs">
-                <option>Maintenance</option>
-                <option>New product</option>
+            <select name="epic" class="mt-2 select select-primary w-auto max-w-xs">
+                {% for epics in epics %}
+                <option value="{{epics.id}}">{{ epics.name }}</option>
+                {% endfor %}
             </select><br>
         </div>
 
