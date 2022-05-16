@@ -22,6 +22,7 @@
                     {% if is_closable == 0 %}
                     <span class="px-2 text-base">All Tasks are done! Do you want to close the sprint?</span>
                     {% endif %}
+                    <a href="#change-sprint"><i class="mx-2 fa-solid fa-pencil"></i></a>
                     {% else %}
                     <span class="py-1 px-2 rounded-lg bg-error text-error-content" class="bg-info">No active sprint</span>
                     {% endif %}
@@ -307,35 +308,62 @@
             <input type="text" name="name" placeholder="Sprint name" class="input input-bordered w-full max-w-xs" />
         </div>
 
-        <div class="form-control w-full max-w-xs">
-            <label class="label">
-              <span class="label-text">Sprint description:</span>
-            </label>
-            <input type="text" name="description" placeholder="Sprint name" class="input input-bordered w-full max-w-xs" />
-        </div>
-
-        <div class="form-control w-100 w-full max-w-xs">
+        <div class="w-100 w-full">
             <div class="grid grid-cols-2">
                 <div class="mx-2">
                     <label class="label">
                         <span class="label-text">Date start:</span>
                       </label>
-                      <input type="date" name="date_start" placeholder="Sprint name" class="input input-bordered w-full max-w-xs" />
+                      <input type="date" name="date_start" class="input input-bordered w-full max-w-xs" />
                 </div>
                 <div class="mx-2">
                     <label class="label">
                         <span class="label-text">Date end:</span>
                       </label>
-                      <input type="date" name="date_end" placeholder="Sprint name" class="input input-bordered w-full max-w-xs" />
+                      <input type="date" name="date_end" class="input input-bordered w-full max-w-xs" />
                 </div>
             </div>
         </div>
-
         <div class="modal-action">
             <a class="btn btn-error" href="#">Back</a>
             <button class="btn btn-success" name="create-sprint" type="submit">Create sprint</button>
         </div>
     </form>     
 </div>
+
+{% if current_sprint != None %}
+<div class="modal" id="change-sprint">
+    <form class="modal-box w-100" name="taskChanged" action="backlog" method="post">
+        
+        <div class="form-control w-full max-w-xs">
+            <label class="label">
+              <span class="label-text">Sprint name:</span>
+            </label>
+            <input type="text" name="name" value="{{ current_sprint.name }}" class="input input-bordered w-full max-w-xs" />
+        </div>
+
+        <div class="w-100 w-full">
+            <div class="grid grid-cols-2">
+                <div class="mx-2">
+                    <label class="label">
+                        <span class="label-text">Date start:</span>
+                      </label>
+                      <input type="date" name="date_start" value="{{ current_sprint.start_date }}" class="input input-bordered w-full max-w-xs" />
+                </div>
+                <div class="mx-2">
+                    <label class="label">
+                        <span class="label-text">Date end:</span>
+                      </label>
+                      <input type="date" name="date_end" value="{{ current_sprint.end_date }}" class="input input-bordered w-full max-w-xs" />
+                </div>
+            </div>
+        </div>
+        <div class="modal-action">
+            <a class="btn btn-error" href="#">Back</a>
+            <button class="btn btn-info" name="update-sprint" type="submit">Update sprint</button>
+        </div>
+    </form>     
+</div>
+{% endif %}
 
 {% endblock %} 
