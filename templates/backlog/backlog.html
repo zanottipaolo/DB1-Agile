@@ -30,26 +30,13 @@
                     
                     <div style="margin-left: auto;"></div>
                     <div class="avatar-group -space-x-6">
-                        <div class="avatar">
-                            <div class="w-9">
-                                <img src="https://api.lorem.space/image/face?hash=53273" />
+                        {% for developer in developer %}
+                            <div class="avatar">
+                                <div class="w-9">
+                                    <img src="static/img/users/{{ developer.url_profile_image }}.jpg"/>
+                                </div>
                             </div>
-                        </div>
-                        <div class="avatar">
-                            <div class="w-9">
-                                <img src="https://api.lorem.space/image/face?hash=91831" />
-                            </div>
-                        </div>
-                        <div class="avatar">
-                            <div class="w-9">
-                                <img src="https://api.lorem.space/image/face?hash=27312" />
-                            </div>
-                        </div>
-                        <div class="avatar">
-                            <div class="w-9">
-                                <img src="https://api.lorem.space/image/face?hash=26448" />
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
                 {% if current_sprint != None %}
@@ -74,7 +61,11 @@
                                 <div class="flex justify-end">
                                     <span class="w-auto h-auto py-1 px-2 rounded bg-secondary text-secondary-content py-auto my-auto text-center inline-block align-middle">{{ task.epic}}</span>
                                     <span class="mx-2 my-auto inline-block align-middle">{{task.id}}</span>
-                                    <img class="mx-2 flex justify-end inline-block align-middle h-8 w-8 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+                                    {% if task.monitorer != None %}
+                                    <img class="mx-2 flex justify-end inline-block align-middle h-8 w-8 rounded-full ring-2 ring-white" src="/static/img/users/profile{{task.monitorer}}.jpg" alt=""/>
+                                    {% else %}
+                                    <img class="mx-2 flex justify-end inline-block align-middle h-8 w-8 rounded-full ring-2 ring-white" src="/static/img/users/none.jpg" alt=""/>
+                                    {% endif %}
                                     <span class="w-auto h-auto py-1 px-2 rounded bg-info text-info-content py-auto my-auto text-center inline-block align-middle">{{task.fibonacci_points}}</span>
                                 </div>
                             </div>
@@ -135,7 +126,11 @@
                             <div class="flex justify-end">
                                 <span class="w-auto h-auto py-1 px-2 rounded bg-secondary text-secondary-content py-auto my-auto text-center inline-block align-middle">{{task.epic}}</span>
                                 <span class="mx-2 my-auto inline-block align-middle">{{task.id}}</span>
-                                <img class="mx-2 flex justify-end inline-block align-middle h-8 w-8 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+                                {% if task.monitorer != None %}
+                                <img class="mx-2 flex justify-end inline-block align-middle h-8 w-8 rounded-full ring-2 ring-white" src="/static/img/users/profile{{task.monitorer}}.jpg" alt=""/>
+                                {% else %}
+                                <img class="mx-2 flex justify-end inline-block align-middle h-8 w-8 rounded-full ring-2 ring-white" src="/static/img/users/none.jpg" alt=""/>
+                                {% endif %}
                                 <span class="w-auto h-auto py-1 px-2 rounded bg-info text-info-content py-auto my-auto text-center inline-block align-middle">{{task.fibonacci_points}}</span>
                             </div>
                         </div>

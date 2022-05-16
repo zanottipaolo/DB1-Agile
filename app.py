@@ -9,7 +9,7 @@ from sqlalchemy import desc
 from backend.database import db_session
 
 # Models
-from backend.models import Sprint, Task, Epic
+from backend.models import Sprint, Task, Epic, User
 
 app = Flask(__name__)
 
@@ -40,6 +40,7 @@ def sprint():
 @app.route('/backlog', methods=['POST', 'GET'])
 def backlog():
     if request.method == 'GET':
+        developer = User.query.all()
         tasks = Task.query.all()
         sprints = Sprint.query.all()
         current_sprint = Sprint.query.filter_by(
@@ -62,7 +63,7 @@ def backlog():
             sprint=None).order_by(Task.status)
         epics = Epic.query.all()
         total_points_of_sprint = 100  # Fare SUM di sprint_task.fibonacci_points
-        return render_template('backlog/backlog.html', tasks=tasks, sprints=sprints, current_sprint=current_sprint, backlog_task=backlog_task, sprint_task=sprint_task, epics=epics, total_points_of_sprint=total_points_of_sprint, is_closable=is_closable, today=today, days_remaning=days_remaning)
+        return render_template('backlog/backlog.html', tasks=tasks, sprints=sprints, current_sprint=current_sprint, backlog_task=backlog_task, sprint_task=sprint_task, epics=epics, total_points_of_sprint=total_points_of_sprint, is_closable=is_closable, today=today, days_remaning=days_remaning, developer=developer)
     if request.method == 'POST' and 'create-new-task' in request.form:
         # add new task
         new_task = Task(request.form.get('name'),
