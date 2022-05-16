@@ -184,9 +184,9 @@
         <p class="">
             Assigned to:  
             <select class="mt-2 select select-primary w-auto max-w-xs">
-                <option>Federico De Duro</option>
-                <option>Paolo Zanotti</option>
-                <option>Matteo Soldini</option>
+                {% for developer in developer %}
+                    <option>{{ developer.name }} {{ developer.surname }}</option>
+                {% endfor %}
             </select><br>
             Reported by: <span class="my-2 w-auto h-auto py-1 px-2 rounded bg-secondary text-secondary-content py-auto my-auto text-center inline-block align-middle">Nome reporter</span>
             <br>Fibonacci points:
