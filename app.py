@@ -1,6 +1,6 @@
 from webbrowser import get
 from flask import Flask, redirect, render_template, request
-from sqlalchemy import func
+from sqlalchemy import desc
 
 # Database
 from backend.database import db_session
@@ -30,9 +30,12 @@ def backlog():
     if request.method == 'GET':
         tasks = Task.query.all()
         sprints = Sprint.query.all()
-        current_sprint = Sprint.query.filter_by(is_active=1).one()
-        backlog_task = Task.query.filter_by(sprint=None)
-        sprint_task = Task.query.filter_by(sprint=current_sprint.id)
+        current_sprint = Sprint.query.filter_by(
+            is_active=1).one()
+        backlog_task = Task.query.filter_by(
+            sprint=None).order_by(Task.status)
+        sprint_task = Task.query.filter_by(
+            sprint=current_sprint.id).order_by(Task.status)
         epics = Epic.query.all()
         total_points_of_sprint = 100  # Fare SUM di sprint_task.fibonacci_points
         return render_template('backlog/backlog.html', tasks=tasks, sprints=sprints, current_sprint=current_sprint, backlog_task=backlog_task, sprint_task=sprint_task, epics=epics, total_points_of_sprint=total_points_of_sprint)
