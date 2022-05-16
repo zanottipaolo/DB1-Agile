@@ -1,5 +1,5 @@
 from typing import Collection
-from sqlalchemy import Column, Integer, String, Date, Text, ForeignKey
+from sqlalchemy import Column, Integer, String, Date, Text, ForeignKey, Boolean
 from .database import Base
 
 
@@ -43,6 +43,14 @@ class Task(Base):
     def __repr__(self):
         return f'<Task {self.name!r}>'
 
+class SubTask(Base):
+    __tablename__ = 'subtasks'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50))
+    description = Column(Text())
+    assigned_to = Column(Integer, ForeignKey('users.id'), nullable=True)
+
+
 
 class Epic(Base):
     __tablename__ = 'epics'
@@ -56,3 +64,22 @@ class Epic(Base):
 
     def __repr__(self):
         return f'< Epic {self.name!r} >'
+
+class User(Base):
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50))
+    surname = Column(String(50))
+    email = Column(String(50))
+    password = Column(String(256)) # SHA256
+    manager = Column(Boolean())
+
+    def __init__(self, name, surname, email, password, manager=False):
+        self.name = name
+        self.surname = surname
+        self.email = email
+        self.password = password
+        self.manager = manager
+
+    def __repr__(self):
+        return f'< User {self.email!r} >'
