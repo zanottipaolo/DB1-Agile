@@ -48,7 +48,18 @@
                         <a href="#modalInfo{{task.id}}">
                             <div class=" grid grid-cols-2">
                                 <div class=" text-left align-middle">
-                                    <span class="w-auto inline-block align-middle">{{task.name}}</span>
+                                    <span class="w-auto inline-block align-middle">
+                                        <span class="w-auto h-auto py-1 px-2 rounded 
+                                        {% if task.status == 'TODO'%}
+                                        bg-error text-error-content 
+                                        {% elif task.status == 'INPROGRESS'%}
+                                        bg-warning text-warning-content
+                                        {% elif task.status == 'DONE'%}
+                                        bg-success text-success-content
+                                        {% endif %}
+                                        py-auto my-auto text-center inline-block align-middle">{{ task.status }}</span>
+                                        {{task.name}}
+                                    </span>
                                 </div>
                                 <div class="flex justify-end">
                                     <span class="w-auto h-auto py-1 px-2 rounded bg-secondary text-secondary-content py-auto my-auto text-center inline-block align-middle">{{ task.epic}}</span>
@@ -90,7 +101,18 @@
                     <a href="#modalInfo{{task.id}}">
                         <div class=" grid grid-cols-2">
                             <div class=" text-left align-middle">
-                                <span class="w-auto inline-block align-middle">{{task.name}}</span>
+                                <span class="w-auto inline-block align-middle">
+                                    <span class="w-auto h-auto py-1 px-2 rounded 
+                                    {% if task.status == 'TODO'%}
+                                    bg-error text-error-content 
+                                    {% elif task.status == 'INPROGRESS'%}
+                                    bg-warning text-warning-content
+                                    {% elif task.status == 'DONE'%}
+                                    bg-success text-success-content
+                                    {% endif %}
+                                    py-auto my-auto text-center inline-block align-middle">{{ task.status }}</span>
+                                    {{task.name}}
+                                </span>
                             </div>
                             <div class="flex justify-end">
                                 <span class="w-auto h-auto py-1 px-2 rounded bg-secondary text-secondary-content py-auto my-auto text-center inline-block align-middle">{{task.epic}}</span>
@@ -114,6 +136,25 @@
         <input type="hidden" name="idTask" value="{{ task.id }}"/>
         <a href="#" class="btn btn-sm btn-circle absolute btn-error right-2 top-2">✕</a>
         
+            <select name="status" class="py-auto my-auto inline-block align-middle select select-secondary w-full max-w-xs
+                {% if task.status == 'TODO'%}
+                select-error text-error-content">
+                    <option>TODO</option>
+                    <option>INPROGRESS</option>
+                    <option>DONE</option>
+                {% elif task.status == 'INPROGRESS'%}
+                select-warning text-warning-content">
+                <option>INPROGRESS</option>
+                <option>DONE</option>
+                <option>TODO</option>
+                {% elif task.status == 'DONE'%}
+                select-success text-success-content">
+                <option>DONE</option>
+                <option>INPROGRESS</option>
+                <option>TODO</option>
+                {% endif %}
+            </select>
+
         <div class="form-control">
             <label class="label">
                 <span class="mt-2 label-text">Task title:</span>

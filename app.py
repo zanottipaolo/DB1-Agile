@@ -44,7 +44,8 @@ def backlog():
                         None,
                         request.form.get('epic'),
                         request.form.get('signaler'),
-                        request.form.get('fibonacci_points'))
+                        request.form.get('fibonacci_points'),
+                        'TODO')
         db_session.add(new_task)
         db_session.commit()
         return redirect('/backlog')
@@ -60,6 +61,7 @@ def backlog():
         task_to_change = Task.query.get(request.form.get('idTask'))
         task_to_change.name = request.form.get('name')
         task_to_change.description = request.form.get('description')
+        task_to_change.status = request.form.get('status')
         # reporter
         task_to_change.fibonacci_points = request.form.get(
             'fibonacci_points_info')
