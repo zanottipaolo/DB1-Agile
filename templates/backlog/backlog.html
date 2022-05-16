@@ -16,11 +16,10 @@
 
         <div id="currentSprint">
             <p class="text-2xl p-4">Sprint</p>
-            {% for sprint in sprints %}
             <div class="p-4 mx-1 bg-base-200 rounded-lg">
                 <div class="mb-2" style="display: flex; flex-direction: row; align-items: center;">
                     <span class="py-1 px-2 rounded-lg bg-primary text-primary-content" class="bg-info">Active</span>
-                    <span class="px-2 text-xl">{{sprint.name}}  ({{sprint.start_date}} / {{sprint.end_date}})</span>
+                    <span class="px-2 text-xl">{{current_sprint.name}}  ({{current_sprint.start_date}} / {{current_sprint.end_date}})</span>
                     
                     <div style="margin-left: auto;"></div>
                     <div class="avatar-group -space-x-6">
@@ -46,27 +45,24 @@
                         </div>
                     </div>
                 </div>
-                {% for task in tasks %}
-                    {% if task.sprint == sprint.id %}
-                        <div class="p-2 mb-1 base-100 rounded bg-base-100 border-solid border-2 border-primary my-0" id="card">
-                            <a href="#modalInfo{{task.id}}">
-                                <div class=" grid grid-cols-2">
-                                    <div class=" text-left align-middle">
-                                        <span class="w-auto inline-block align-middle">{{task.name}}</span>
-                                    </div>
-                                    <div class="flex justify-end">
-                                        <span class="w-auto h-auto py-1 px-2 rounded bg-secondary py-auto my-auto text-center inline-block align-middle">{{task.epic}}</span>
-                                        <span class="mx-2 my-auto inline-block align-middle">{{task.id}}</span>
-                                        <img class="mx-2 flex justify-end inline-block align-middle h-8 w-8 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
-                                        <span class="w-auto h-auto py-1 px-2 rounded bg-info text-info-content py-auto my-auto text-center inline-block align-middle">{{task.fibonacci_points}}</span>
-                                    </div>
+                {% for task in sprint_task %}
+                    <div class="p-2 mb-1 base-100 rounded bg-base-100 border-solid border-2 border-primary my-0" id="card">
+                        <a href="#modalInfo{{task.id}}">
+                            <div class=" grid grid-cols-2">
+                                <div class=" text-left align-middle">
+                                    <span class="w-auto inline-block align-middle">{{task.name}}</span>
                                 </div>
-                            </a>
-                        </div>
-                    {% endif %}
+                                <div class="flex justify-end">
+                                    <span class="w-auto h-auto py-1 px-2 rounded bg-secondary py-auto my-auto text-center inline-block align-middle">{{task.epic}}</span>
+                                    <span class="mx-2 my-auto inline-block align-middle">{{task.id}}</span>
+                                    <img class="mx-2 flex justify-end inline-block align-middle h-8 w-8 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+                                    <span class="w-auto h-auto py-1 px-2 rounded bg-info text-info-content py-auto my-auto text-center inline-block align-middle">{{task.fibonacci_points}}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                 {% endfor %}
             </div>
-            {% endfor %}
             
         </div>
     </div>
@@ -89,8 +85,7 @@
 
         
         <div id="currentSprint">
-            {% for task in tasks %}
-                {% if task.sprint == None %}
+            {% for task in backlog_task %}
                 <div class="p-2 mb-1 base-100 rounded bg-base-100 border-solid border-2 border-primary my-0" id="card">
                     <a href="#modalInfo{{task.id}}">
                         <div class=" grid grid-cols-2">
@@ -106,7 +101,6 @@
                         </div>
                     </a>
                 </div>
-                {% endif %}
             {% endfor %}
         </div>
     </div>

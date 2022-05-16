@@ -4,7 +4,7 @@ from flask import Flask, redirect, render_template, request
 from backend.database import db_session
 
 # Models
-from backend.models import Sprint, Task
+from backend.models import Sprint, Task, Epic
 
 app = Flask(__name__)
 
@@ -28,7 +28,10 @@ def backlog():
     if request.method == 'GET':
         tasks = Task.query.all()
         sprints = Sprint.query.all()
-        return render_template('backlog/backlog.html', tasks=tasks, sprints=sprints)
+        current_sprint = Sprint.query.filter_by(is_active=1).first()
+        backlog_task = Task.query.filter_by(sprint=None)
+        sprint_task = Task.query.filter_by(sprint=current_sprint.id)
+        return render_template('backlog/backlog.html', tasks=tasks, sprints=sprints, current_sprint=current_sprint, backlog_task=backlog_task, sprint_task=sprint_task)
     if request.method == 'POST' and 'create-new-task' in request.form:
         # add new task
         new_task = Task(request.form.get('name'),
