@@ -21,8 +21,14 @@ def login():
 
 @app.route('/sprint', methods=['POST', 'GET'])
 def sprint():
-    sprint = Sprint.query.all()
-    return render_template('sprint.html', sprint=sprint)
+    if request.method == 'GET':
+        tasks = Task.query.all()
+        sprints = Sprint.query.all()
+        current_sprint = Sprint.query.filter_by(
+            is_active=1).one()
+        sprint_task = Task.query.filter_by(
+            sprint=current_sprint.id).order_by(Task.status)
+        return render_template('sprint.html', tasks=tasks, sprints=sprints, current_sprint=current_sprint, sprint_task=sprint_task)
 
 
 @app.route('/backlog', methods=['POST', 'GET'])
