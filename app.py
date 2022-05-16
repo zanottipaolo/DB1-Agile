@@ -21,6 +21,11 @@ def login():
     else:
         return render_template('login.html')
 
+@app.route('/profile', methods=['POST', 'GET'])
+def profile():
+    if request.method == 'GET':
+        return render_template('profile.html')
+
 
 @app.route('/sprint', methods=['POST', 'GET'])
 def sprint():

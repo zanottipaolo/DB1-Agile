@@ -13,7 +13,6 @@
     {% if current_sprint != None %}
     <h1 class="font-bold leading-tight text-3xl mt-6 ml-6">Active Sprint: <span class="italic">{{ current_sprint.name }} ({{current_sprint.start_date}} / {{current_sprint.end_date}})</span></h1>
 
-
     <div class="flex flex-col w-5/6 lg:w-full lg:flex-row items-center mx-auto">
 
         <!-- TODO -->
@@ -36,7 +35,11 @@
         {% for task in sprint_task %}
 
         <div class="collapse w-full overflow-visible collapse-arrow hover:ml-2 transform duration-300">
+            {% if loop.first%}
+            <input type="checkbox" checked /> 
+            {% else %}
             <input type="checkbox" /> 
+            {% endif %}
 
             <div class="collapse-title">
                 
