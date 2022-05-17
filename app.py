@@ -148,17 +148,17 @@ def logout():
 @login_required
 def sprint():
     if request.method == 'GET':
-        tasks = Task.query.all()
-        sprints = Sprint.query.all()
         current_sprint = Sprint.query.filter_by(
             is_active=1).first()
         if current_sprint != None:
-            sprint_task = Task.query.filter_by(
+            sprint_tasks = Task.query.filter_by(
                 sprint=current_sprint.id).order_by(Task.status)
         else:
-            sprint_task = None
-        return render_template('sprint.html', tasks=tasks, sprints=sprints, current_sprint=current_sprint, sprint_task=sprint_task, isNotLogin=True)
+            sprint_tasks = None
 
+        return render_template('sprint.html', current_sprint=current_sprint, sprint_task=sprint_tasks, isNotLogin=True)
+    elif request.method == 'POST':
+        return True
 
 @app.route('/backlog', methods=['POST', 'GET'])
 @login_required
@@ -210,7 +210,7 @@ def backlog():
 
         epics = Epic.query.filter(Epic.id != 0).all()
         total_points_of_sprint = 100  # Fare SUM di sprint_task.fibonacci_points
-        return render_template('backlog/backlog.html', tasks=tasks, current_sprint=current_sprint, backlog_task=backlog_task, sprint_task=sprint_task, epics=epics, total_points_of_sprint=total_points_of_sprint, is_closable=is_closable, today=today, days_remaning=days_remaning, developer=developer, isNotLogin=True)
+        return render_template('backlog.html', tasks=tasks, current_sprint=current_sprint, backlog_task=backlog_task, sprint_task=sprint_task, epics=epics, total_points_of_sprint=total_points_of_sprint, is_closable=is_closable, today=today, days_remaning=days_remaning, developer=developer, isNotLogin=True)
     if request.method == 'POST' and 'create-new-task' in request.form:
         # add new task
         new_task = Task(request.form.get('name'),               # name
