@@ -4,6 +4,8 @@ import datetime
 from time import strptime
 from webbrowser import get
 from flask import Flask, flash, redirect, render_template, request, url_for
+import flask_login
+from sqlalchemy import desc
 from sqlalchemy import desc, func, true
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
@@ -82,7 +84,27 @@ def signup():
 def profile():
     if request.method == 'GET':
         return render_template('profile.html', isNotLogin=True)
+    else:
+        user_to_update = User.query.get(request.form.get('id'))
+        user_to_update.name = request.form.get('name')
+        user_to_update.surname = request.form.get('surname')
+        user_to_update.email = request.form.get('email')
+        app.logger.info(request.form.get('name'))
+        #user_to_update.password = request.form.get('password')
+        user_to_update.manager = request.form.get('manager', type=bool)
 
+        # check if a user already exists wth the new email
+        user_exists = User.query.filter_by(email=user_to_update.email).first()
+
+        if user_exists :  # if user is found --> redirect to Profile
+            flash('Email already exists')
+            return render_template('profile.html', isNotLogin=True)
+
+        #user_to_update.password=generate_password_hash(user_to_update.password, method='sha256')
+
+        db_session.commit()
+
+        return render_template('profile.html', isNotLogin=True)
 
 @app.route('/logout')
 @login_required
