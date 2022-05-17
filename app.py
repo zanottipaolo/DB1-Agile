@@ -77,8 +77,7 @@ def signup():
 @login_required
 def profile():
     if request.method == 'GET':
-        user = User.query.all()
-        return render_template('profile.html', isNotLogin=True, name=current_user.name)
+        return render_template('profile.html', isNotLogin=True)
 
 @app.route('/logout')
 @login_required
@@ -88,6 +87,7 @@ def logout():
 
 
 @app.route('/sprint', methods=['POST', 'GET'])
+@login_required
 def sprint():
     if request.method == 'GET':
         tasks = Task.query.all()
@@ -103,6 +103,7 @@ def sprint():
 
 
 @app.route('/backlog', methods=['POST', 'GET'])
+@login_required
 def backlog():
     if request.method == 'GET':
         developer = User.query.filter_by(manager=0).all()
