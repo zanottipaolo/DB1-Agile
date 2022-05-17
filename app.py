@@ -86,23 +86,25 @@ def profile():
         return render_template('profile.html', isNotLogin=True)
     elif request.method == 'POST' and 'updateUser' in request.form:
         user_to_update = User.query.get(request.form.get('id'))
+
+        # check if a user already exists wth the new email
+        user_exists = User.query.filter_by(email=User.query.get(request.form.get('email'))).first()
+
+        if user_exists and user_exists.id != current_user.id :  # if user is found --> redirect to Profile
+            flash('Email already exists', 'error')
+            return render_template('profile.html', isNotLogin=True)
+        
         user_to_update.name = request.form.get('name')
         user_to_update.surname = request.form.get('surname')
         user_to_update.email = request.form.get('email')
         #user_to_update.password = request.form.get('password')
         user_to_update.manager = request.form.get('manager', type=bool)
 
-        # check if a user already exists wth the new email
-        user_exists = User.query.filter_by(email=user_to_update.email).first()
-
-        if user_exists and user_exists.id != current_user.id :  # if user is found --> redirect to Profile
-            flash('Email already exists')
-            return render_template('profile.html', isNotLogin=True)
-
         #user_to_update.password=generate_password_hash(user_to_update.password, method='sha256')
 
         db_session.commit()
 
+        flash('User info updated!', 'success')
         return render_template('profile.html', isNotLogin=True)
 
 @app.route('/logout')
