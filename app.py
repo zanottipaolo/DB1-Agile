@@ -1,11 +1,15 @@
+from cProfile import label
 from datetime import date
 import datetime
 from time import strptime
 from webbrowser import get
 from flask import Flask, flash, redirect, render_template, request, url_for
+import flask_login
 from sqlalchemy import desc
+from sqlalchemy import desc, func, true
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
+from sqlalchemy.orm import aliased
 
 # Database
 from backend.database import db_session
@@ -17,7 +21,7 @@ app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'ciao'
 
-#Log in manager
+# Log in manager
 login_manager = LoginManager()
 login_manager.login_view = 'login'
 login_manager.init_app(app)
@@ -39,8 +43,8 @@ def login():
 
         # If not exists or pw not match
         if not user or not check_password_hash(user.password, password):
-            flash('Check your login details and try again.')
-            return render_template('login.html', isNotLogin=False)
+            flash('Check your login details and try again.', 'error')
+            return redirect('/')
 
         login_user(user)
         return redirect(url_for('sprint'))
@@ -62,7 +66,7 @@ def signup():
 
         if user:  # if user is found --> redirect to Sign Up
             flash('Email already exists')
-            return render_template('signup.html', isNotLogin=False)
+            return redirect(url_for('signup'))
 
         new_user = User(name=name, surname=surname, email=email, password=generate_password_hash(
             password, method='sha256'), manager=manager)
@@ -70,7 +74,8 @@ def signup():
         db_session.add(new_user)
         db_session.commit()
 
-        return render_template('login.html', isNotLogin=False)
+        flash('User has been successfully created!', 'success')
+        return redirect('/')
     else:
         return render_template('signup.html', isNotLogin=False)
 
@@ -80,6 +85,56 @@ def signup():
 def profile():
     if request.method == 'GET':
         return render_template('profile.html', isNotLogin=True)
+    elif request.method == 'POST' and 'updateUser' in request.form:
+        user_to_update = User.query.get(request.form.get('id'))
+
+        # check if a user already exists wth the new emailù
+        user_exists = User.query.filter_by(email=request.form.get('email')).first()
+
+        app.logger.info(user_exists)
+
+        if user_exists and user_exists.id != current_user.id:  # if user is found --> redirect to Profile
+            flash('Email already exists', 'error')
+            return redirect(url_for('profile'))
+        
+        user_to_update.name = request.form.get('name')
+        user_to_update.surname = request.form.get('surname')
+        user_to_update.email = request.form.get('email')
+        user_to_update.manager = request.form.get('manager', type=bool)
+        
+        if user_to_update.manager == None:
+            user_to_update.manager = 0
+
+        db_session.commit()
+
+        flash('User info updated!', 'success')
+        return redirect(url_for('profile'))
+
+    elif request.method == 'POST' and 'deleteUser' in request.form:
+        User.query.filter_by(id=request.form.get('id')).delete()
+        db_session.commit()
+
+        flash('User has been successfully deleted', 'success')
+        return redirect('/')
+    
+    elif request.method == 'POST' and 'updatePw' in request.form:
+        current_password = request.form.get('cur-password')
+        new_password = request.form.get('new-password')
+
+        # Current id user
+        user_to_update = User.query.get(request.form.get('id'))
+
+        # If current password is wrong
+        if not check_password_hash(user_to_update.password, current_password):
+            flash('Wrong password, try again.', 'error-pw')
+            return redirect(url_for('profile'))
+
+        user_to_update.password=generate_password_hash(new_password, method='sha256')        
+
+        db_session.commit()
+
+        flash('Password has been successfully updated!', 'success-pw')
+        return redirect(url_for('profile'))
 
 
 @app.route('/logout')
@@ -109,39 +164,63 @@ def sprint():
 @login_required
 def backlog():
     if request.method == 'GET':
-        developer = User.query.filter_by(manager=0).all()
-        tasks = Task.query.all()
-        current_sprint = Sprint.query.filter_by(
-            is_active=1).first()
+        developer = User.query.filter(User.manager == 0, User.id != 0).all()
+        S = aliased(User)  # signaler
+        M = aliased(User)  # monitorer
+
+        tasks = db_session.query(Task.id.label("id"), Task.name.label("name"), Task.description.label("description"), Task.sprint.label("sprint"), Task.monitorer.label("monitorer"), Task.signaler.label(
+            "signaler"), Task.epic.label("epic"), Task.fibonacci_points.label("fibonacci_points"), Task.status.label("status"), Epic.name.label("epic_name"), M.name.label("monitorer_name"), M.surname.label("monitorer_surname"), S.name.label("signaler_name"), S.surname.label("signaler_surname"))\
+            .join(Epic, Task.epic == Epic.id)\
+            .join(S, Task.signaler == S.id)\
+            .join(M, Task.monitorer == M.id)
+
+        current_sprint = db_session.query(Sprint).filter(
+            Sprint.is_active == 1).first()
         is_closable = 1
         days_remaning = 0
         today = date.today()
         if current_sprint != None:
             sprint_task = Task.query.filter_by(
                 sprint=current_sprint.id).order_by(Task.status)
+            current_sprint_id = current_sprint.id
+
+            sprint_task = db_session.query(Task.id.label("id"), Task.name.label("name"), Task.description.label("description"), Task.sprint.label("sprint"), Task.monitorer.label("monitorer"), Task.signaler.label(
+                "signaler"), Task.epic.label("epic"), Task.fibonacci_points.label("fibonacci_points"), Task.status.label("status"), Epic.name.label("epic_name"), M.name.label("monitorer_name"), M.surname.label("monitorer_surname"), S.name.label("signaler_name"), S.surname.label("signaler_surname"))\
+                .filter(Task.sprint == current_sprint_id)\
+                .join(Epic, Task.epic == Epic.id)\
+                .join(S, Task.signaler == S.id)\
+                .join(M, Task.monitorer == M.id)\
+                .order_by(Task.status).all()
+
             task_in_sprint_done = Task.query.filter_by(
                 sprint=current_sprint.id, status='DONE').count()
             days_remaning = abs(current_sprint.end_date - today).days
-            if task_in_sprint_done == sprint_task.count and sprint_task.count() != 0:
+            if task_in_sprint_done == len(sprint_task) and len(sprint_task) != 0:
                 is_closable = 0
         else:
             sprint_task = None
 
-        backlog_task = Task.query.filter_by(
-            sprint=None).order_by(Task.status)
-        epics = Epic.query.all()
+        backlog_task = db_session.query(Task.id.label("id"), Task.name.label("name"), Task.description.label("description"), Task.sprint.label("sprint"), Task.monitorer.label("monitorer"), Task.signaler.label(
+            "signaler"), Task.epic.label("epic"), Task.fibonacci_points.label("fibonacci_points"), Task.status.label("status"), Epic.name.label("epic_name"), M.name.label("monitorer_name"), M.surname.label("monitorer_surname"), S.name.label("signaler_name"), S.surname.label("signaler_surname"))\
+            .filter(Task.sprint == None)\
+            .join(Epic, Task.epic == Epic.id)\
+            .join(S, Task.signaler == S.id)\
+            .join(M, Task.monitorer == M.id)\
+            .order_by(Task.status)
+
+        epics = Epic.query.filter(Epic.id != 0).all()
         total_points_of_sprint = 100  # Fare SUM di sprint_task.fibonacci_points
         return render_template('backlog.html', tasks=tasks, current_sprint=current_sprint, backlog_task=backlog_task, sprint_task=sprint_task, epics=epics, total_points_of_sprint=total_points_of_sprint, is_closable=is_closable, today=today, days_remaning=days_remaning, developer=developer, isNotLogin=True)
     if request.method == 'POST' and 'create-new-task' in request.form:
         # add new task
-        new_task = Task(request.form.get('name'),
-                        request.form.get('description'),
-                        None,
-                        None,
-                        request.form.get('epic'),
-                        request.form.get('signaler'),
-                        request.form.get('fibonacci_points'),
-                        'TODO')
+        new_task = Task(request.form.get('name'),               # name
+                        request.form.get('description'),        # description
+                        None,                                   # sprint
+                        0,                                      # monitorer
+                        request.form.get('epic'),               # epic
+                        request.form.get('signaler'),           # signaler
+                        request.form.get('fibonacci_points'),   # f. points
+                        'TODO')                                 # status
         db_session.add(new_task)
         db_session.commit()
         return redirect('/backlog', isNotLogin=True)
@@ -157,10 +236,12 @@ def backlog():
         task_to_change = Task.query.get(request.form.get('idTask'))
         task_to_change.name = request.form.get('name')
         task_to_change.description = request.form.get('description')
+        task_to_change.monitorer = request.form.get('monitorer')
+        task_to_change.epic = request.form.get('epic')
+        task_to_change.fibonacci_points = request.form.get('fibonacci_points')
         task_to_change.status = request.form.get('status')
-        # reporter
         task_to_change.fibonacci_points = request.form.get(
-            'fibonacci_points_info')
+            'fibonacci_points')
         db_session.commit()
         return redirect('/backlog', isNotLogin=True)
     if request.method == 'POST' and 'remove-from-sprint' in request.form:
@@ -206,6 +287,7 @@ def backlog():
         db_session.commit()
         return redirect('/backlog', isNotLogin=True)
     # Close connection to database when shutting down
+    shutdown_session()
 
 
 @ app.teardown_appcontext

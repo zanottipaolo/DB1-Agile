@@ -59,14 +59,16 @@
                                     </span>
                                 </div>
                                 <div class="flex justify-end">
-                                    <span class="w-auto h-auto py-1 px-2 rounded bg-secondary text-secondary-content py-auto my-auto text-center inline-block align-middle">{{ task.epics_name}}</span>
+                                    {% if task.epic != 0 %}
+                                        <span class="w-auto h-auto py-1 px-2 rounded bg-secondary text-secondary-content py-auto my-auto text-center inline-block align-middle">{{ task.epic_name}}</span>
+                                    {% endif %}
                                     <span class="mx-2 my-auto inline-block align-middle">{{task.id}}</span>
-                                    {% if task.monitorer != None %}
+                                    {% if task.monitorer != 0 %}
                                     <img class="mx-2 flex justify-end inline-block align-middle h-8 w-8 rounded-full ring-2 ring-white" src="/static/img/users/profile{{task.monitorer}}.jpg" alt=""/>
                                     {% else %}
                                     <img class="mx-2 flex justify-end inline-block align-middle h-8 w-8 rounded-full ring-2 ring-white" src="/static/img/users/none.jpg" alt=""/>
                                     {% endif %}
-                                    <span class="w-auto h-auto py-1 px-2 rounded bg-info text-info-content py-auto my-auto text-center inline-block align-middle">{{task.fibonacci_points}}</span>
+                                    <span class="w-auto h-auto py-1 px-2 rounded bg-info text-info-content py-auto my-auto text-center inline-block align-middle">{{task.fibonacci_points}} FB</span>
                                 </div>
                             </div>
                         </a>
@@ -76,7 +78,11 @@
 
                 {% if current_sprint != None %}
                 <form class="mt-3" action="backlog" method="POST">
-                    <a href="#closeSprint">Close sprint ({{days_remaning}} days remaining)</a>
+                    {% if is_closable == 0 %}
+                        <a href="#closeSprint" class="py-1 px-2 rounded bg-success text-success-content">Close sprint ({{days_remaning}} days remaining)</a>
+                    {% else %}
+                        <a href="#closeSprint" class="py-1 px-2 rounded text-error">Close sprint ({{days_remaning}} days remaining)</a>
+                    {% endif %}
                 </form>
                 {% else %}
                 <form class="mt-3" action="backlog" method="POST">
@@ -124,14 +130,16 @@
                                 </span>
                             </div>
                             <div class="flex justify-end">
-                                <span class="w-auto h-auto py-1 px-2 rounded bg-secondary text-secondary-content py-auto my-auto text-center inline-block align-middle">{{task.epic}}</span>
+                                {% if task.epic != 0 %}
+                                <span class="w-auto h-auto py-1 px-2 rounded bg-secondary text-secondary-content py-auto my-auto text-center inline-block align-middle">{{task.epic_name}}</span>
+                                {% endif %}
                                 <span class="mx-2 my-auto inline-block align-middle">{{task.id}}</span>
-                                {% if task.monitorer != None %}
+                                {% if task.monitorer != 0 %}
                                 <img class="mx-2 flex justify-end inline-block align-middle h-8 w-8 rounded-full ring-2 ring-white" src="/static/img/users/profile{{task.monitorer}}.jpg" alt=""/>
                                 {% else %}
                                 <img class="mx-2 flex justify-end inline-block align-middle h-8 w-8 rounded-full ring-2 ring-white" src="/static/img/users/none.jpg" alt=""/>
                                 {% endif %}
-                                <span class="w-auto h-auto py-1 px-2 rounded bg-info text-info-content py-auto my-auto text-center inline-block align-middle">{{task.fibonacci_points}}</span>
+                                <span class="w-auto h-auto py-1 px-2 rounded bg-info text-info-content py-auto my-auto text-center inline-block align-middle">{{task.fibonacci_points}} FB</span>
                             </div>
                         </div>
                     </a>
@@ -183,15 +191,24 @@
 
         <p class="">
             Assigned to:  
-            <select class="mt-2 select select-primary w-auto max-w-xs">
-                <option>{{ task.monitorer_name }} {{ task.monitorer_name }}</option>
+            <select name="monitorer" class="ml-2 mt-2 select select-primary w-auto max-w-xs">
+                {% if task.monitorer == 0 %}
+                    <!-- non è assegnata -->
+                    <option value="0" class="bg-error text-error-content">No one selected</option>
+                {% else %}
+                    <option value="{{task.monitorer}}">{{ task.monitorer_name }} {{ task.monitorer_surname }}</option>
+                    <option value="0" class="bg-error text-error-content">Remove monitorer</option>
+                {% endif%}
+                
                 {% for developer in developer %}
-                    <option>{{ developer.name }} {{ developer.surname }}</option>
+                    {% if developer.id != task.monitorer %}
+                        <option value="{{ developer.id }}">{{ developer.name }} {{ developer.surname }}</option>
+                    {% endif %}
                 {% endfor %}
             </select><br>
-            Reported by: <span class="my-2 w-auto h-auto py-1 px-2 rounded bg-secondary text-secondary-content py-auto my-auto text-center inline-block align-middle">Nome reporter</span>
+            Reported by: <span class="my-2 w-auto h-auto py-1 px-2 rounded bg-secondary text-secondary-content py-auto my-auto text-center inline-block align-middle">{{ task.signaler_name }} {{ task.signaler_surname }}</span>
             <br>Fibonacci points:
-            <input id="fibonacci_points_info" type="range" min="0" max="8" value="{{task.fibonacci_points}}" class="range range-xs range-primary" step="1" />
+            <input name="fibonacci_points" id="fibonacci_points_info" type="range" min="0" max="8" value="{{task.fibonacci_points}}" class="range range-xs range-primary" step="1" />
             <div class="w-full flex justify-between text-xs px-2">
                 <span>0</span>
                 <span>0.5</span>
@@ -216,7 +233,20 @@
             </div>
             <div>
                 <p class="mb-2">Epic:</p>
-                <span class="w-auto h-auto py-1 px-2 rounded bg-secondary text-secondary-content py-auto my-auto text-center inline-block align-middle">{{task.epic}}</span>
+                <select name="epic" class="ml-2 mt-2 select select-primary w-auto max-w-xs">
+                    {% if task.epic == 0 %}
+                        <option value="0" class="bg-error text-error-content">No one selected</option>
+                    {% else %}
+                        <option value="{{ task.epic }}">{{ task.epic_name }}</option>
+                        <option value="0" class="bg-error text-error-content">Remove selected epic</option>
+                    {% endif%}
+
+                    {% for epics in epics %}
+                        {% if epics.id != task.epic %}
+                            <option value="{{ epics.id }}">{{ epics.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
             </div>
         </div>
         <div class="modal-action">
@@ -244,7 +274,7 @@
             <input type="text" name="description" placeholder="Task description" class="input input-bordered w-full max-w-xs" />
         </div>
 
-        <input type="hidden" name="signaler" value="1"/> <!-- ID DELL'Utente in sessione-->
+        <input type="hidden" name="signaler" value="1"/> <!-- WARNING ID DELL'Utente in sessione-->
         
         <div class="m-2 form-control w-full max-w-xs">
             Fibonacci points:</p>

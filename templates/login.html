@@ -7,12 +7,13 @@
   <div class="container px-6 py-12 h-full">
     <div class="flex justify-center items-center flex-wrap h-full g-6">
       <div class="md:w-8/12 lg:w-6/12 mb-12 md:mb-0">
-        <img src="static/img/wallpaper_login.svg" class="w-full" alt="Login image" />
+        <a href="{{ url_for('login')}}"><img src="static/img/wallpaper_login.svg" class="w-full" alt="Login image" /></a>
       </div>
       <div class="md:w-8/12 lg:w-5/12 lg:ml-20">
         <h1 class="title-font text-center sm:text-4xl text-3xl mb-4">Welcome to Gira</h1>
         
-        {% with messages = get_flashed_messages() %}
+        {# If error mail --> show alert error #}
+        {% with messages = get_flashed_messages(category_filter=["error"]) %}
         {% if messages %}
             <div class="alert alert-error shadow-lg mb-6">
               <div>
@@ -23,16 +24,28 @@
         {% endif %}
         {% endwith %}
 
+        {# When delete user --> show alert success #}
+        {% with messages = get_flashed_messages(category_filter=["success"]) %}
+        {% if messages %}
+            <div class="alert alert-success shadow-lg mb-6">
+              <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <span>{{ messages[0] }}</span>
+              </div>
+            </div>
+        {% endif %}
+        {% endwith %}
+
         <form method="POST" id="loginUser">
 
           <!-- Email input -->
           <div class="mb-6">
-            <input type="text" placeholder="Email address" name="email" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none text-base-300" />
+            <input type="text" placeholder="Email address" name="email" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none" />
           </div>
 
           <!-- Password input -->
           <div class="mb-6">
-            <input type="password" placeholder="Password" name="password" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none text-base-300" />
+            <input type="password" placeholder="Password" name="password" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none" />
           </div>
 
           <!-- Submit button -->
