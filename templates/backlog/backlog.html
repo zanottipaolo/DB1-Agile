@@ -183,15 +183,24 @@
 
         <p class="">
             Assigned to:  
-            <select class="mt-2 select select-primary w-auto max-w-xs">
-                <option>{{ task.monitorer_name }} {{ task.monitorer_name }}</option>
+            <select name="monitorer" class="ml-2 mt-2 select select-primary w-auto max-w-xs">
+                {% if task.monitorer == 0 %}
+                    <!-- non è assegnata -->
+                    <option value="0" class="bg-error text-error-content">No one selected</option>
+                {% else %}
+                    <option value="{{task.monitorer}}">{{ task.monitorer_name }} {{ task.monitorer_surname }}</option>
+                    <option value="0" class="bg-error text-error-content">Remove monitorer</option>
+                {% endif%}
+                
                 {% for developer in developer %}
-                    <option>{{ developer.name }} {{ developer.surname }}</option>
+                    {% if developer.id != task.monitorer %}
+                        <option value="{{ developer.id }}">{{ developer.name }} {{ developer.surname }}</option>
+                    {% endif %}
                 {% endfor %}
             </select><br>
-            Reported by: <span class="my-2 w-auto h-auto py-1 px-2 rounded bg-secondary text-secondary-content py-auto my-auto text-center inline-block align-middle">Nome reporter</span>
+            Reported by: <span class="my-2 w-auto h-auto py-1 px-2 rounded bg-secondary text-secondary-content py-auto my-auto text-center inline-block align-middle">{{ task.signaler_name }} {{ task.signaler_surname }}</span>
             <br>Fibonacci points:
-            <input id="fibonacci_points_info" type="range" min="0" max="8" value="{{task.fibonacci_points}}" class="range range-xs range-primary" step="1" />
+            <input name="fibonacci_points" id="fibonacci_points_info" type="range" min="0" max="8" value="{{task.fibonacci_points}}" class="range range-xs range-primary" step="1" />
             <div class="w-full flex justify-between text-xs px-2">
                 <span>0</span>
                 <span>0.5</span>
@@ -216,7 +225,20 @@
             </div>
             <div>
                 <p class="mb-2">Epic:</p>
-                <span class="w-auto h-auto py-1 px-2 rounded bg-secondary text-secondary-content py-auto my-auto text-center inline-block align-middle">{{task.epic}}</span>
+                <select name="epic" class="ml-2 mt-2 select select-primary w-auto max-w-xs">
+                    {% if task.epic == 0 %}
+                        <option value="0" class="bg-error text-error-content">No one selected</option>
+                    {% else %}
+                        <option value="{{ task.epic }}">{{ task.epic_name }}</option>
+                        <option value="0" class="bg-error text-error-content">Remove selected epic</option>
+                    {% endif%}
+
+                    {% for epics in epics %}
+                        {% if epics.id != task.epic %}
+                            <option value="{{ epics.id }}">{{ epics.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
             </div>
         </div>
         <div class="modal-action">

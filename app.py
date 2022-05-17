@@ -111,8 +111,17 @@ def sprint():
 @login_required
 def backlog():
     if request.method == 'GET':
-        developer = User.query.filter_by(manager=0).all()
-        tasks = Task.query.all()
+        developer = User.query.filter(User.manager == 0, User.id != 0).all()
+
+        S = aliased(User)  # signaler
+        M = aliased(User)  # monitorer
+
+        tasks = db_session.query(Task.id.label("id"), Task.name.label("name"), Task.description.label("description"), Task.sprint.label("sprint"), Task.monitorer.label("monitorer"), Task.signaler.label(
+            "signaler"), Task.epic.label("epic"), Task.fibonacci_points.label("fibonacci_points"), Task.status.label("status"), Epic.name.label("epic_name"), M.name.label("monitorer_name"), M.surname.label("monitorer_surname"), S.name.label("signaler_name"), S.surname.label("signaler_surname"))\
+            .join(Epic, Task.epic == Epic.id)\
+            .join(S, Task.signaler == S.id)\
+            .join(M, Task.monitorer == M.id)
+
         current_sprint = db_session.query(Sprint).filter(
             Sprint.is_active == 1).one()
         is_closable = 1
@@ -123,8 +132,6 @@ def backlog():
                 sprint=current_sprint.id).order_by(Task.status)
             current_sprint_id = current_sprint.id
 
-            S = aliased(User)  # signaler
-            M = aliased(User)  # monitorer
             sprint_task = db_session.query(Task.id.label("id"), Task.name.label("name"), Task.description.label("description"), Task.sprint.label("sprint"), Task.monitorer.label("monitorer"), Task.signaler.label(
                 "signaler"), Task.epic.label("epic"), Task.fibonacci_points.label("fibonacci_points"), Task.status.label("status"), Epic.name.label("epic_name"), M.name.label("monitorer_name"), M.surname.label("monitorer_surname"), S.name.label("signaler_name"), S.surname.label("signaler_surname"))\
                 .filter(Task.sprint == current_sprint_id)\
@@ -150,7 +157,7 @@ def backlog():
             .join(M, Task.monitorer == M.id)\
             .order_by(Task.status)
 
-        epics = Epic.query.all()
+        epics = Epic.query.filter(Epic.id != 0).all()
         total_points_of_sprint = 100  # Fare SUM di sprint_task.fibonacci_points
         return render_template('backlog/backlog.html', tasks=tasks, current_sprint=current_sprint, backlog_task=backlog_task, sprint_task=sprint_task, epics=epics, total_points_of_sprint=total_points_of_sprint, is_closable=is_closable, today=today, days_remaning=days_remaning, developer=developer, isNotLogin=True)
     if request.method == 'POST' and 'create-new-task' in request.form:
@@ -178,6 +185,9 @@ def backlog():
         task_to_change = Task.query.get(request.form.get('idTask'))
         task_to_change.name = request.form.get('name')
         task_to_change.description = request.form.get('description')
+        task_to_change.monitorer = request.form.get('monitorer')
+        task_to_change.epic = request.form.get('epic')
+        task_to_change.fibonacci_points = request.form.get('fibonacci_points')
         task_to_change.status = request.form.get('status')
         # reporter
         task_to_change.fibonacci_points = request.form.get(
