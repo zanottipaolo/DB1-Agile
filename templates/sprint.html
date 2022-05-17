@@ -1,123 +1,172 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block title %}Sprint{% endblock %} {% block head %}
+<!-- JQuery -->
+<script src="{{ url_for('static', filename='lib/jquery-3.6.0.js') }}"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+{% endblock %} {% block body %} {% if current_sprint != None %}
+<h1 class="font-bold leading-tight text-3xl mt-6 ml-6">
+	Active Sprint:
+	<span class="italic"
+		>{{ current_sprint.name }} ({{current_sprint.start_date}} /
+		{{current_sprint.end_date}})</span
+	>
+</h1>
 
-{% block title %}Sprint{% endblock %}
+{% for task in sprint_task %}
 
-{% block head %}
-    <!-- JQuery -->
-    <script src="{{ url_for('static', filename='lib/jquery-3.6.0.js') }}"></script>
-    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
-{% endblock %}
+<div
+	class="collapse w-full overflow-visible collapse-arrow hover:ml-2 transform duration-300"
+>
+	{% if loop.first%}
+	<input type="checkbox" checked />
+	{% else %}
+	<input type="checkbox" />
+	{% endif %}
 
-{% block body %}
+	<div class="collapse-title">
+		<!-- Task -->
+		<h2 class="font-medium leading-tight text-2xl mt-6 ml-6">
+			{% if task.status == 'TODO' %}
+			<span class="badge badge-error">{{task.status}}</span>
+			{% elif task.status == 'INPROGRESS' %}
+			<span class="badge badge-warning">{{task.status}}</span>
+			{% elif task.status == 'DONE' %}
+			<span class="badge badge-success">{{task.status}}</span>
+			{% endif %} {{ task.name }}:
 
-    {% if current_sprint != None %}
-    <h1 class="font-bold leading-tight text-3xl mt-6 ml-6">Active Sprint: <span class="italic">{{ current_sprint.name }} ({{current_sprint.start_date}} / {{current_sprint.end_date}})</span></h1>
+			<span class="text-lg">{{ task.description }}</span>
+		</h2>
+	</div>
 
-    <div class="flex flex-col w-5/6 lg:w-full lg:flex-row items-center mx-auto">
+	<div class="collapse-content">
+		<div class="flex flex-col lg:w-full lg:flex-row m-6 items-center mx-auto">
+			<div
+				class="flex flex-col w-full lg:w-1/3 h-64 bg-red-700 bg-opacity-25 rounded-box place-items-center overflow-auto"
+			>
+				<h1 style="padding: 10px; font-weight: bold; font-size: 1.2em">
+					TO DO
+				</h1>
+				<!-- TODO -->
+				<div
+					id="task{{ loop.index }}-todo"
+					ondragover="onDragOver(event);"
+					ondrop="onDrop(event, this);"
+					style="
+						width: 100%;
+						height: 100%;
+						display: flex;
+						flex-direction: column;
+						align-items: center;
+						gap: 5px;
+					"
+				>
+					<div
+						id="task{{ loop.index }}-sub1"
+						draggable="true"
+						ondragstart="onDragStart(event);"
+						class="bg-base-100 p-5 rounded-box cursor-pointer w-4/5 text-center whitespace-nowrap"
+					>
+						Subtask 1
+					</div>
 
-        <!-- TODO -->
-        <div id="todo" ondragover="onDragOver(event);" ondrop="onDrop(event, this);" class="flex flex-col w-full lg:w-1/3 h-10 bg-red-700 bg-opacity-25 rounded-box place-items-center m-4 justify-center" >
-            TODO
-        </div>
+					<div
+						id="task{{ loop.index }}-sub2"
+						draggable="true"
+						ondragstart="onDragStart(event);"
+						class="bg-base-100 p-5 rounded-box cursor-pointer w-4/5 text-center whitespace-nowrap"
+					>
+						Subtask 2
+					</div>
 
-        <!-- IN PROGRESS -->
-        <div id="progress" ondragover="onDragOver(event);" ondrop="onDrop(event, this);" class="flex flex-col w-full lg:w-1/3 h-10 bg-yellow-700 bg-opacity-25 rounded-box place-items-center m-4 justify-center" >
-            IN PROGRESS
-        </div>
+					<div
+						id="task{{ loop.index }}-sub3"
+						draggable="true"
+						ondragstart="onDragStart(event);"
+						class="bg-base-100 p-5 rounded-box cursor-pointer w-4/5 text-center whitespace-nowrap"
+					>
+						Subtask 3
+					</div>
 
-        <!-- DONE -->
-        <div id="done" ondragover="onDragOver(event);" ondrop="onDrop(event, this);" class="flex flex-col w-full lg:w-1/3 h-10 bg-emerald-700 bg-opacity-25 rounded-box place-items-center m-4 justify-center">
-            DONE
-        </div>
+					<div
+						id="task{{ loop.index }}-sub4"
+						draggable="true"
+						ondragstart="onDragStart(event);"
+						class="bg-base-100 p-5 rounded-box cursor-pointer w-4/5 text-center whitespace-nowrap"
+					>
+						Subtask 4
+					</div>
+				</div>
+			</div>
+			
+			<!-- IN PROGRESS -->
+			<div
+				class="flex flex-col w-full lg:w-1/3 h-64 bg-yellow-700 bg-opacity-25 rounded-box place-items-center m-4 overflow-auto"
+			>
+			<h1 style="padding: 10px; font-weight: bold; font-size: 1.2em">
+				DOING
+			</h1>
+				<div
+					id="task{{ loop.index }}-progress"
+					ondragover="onDragOver(event);"
+					ondrop="onDrop(event, this);"
+					style="
+						width: 100%;
+						height: 100%;
+						display: flex;
+						flex-direction: column;
+						align-items: center;
+						gap: 5px;
+					"
+				></div>
+			</div>
 
-    </div>
+			<!-- DONE -->
+			<div class="flex flex-col w-full lg:w-1/3 h-64 bg-emerald-700 bg-opacity-25 rounded-box place-items-center m-4 overflow-auto">
+				<h1 style="padding: 10px; font-weight: bold; font-size: 1.2em">
+					DONE
+				</h1>
+				<div
+					id="task{{ loop.index }}-done"
+					ondragover="onDragOver(event);"
+					ondrop="onDrop(event, this);"
+					style="
+						width: 100%;
+						height: 100%;
+						display: flex;
+						flex-direction: column;
+						align-items: center;
+						gap: 5px;
+					"
+				></div>
+			</div>
+				
+			</div>
+		</div>
+	</div>
 
-        {% for task in sprint_task %}
+	{% if not loop.last %}
+	<div class="divider"></div>
+	{% endif %}
 
-        <div class="collapse w-full overflow-visible collapse-arrow hover:ml-2 transform duration-300">
-            {% if loop.first%}
-            <input type="checkbox" checked /> 
-            {% else %}
-            <input type="checkbox" /> 
-            {% endif %}
+	<script>
+		$(
+			"#task{{ loop.index }}-todo, #task{{ loop.index }}-progress, #task{{ loop.index }}-done"
+		).sortable({
+			connectWith:
+				"#task{{ loop.index }}-todo, #task{{ loop.index }}-progress, #task{{ loop.index }}-done",
+			revert: true,
+			cursor: "move",
+			scrollSpeed: 5,
+		});
+	</script>
 
-            <div class="collapse-title">
-                
-                <!-- Task -->
-                <h2 class="font-medium leading-tight text-2xl mt-6 ml-6">
-                    {% if task.status == 'TODO' %}
-                    <span class="badge badge-error">{{task.status}}</span>
-                    {% elif task.status == 'INPROGRESS' %}
-                    <span class="badge badge-warning">{{task.status}}</span>
-                    {% elif task.status == 'DONE' %}
-                    <span class="badge badge-success">{{task.status}}</span>
-                    {% endif %}
+	{% endfor %} {% else %}
 
-                    {{ task.name }}:
+	<p class="font-bold leading-tight text-4xl mt-6 ml-6">
+		No active sprint, start a
+		<a class="link" href="{{ url_for('backlog', _anchor='createSprint' )}}"
+			>new one</a
+		>
+	</p>
 
-                    <span class="text-lg">{{ task.description }}</span>
-                </h2>
-
-            </div>
-
-            <div class="collapse-content"> 
-              
-                
-                <div class="flex flex-col w-5/6 lg:w-full lg:flex-row m-6 items-center mx-auto">
-
-                    <!-- TODO -->
-                    <div id="task{{ loop.index }}-todo" ondragover="onDragOver(event);" ondrop="onDrop(event, this);" class="flex flex-col w-full lg:w-1/3 h-64 bg-red-700 bg-opacity-25 rounded-box place-items-center m-4 overflow-auto" >
-                        
-                        <div id="task{{ loop.index }}-sub1" draggable="true" ondragstart="onDragStart(event);" class="bg-base-100 p-2 m-5 rounded-box cursor-pointer w-4/5 text-center whitespace-nowrap">
-                            Subtask 1
-                        </div> 
-
-                        <div id="task{{ loop.index }}-sub2" draggable="true" ondragstart="onDragStart(event);" class="bg-base-100 p-2 m-5 rounded-box cursor-pointer w-4/5 text-center whitespace-nowrap">
-                            Subtask 2
-                        </div>  
-
-                        <div id="task{{ loop.index }}-sub3" draggable="true" ondragstart="onDragStart(event);" class="bg-base-100 p-2 m-5 rounded-box cursor-pointer w-4/5 text-center whitespace-nowrap">
-                            Subtask 3
-                        </div> 
-
-                        <div id="task{{ loop.index }}-sub4" draggable="true" ondragstart="onDragStart(event);" class="bg-base-100 p-2 m-5 rounded-box cursor-pointer w-4/5 text-center whitespace-nowrap">
-                            Subtask 4
-                        </div>
-                        
-                    </div>
-
-                    <!-- IN PROGRESS -->
-                    <div id="task{{ loop.index }}-progress" ondragover="onDragOver(event);" ondrop="onDrop(event, this);" class="flex flex-col w-full lg:w-1/3 h-64 bg-yellow-700 bg-opacity-25 rounded-box place-items-center m-4 overflow-auto" >
-                    </div>
-
-                    <!-- DONE -->
-                    <div id="task{{ loop.index }}-done" ondragover="onDragOver(event);" ondrop="onDrop(event, this);" class="flex flex-col w-full lg:w-1/3 h-64 bg-emerald-700 bg-opacity-25 rounded-box place-items-center m-4 overflow-auto">
-                    </div>
-
-                </div>
-
-            </div>
-        </div>
-
-            {% if not loop.last %}
-            <div class="divider"></div>
-            {% endif %}
-
-        <script>
-            $( "#task{{ loop.index }}-todo, #task{{ loop.index }}-progress, #task{{ loop.index }}-done" ).sortable({
-                connectWith: "#task{{ loop.index }}-todo, #task{{ loop.index }}-progress, #task{{ loop.index }}-done",
-                revert: true,
-                cursor: "move",
-                scrollSpeed: 5
-            });
-        </script>
-
-        {% endfor %}
-
-    {% else %}
-
-    <p class="font-bold leading-tight text-4xl mt-6 ml-6">No active sprint, start a <a class="link" href="{{ url_for('backlog', _anchor='createSprint' )}}">new one</a></p>
-
-    {% endif %}
-
-{% endblock %}
+	{% endif %} {% endblock %}
+</div>

@@ -118,7 +118,7 @@ def backlog():
             sprint=None).order_by(Task.status)
         epics = Epic.query.all()
         total_points_of_sprint = 100  # Fare SUM di sprint_task.fibonacci_points
-        return render_template('backlog/backlog.html', tasks=tasks, sprints=sprints, current_sprint=current_sprint, backlog_task=backlog_task, sprint_task=sprint_task, epics=epics, total_points_of_sprint=total_points_of_sprint, is_closable=is_closable, today=today, days_remaning=days_remaning, developer=developer, isNotLogin=True)
+        return render_template('backlog/backlog.html', tasks=tasks, current_sprint=current_sprint, backlog_task=backlog_task, sprint_task=sprint_task, epics=epics, total_points_of_sprint=total_points_of_sprint, is_closable=is_closable, today=today, days_remaning=days_remaning, developer=developer, isNotLogin=True)
     if request.method == 'POST' and 'create-new-task' in request.form:
         # add new task
         new_task = Task(request.form.get('name'),
