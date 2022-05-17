@@ -99,6 +99,9 @@ def profile():
         user_to_update.email = request.form.get('email')
         #user_to_update.password = request.form.get('password')
         user_to_update.manager = request.form.get('manager', type=bool)
+        
+        if user_to_update.manager == None:
+            user_to_update.manager = 0
 
         app.logger.info(user_to_update.manager)
 
