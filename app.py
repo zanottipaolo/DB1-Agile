@@ -95,7 +95,7 @@ def profile():
         # check if a user already exists wth the new email
         user_exists = User.query.filter_by(email=user_to_update.email).first()
 
-        if user_exists and user_exists.id != current_user.id :  # if user is found --> redirect to Profile
+        if user_exists and user_exists.id != current_user.id:  # if user is found --> redirect to Profile
             flash('Email already exists')
             return render_template('profile.html', isNotLogin=True)
 
@@ -104,6 +104,7 @@ def profile():
         db_session.commit()
 
         return render_template('profile.html', isNotLogin=True)
+
 
 @app.route('/logout')
 @login_required
@@ -159,13 +160,12 @@ def backlog():
                 .join(Epic, Task.epic == Epic.id)\
                 .join(S, Task.signaler == S.id)\
                 .join(M, Task.monitorer == M.id)\
-                .order_by(Task.status)
+                .order_by(Task.status).all()
 
-            app.logger.info(sprint_task)
             task_in_sprint_done = Task.query.filter_by(
                 sprint=current_sprint.id, status='DONE').count()
             days_remaning = abs(current_sprint.end_date - today).days
-            if task_in_sprint_done == sprint_task.count and sprint_task.count() != 0:
+            if task_in_sprint_done == len(sprint_task) and len(sprint_task) != 0:
                 is_closable = 0
         else:
             sprint_task = None

@@ -78,7 +78,11 @@
 
                 {% if current_sprint != None %}
                 <form class="mt-3" action="backlog" method="POST">
-                    <a href="#closeSprint">Close sprint ({{days_remaning}} days remaining)</a>
+                    {% if is_closable == 0 %}
+                        <a href="#closeSprint" class="py-1 px-2 rounded bg-success text-success-content">Close sprint ({{days_remaning}} days remaining)</a>
+                    {% else %}
+                        <a href="#closeSprint" class="py-1 px-2 rounded text-error">Close sprint ({{days_remaning}} days remaining)</a>
+                    {% endif %}
                 </form>
                 {% else %}
                 <form class="mt-3" action="backlog" method="POST">
