@@ -144,7 +144,7 @@ def backlog():
             .join(M, Task.monitorer == M.id)
 
         current_sprint = db_session.query(Sprint).filter(
-            Sprint.is_active == 1).one()
+            Sprint.is_active == 1).first()
         is_closable = 1
         days_remaning = 0
         today = date.today()
@@ -210,9 +210,8 @@ def backlog():
         task_to_change.epic = request.form.get('epic')
         task_to_change.fibonacci_points = request.form.get('fibonacci_points')
         task_to_change.status = request.form.get('status')
-        # reporter
         task_to_change.fibonacci_points = request.form.get(
-            'fibonacci_points_info')
+            'fibonacci_points')
         db_session.commit()
         return redirect('/backlog', isNotLogin=True)
     if request.method == 'POST' and 'remove-from-sprint' in request.form:
@@ -258,6 +257,7 @@ def backlog():
         db_session.commit()
         return redirect('/backlog', isNotLogin=True)
     # Close connection to database when shutting down
+    shutdown_session()
 
 
 @ app.teardown_appcontext

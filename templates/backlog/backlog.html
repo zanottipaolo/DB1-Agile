@@ -59,7 +59,9 @@
                                     </span>
                                 </div>
                                 <div class="flex justify-end">
-                                    <span class="w-auto h-auto py-1 px-2 rounded bg-secondary text-secondary-content py-auto my-auto text-center inline-block align-middle">{{ task.epic_name}}</span>
+                                    {% if task.epic != 0 %}
+                                        <span class="w-auto h-auto py-1 px-2 rounded bg-secondary text-secondary-content py-auto my-auto text-center inline-block align-middle">{{ task.epic_name}}</span>
+                                    {% endif %}
                                     <span class="mx-2 my-auto inline-block align-middle">{{task.id}}</span>
                                     {% if task.monitorer != 0 %}
                                     <img class="mx-2 flex justify-end inline-block align-middle h-8 w-8 rounded-full ring-2 ring-white" src="/static/img/users/profile{{task.monitorer}}.jpg" alt=""/>
@@ -124,7 +126,9 @@
                                 </span>
                             </div>
                             <div class="flex justify-end">
+                                {% if task.epic != 0 %}
                                 <span class="w-auto h-auto py-1 px-2 rounded bg-secondary text-secondary-content py-auto my-auto text-center inline-block align-middle">{{task.epic_name}}</span>
+                                {% endif %}
                                 <span class="mx-2 my-auto inline-block align-middle">{{task.id}}</span>
                                 {% if task.monitorer != 0 %}
                                 <img class="mx-2 flex justify-end inline-block align-middle h-8 w-8 rounded-full ring-2 ring-white" src="/static/img/users/profile{{task.monitorer}}.jpg" alt=""/>
@@ -266,7 +270,7 @@
             <input type="text" name="description" placeholder="Task description" class="input input-bordered w-full max-w-xs" />
         </div>
 
-        <input type="hidden" name="signaler" value="1"/> <!-- ID DELL'Utente in sessione-->
+        <input type="hidden" name="signaler" value="1"/> <!-- WARNING ID DELL'Utente in sessione-->
         
         <div class="m-2 form-control w-full max-w-xs">
             Fibonacci points:</p>
