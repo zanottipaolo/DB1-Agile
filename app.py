@@ -38,6 +38,7 @@ def signup():
     else:
         return render_template('signup.html', isNotLogin=False)
 
+
 @app.route('/profile', methods=['POST', 'GET'])
 def profile():
     if request.method == 'GET':
@@ -63,21 +64,27 @@ def sprint():
 @app.route('/backlog', methods=['POST', 'GET'])
 def backlog():
     if request.method == 'GET':
-        developer = User.query.all()
+        developer = User.query.filter_by(manager=0).all()
         tasks = Task.query.all()
-        sprints = Sprint.query.all()
         current_sprint = Sprint.query.filter_by(
             is_active=1).first()
         is_closable = 1
         days_remaning = 0
         today = date.today()
         if current_sprint != None:
-            sprint_task = Task.query.filter_by(
+            sprint_task_obj = Task.query.filter_by(
                 sprint=current_sprint.id).order_by(Task.status)
+            sprint_task = db_session.execute(
+                'SELECT tasks.*, epics.name AS epics_name, M.name AS monitorer_name, M.surname AS monitorer_surname, S.name AS signaler_name, S.surname AS signaler_surname from tasks \
+                JOIN epics ON tasks.epic = epics.id \
+                JOIN users AS M ON tasks.monitorer = M.id \
+                JOIN users AS S ON tasks.signaler = S.id \
+                WHERE tasks.sprint = ' + str(current_sprint.id) + ' \
+            ')
             task_in_sprint_done = Task.query.filter_by(
                 sprint=current_sprint.id, status='DONE').count()
             days_remaning = abs(current_sprint.end_date - today).days
-            if task_in_sprint_done == sprint_task.count() and sprint_task.count() != 0:
+            if task_in_sprint_done == sprint_task_obj.count and sprint_task_obj.count() != 0:
                 is_closable = 0
         else:
             sprint_task = None
