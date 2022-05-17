@@ -5,6 +5,7 @@ from webbrowser import get
 from flask import Flask, flash, redirect, render_template, request, url_for
 from sqlalchemy import desc
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 
 # Database
 from backend.database import db_session
@@ -15,6 +16,17 @@ from backend.models import Sprint, Task, SubTask, Epic, User
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'ciao'
+
+#Log in manager 
+login_manager = LoginManager()
+
+login_manager.login_view = 'login'
+
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
@@ -29,7 +41,8 @@ def login():
         if not user or not check_password_hash(user.password, password):
             flash('Check your login details and try again.')
             return render_template('login.html', isNotLogin=False)
-            
+        
+        login_user(user)
         return redirect(url_for('sprint'))
     else:
         return render_template('login.html', isNotLogin=False)
@@ -61,14 +74,17 @@ def signup():
 
 
 @app.route('/profile', methods=['POST', 'GET'])
+@login_required
 def profile():
     if request.method == 'GET':
         user = User.query.all()
-        return render_template('profile.html', user=user, isNotLogin=True)
+        return render_template('profile.html', isNotLogin=True, name=current_user.name)
 
 @app.route('/logout')
+@login_required
 def logout():
-    return 'Logout'
+    logout_user()
+    return redirect(url_for('login'))
 
 
 @app.route('/sprint', methods=['POST', 'GET'])

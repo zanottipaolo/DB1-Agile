@@ -1,6 +1,7 @@
 from typing import Collection
 from sqlalchemy import Column, Integer, String, Date, Text, ForeignKey, Boolean
 from .database import Base
+from flask_login import UserMixin
 
 
 class Sprint(Base):
@@ -79,7 +80,7 @@ class Epic(Base):
         return f'< Epic {self.name!r} >'
 
 
-class User(Base):
+class User(UserMixin, Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     name = Column(String(50))
