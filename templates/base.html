@@ -78,7 +78,7 @@
 								<img src="https://api.lorem.space/image/face?hash=92310" />
 							</a>
 						</div>
-						<p class="flex items-center font-bold text-2xl whitespace-nowrap">Ciao Elon 👋</p>
+						<p class="flex items-center font-bold text-2xl whitespace-nowrap">Ciao {{ current_user.name }} 👋</p>
 					</div>
 
 					<!-- Menu -->
@@ -542,9 +542,9 @@
 
 					<!-- Logout -->
 					<div class="my-4 flex justify-center mt-auto">
-						<button class="btn btn-outline btn-error btn-md transition duration-300 ease-in-out">
+						<a href="{{ url_for('logout') }}" class="btn btn-outline btn-error btn-md transition duration-300 ease-in-out">
 							Logout
-						</button>
+						</a>
 					</div>
 				</div>
 			</div>
@@ -606,6 +606,8 @@
 
 		<!-- CDN Theme Change -->
 		<script src="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/index.js"></script>
+
+		{% block link_footer %}{% endblock %}
 
 	</body>	
 </html>

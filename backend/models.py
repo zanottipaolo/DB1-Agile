@@ -1,6 +1,8 @@
+from email.policy import default
 from typing import Collection
 from sqlalchemy import Column, Integer, String, Date, Text, ForeignKey, Boolean
 from .database import Base
+from flask_login import UserMixin
 
 
 class Sprint(Base):
@@ -79,14 +81,14 @@ class Epic(Base):
         return f'< Epic {self.name!r} >'
 
 
-class User(Base):
+class User(UserMixin, Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     name = Column(String(50))
     surname = Column(String(50))
     email = Column(String(50))
     password = Column(String(256))  # SHA256
-    manager = Column(Boolean())
+    manager = Column(Boolean(), default=0)
     url_profile_image = Column(String(50))
 
     def __init__(self, name, surname, email, password, manager):
