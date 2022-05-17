@@ -17,14 +17,16 @@ app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'ciao'
 
-#Log in manager 
+#Log in manager
 login_manager = LoginManager()
 login_manager.login_view = 'login'
 login_manager.init_app(app)
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
@@ -39,11 +41,12 @@ def login():
         if not user or not check_password_hash(user.password, password):
             flash('Check your login details and try again.')
             return render_template('login.html', isNotLogin=False)
-        
+
         login_user(user)
         return redirect(url_for('sprint'))
     else:
         return render_template('login.html', isNotLogin=False)
+
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -57,11 +60,12 @@ def signup():
         # check if a user already exists
         user = User.query.filter_by(email=email).first()
 
-        if user: # if user is found --> redirect to Sign Up
+        if user:  # if user is found --> redirect to Sign Up
             flash('Email already exists')
             return render_template('signup.html', isNotLogin=False)
 
-        new_user = User(name=name, surname=surname, email=email, password=generate_password_hash(password, method='sha256'), manager=manager)
+        new_user = User(name=name, surname=surname, email=email, password=generate_password_hash(
+            password, method='sha256'), manager=manager)
 
         db_session.add(new_user)
         db_session.commit()
@@ -76,6 +80,7 @@ def signup():
 def profile():
     if request.method == 'GET':
         return render_template('profile.html', isNotLogin=True)
+
 
 @app.route('/logout')
 @login_required
@@ -112,19 +117,12 @@ def backlog():
         days_remaning = 0
         today = date.today()
         if current_sprint != None:
-            sprint_task_obj = Task.query.filter_by(
+            sprint_task = Task.query.filter_by(
                 sprint=current_sprint.id).order_by(Task.status)
-            sprint_task = db_session.execute(
-                'SELECT tasks.*, epics.name AS epics_name, M.name AS monitorer_name, M.surname AS monitorer_surname, S.name AS signaler_name, S.surname AS signaler_surname from tasks \
-                JOIN epics ON tasks.epic = epics.id \
-                JOIN users AS M ON tasks.monitorer = M.id \
-                JOIN users AS S ON tasks.signaler = S.id \
-                WHERE tasks.sprint = ' + str(current_sprint.id) + ' \
-            ')
             task_in_sprint_done = Task.query.filter_by(
                 sprint=current_sprint.id, status='DONE').count()
             days_remaning = abs(current_sprint.end_date - today).days
-            if task_in_sprint_done == sprint_task_obj.count and sprint_task_obj.count() != 0:
+            if task_in_sprint_done == sprint_task.count and sprint_task.count() != 0:
                 is_closable = 0
         else:
             sprint_task = None
@@ -133,7 +131,7 @@ def backlog():
             sprint=None).order_by(Task.status)
         epics = Epic.query.all()
         total_points_of_sprint = 100  # Fare SUM di sprint_task.fibonacci_points
-        return render_template('backlog/backlog.html', tasks=tasks, sprints=sprints, current_sprint=current_sprint, backlog_task=backlog_task, sprint_task=sprint_task, epics=epics, total_points_of_sprint=total_points_of_sprint, is_closable=is_closable, today=today, days_remaning=days_remaning, developer=developer, isNotLogin=True)
+        return render_template('backlog/backlog.html', tasks=tasks, current_sprint=current_sprint, backlog_task=backlog_task, sprint_task=sprint_task, epics=epics, total_points_of_sprint=total_points_of_sprint, is_closable=is_closable, today=today, days_remaning=days_remaning, developer=developer, isNotLogin=True)
     if request.method == 'POST' and 'create-new-task' in request.form:
         # add new task
         new_task = Task(request.form.get('name'),
