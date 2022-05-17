@@ -10,28 +10,40 @@
         <img src="static/img/wallpaper_login.svg" class="w-full" alt="Login image" />
       </div>
       <div class="md:w-8/12 lg:w-5/12 lg:ml-20">
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="alert alert-error shadow-lg">
+            <div>
+              <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <span>{{ messages[0] }}. Go to <a href="{{ url_for('login') }}" class="link">login page</a>.</span>
+            </div>
+          </div>
+        {% endif %}
+        {% endwith %}
+
         <h1 class="title-font text-center sm:text-4xl text-3xl mb-4">Sign up to Gira</h1>
         
         <form method="POST" id="createUser">
 
           <!-- Name input -->
           <div class="mb-6">
-            <input type="text" placeholder="Name" name="name" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none" />
+            <input type="text" placeholder="Name" name="name" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none" required />
           </div>
 
           <!-- Surname input -->
           <div class="mb-6">
-            <input type="text" placeholder="Surname" name="surname" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none" />
+            <input type="text" placeholder="Surname" name="surname" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none" required />
           </div>
 
           <!-- Email input -->
           <div class="mb-6">
-            <input type="text" placeholder="Email address" name="email" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none" />
+            <input type="email" placeholder="Email address" name="email" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none" required />
           </div>
 
           <!-- Password input -->
           <div class="mb-6">
-            <input type="password" placeholder="Password" name="password" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none" />
+            <input type="password" placeholder="Password" name="password" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none" required />
           </div>
 
           <!-- Check role -->

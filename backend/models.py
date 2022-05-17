@@ -53,6 +53,16 @@ class SubTask(Base):
     name = Column(String(50))
     description = Column(Text())
     assigned_to = Column(Integer, ForeignKey('users.id'), nullable=True)
+    task = Column(Integer, ForeignKey('tasks.id'))
+
+    def __init__(self, name, description, assigned_to, task):
+        self.name = name
+        self.description = description
+        self.assigned_to = assigned_to
+        self.task = task
+
+    def __repr__(self):
+        return f'< Subtask {self.name!r} >'
 
 
 class Epic(Base):
@@ -79,7 +89,7 @@ class User(Base):
     manager = Column(Boolean())
     url_profile_image = Column(String(50))
 
-    def __init__(self, name, surname, email, password, manager=False):
+    def __init__(self, name, surname, email, password, manager):
         self.name = name
         self.surname = surname
         self.email = email

@@ -10,10 +10,11 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from backend.database import db_session
 
 # Models
-from backend.models import Sprint, Task, Epic, User
+from backend.models import Sprint, Task, SubTask, Epic, User
 
 app = Flask(__name__)
 
+app.config['SECRET_KEY'] = 'ciao'
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
@@ -34,7 +35,25 @@ def login():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        return render_template('signup.html')
+        name = request.form.get('name')
+        surname = request.form.get('surname')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        manager = request.form.get('manager', type=bool)
+
+        # check if a user already exists
+        user = User.query.filter_by(email=email).first()
+
+        if user: # if user is found --> redirect to Sign Up
+            flash('Email already exists')
+            return render_template('signup.html', isNotLogin=False)
+
+        new_user = User(name=name, surname=surname, email=email, password=generate_password_hash(password, method='sha256'), manager=manager)
+
+        db_session.add(new_user)
+        db_session.commit()
+
+        return render_template('login.html', isNotLogin=False)
     else:
         return render_template('signup.html', isNotLogin=False)
 
@@ -44,6 +63,10 @@ def profile():
     if request.method == 'GET':
         user = User.query.all()
         return render_template('profile.html', user=user, isNotLogin=True)
+
+@app.route('/logout')
+def logout():
+    return 'Logout'
 
 
 @app.route('/sprint', methods=['POST', 'GET'])
