@@ -22,13 +22,15 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
 
+        # Get the user from DB
         user = User.query.filter_by(email=email).first()
 
+        # If not exists or pw not match
         if not user or not check_password_hash(user.password, password):
-            flash('Please check your login details and try again.')
+            flash('Check your login details and try again.')
             return render_template('login.html', isNotLogin=False)
             
-        return redirect(url_for('profile'))
+        return redirect(url_for('sprint'))
     else:
         return render_template('login.html', isNotLogin=False)
 
