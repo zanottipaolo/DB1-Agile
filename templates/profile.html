@@ -19,7 +19,7 @@
             </div>
         {% endif %}
         {% endwith %}
-        <form method="POST" id="updateUser" class="w-96 text-center m-auto">
+        <form method="POST" id="updateUser" action="profile" class="w-96 text-center m-auto">
 
             <!-- id user -->
             <input type="hidden" value="{{ current_user.id }}" id="current_id" name="id" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none" />
@@ -55,12 +55,12 @@
 
             <div class="flex w-full justify-around">
                 <!-- Update button -->
-                <button type="submit" id="updateButton" class="btn btn-warning text-warning hover:text-base-100 w-1/3 uppercase rounded">
+                <button type="submit" name="updateUser" class="btn btn-warning text-warning hover:text-base-100 w-1/3 uppercase rounded">
                     <i class="fa-solid fa-pencil text-inherit"></i>
                 </button>
 
                 <!-- Delete button -->
-                <button type="submit" id="deleteButton" class="btn btn-error text-error hover:text-base-100 w-1/3 uppercase rounded">
+                <button type="submit" name="deleteUser" class="btn btn-error text-error hover:text-base-100 w-1/3 uppercase rounded">
                     <i class="fa-solid fa-x text-inherit"></i>
                 </button>
             </div>
