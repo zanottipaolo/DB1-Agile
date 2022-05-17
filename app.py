@@ -134,7 +134,6 @@ def sprint():
 def backlog():
     if request.method == 'GET':
         developer = User.query.filter(User.manager == 0, User.id != 0).all()
-
         S = aliased(User)  # signaler
         M = aliased(User)  # monitorer
 
@@ -183,14 +182,14 @@ def backlog():
         return render_template('backlog/backlog.html', tasks=tasks, current_sprint=current_sprint, backlog_task=backlog_task, sprint_task=sprint_task, epics=epics, total_points_of_sprint=total_points_of_sprint, is_closable=is_closable, today=today, days_remaning=days_remaning, developer=developer, isNotLogin=True)
     if request.method == 'POST' and 'create-new-task' in request.form:
         # add new task
-        new_task = Task(request.form.get('name'),
-                        request.form.get('description'),
-                        None,
-                        0,
-                        request.form.get('epic'),
-                        request.form.get('signaler'),
-                        request.form.get('fibonacci_points'),
-                        'TODO')
+        new_task = Task(request.form.get('name'),               # name
+                        request.form.get('description'),        # description
+                        None,                                   # sprint
+                        0,                                      # monitorer
+                        request.form.get('epic'),               # epic
+                        request.form.get('signaler'),           # signaler
+                        request.form.get('fibonacci_points'),   # f. points
+                        'TODO')                                 # status
         db_session.add(new_task)
         db_session.commit()
         return redirect('/backlog', isNotLogin=True)
