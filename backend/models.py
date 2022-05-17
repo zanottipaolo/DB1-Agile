@@ -1,6 +1,7 @@
 from email.policy import default
 from typing import Collection
 from sqlalchemy import Column, Integer, String, Date, Text, ForeignKey, Boolean
+from sqlalchemy.orm import relationship
 from .database import Base
 from flask_login import UserMixin
 
@@ -33,7 +34,9 @@ class Task(Base):
     epic = Column(Integer, ForeignKey('epics.id'), nullable=True)
     signaler = Column(Integer)  # diventa chiave esterna
     fibonacci_points = Column(Integer)
-    status = Column(String(15))
+    status = Column(String(15)) # TODO, INPROGESS, DONE
+    subtasks = relationship("SubTask")
+
 
     def __init__(self, name, description, sprint, monitorer, epic, signaler, fibonacci_points, status):
         self.name = name
@@ -55,13 +58,16 @@ class SubTask(Base):
     name = Column(String(50))
     description = Column(Text())
     assigned_to = Column(Integer, ForeignKey('users.id'), nullable=True)
+    status = Column(String(15)) # TODO, INPROGESS, DONE
     task = Column(Integer, ForeignKey('tasks.id'))
+    #task = relationship("Task", back_populates="subtasks")
 
-    def __init__(self, name, description, assigned_to, task):
+    def __init__(self, name, description, task, assigned_to=None):
         self.name = name
         self.description = description
         self.assigned_to = assigned_to
         self.task = task
+        self.status = 'TODO'
 
     def __repr__(self):
         return f'< Subtask {self.name!r} >'
