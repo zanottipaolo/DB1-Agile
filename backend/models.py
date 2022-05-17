@@ -1,3 +1,4 @@
+from email.policy import default
 from typing import Collection
 from sqlalchemy import Column, Integer, String, Date, Text, ForeignKey, Boolean
 from .database import Base
@@ -87,7 +88,7 @@ class User(UserMixin, Base):
     surname = Column(String(50))
     email = Column(String(50))
     password = Column(String(256))  # SHA256
-    manager = Column(Boolean())
+    manager = Column(Boolean(), default=0)
     url_profile_image = Column(String(50))
 
     def __init__(self, name, surname, email, password, manager):
