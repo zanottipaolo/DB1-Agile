@@ -116,6 +116,25 @@ def profile():
 
         flash('User has been successfully deleted', 'success')
         return redirect('/')
+    
+    elif request.method == 'POST' and 'updatePw' in request.form:
+        current_password = request.form.get('cur-password')
+        new_password = request.form.get('new-password')
+
+        # Current id user
+        user_to_update = User.query.get(request.form.get('id'))
+
+        # If current password is wrong
+        if not check_password_hash(user_to_update.password, current_password):
+            flash('Wrong password, try again.', 'error-pw')
+            return redirect(url_for('profile'))
+
+        user_to_update.password=generate_password_hash(new_password, method='sha256')        
+
+        db_session.commit()
+
+        flash('Password has been successfully updated!', 'success-pw')
+        return redirect(url_for('profile'))
 
 
 @app.route('/logout')

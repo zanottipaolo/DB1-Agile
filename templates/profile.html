@@ -8,39 +8,38 @@
 {% block body %}
     <div class="w-full mt-10">
         <h1 class="title-font text-center sm:text-4xl text-3xl mb-4">Ciao {{ current_user.name }}</h1>
-       
-        {# If error --> show alert error #}
-        {% with messages = get_flashed_messages(category_filter=["error"]) %}
-        {% if messages %}
-            <div class="alert alert-error shadow-lg mb-6 w-96 text-center mx-auto">
-              <div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                <span>{{ messages[0] }}</span>
-              </div>
-            </div>
-        {% endif %}
-        {% endwith %}
-        
-        {# If success --> show alert success #}
-        {% with messages = get_flashed_messages(category_filter=["success"]) %}
-        {% if messages %}
-            <div class="alert alert-success shadow-lg mb-6 w-96 text-center mx-auto">
-              <div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                <span>{{ messages[0] }}</span>
-              </div>
-            </div>
-        {% endif %}
-        {% endwith %}
 
         <div class="flex flex-col lg:flex-row mt-14 lg:mt-10 gap-4 mx-4">
             <!-- Update User info -->
             <form method="POST" id="updateUserForm" action="profile" class="w-4/5 lg:w-96 text-center mx-auto">
                 <h2 class="sm:text-2xl text-xl mb-4">Information</h2>
 
+                {# If error --> show alert error #}
+                {% with messages = get_flashed_messages(category_filter=["error"]) %}
+                {% if messages %}
+                    <div class="alert alert-error shadow-lg mb-6 w-96 text-center mx-auto">
+                      <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <span>{{ messages[0] }}</span>
+                      </div>
+                    </div>
+                {% endif %}
+                {% endwith %}
+                
+                {# If success --> show alert success #}
+                {% with messages = get_flashed_messages(category_filter=["success"]) %}
+                {% if messages %}
+                    <div class="alert alert-success shadow-lg mb-6 w-96 text-center mx-auto">
+                      <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <span>{{ messages[0] }}</span>
+                      </div>
+                    </div>
+                {% endif %}
+                {% endwith %}
+
                 <!-- id user -->
                 <input type="hidden" value="{{ current_user.id }}" id="current_id" name="id" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none" />
-
 
                 <!-- Name input -->
                 <div class="mb-6">
@@ -90,6 +89,31 @@
             <!-- Update password -->
             <form method="POST" id="upPwForm" action="profile" class="w-4/5 lg:w-96 text-center mx-auto mt-14 lg:mt-0">
                 <h2 class="sm:text-2xl text-xl mb-4">Password</h2>
+
+                {# If error pw --> show alert error #}
+                {% with messages = get_flashed_messages(category_filter=["error-pw"]) %}
+                {% if messages %}
+                    <div class="alert alert-error shadow-lg mb-6 w-96 text-center mx-auto">
+                      <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <span>{{ messages[0] }}</span>
+                      </div>
+                    </div>
+                {% endif %}
+                {% endwith %}
+                
+                {# If success pw --> show alert success #}
+                {% with messages = get_flashed_messages(category_filter=["success-pw"]) %}
+                {% if messages %}
+                    <div class="alert alert-success shadow-lg mb-6 w-96 text-center mx-auto">
+                      <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <span>{{ messages[0] }}</span>
+                      </div>
+                    </div>
+                {% endif %}
+                {% endwith %}
+
                 <!-- id user -->
                 <input type="hidden" value="{{ current_user.id }}" name="id" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none" />
 
