@@ -1,11 +1,13 @@
+from cProfile import label
 from datetime import date
 import datetime
 from time import strptime
 from webbrowser import get
 from flask import Flask, flash, redirect, render_template, request, url_for
-from sqlalchemy import desc
+from sqlalchemy import desc, func, true
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
+from sqlalchemy.orm import aliased
 
 # Database
 from backend.database import db_session
@@ -17,7 +19,7 @@ app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'ciao'
 
-#Log in manager
+# Log in manager
 login_manager = LoginManager()
 login_manager.login_view = 'login'
 login_manager.init_app(app)
@@ -111,14 +113,27 @@ def backlog():
     if request.method == 'GET':
         developer = User.query.filter_by(manager=0).all()
         tasks = Task.query.all()
-        current_sprint = Sprint.query.filter_by(
-            is_active=1).first()
+        current_sprint = db_session.query(Sprint).filter(
+            Sprint.is_active == 1).one()
         is_closable = 1
         days_remaning = 0
         today = date.today()
         if current_sprint != None:
             sprint_task = Task.query.filter_by(
                 sprint=current_sprint.id).order_by(Task.status)
+            current_sprint_id = current_sprint.id
+
+            S = aliased(User)  # signaler
+            M = aliased(User)  # monitorer
+            sprint_task = db_session.query(Task.id.label("id"), Task.name.label("name"), Task.description.label("description"), Task.sprint.label("sprint"), Task.monitorer.label("monitorer"), Task.signaler.label(
+                "signaler"), Task.epic.label("epic"), Task.fibonacci_points.label("fibonacci_points"), Task.status.label("status"), Epic.name.label("epic_name"), M.name.label("monitorer_name"), M.surname.label("monitorer_surname"), S.name.label("signaler_name"), S.surname.label("signaler_surname"))\
+                .filter(Task.sprint == current_sprint_id)\
+                .join(Epic, Task.epic == Epic.id)\
+                .join(S, Task.signaler == S.id)\
+                .join(M, Task.monitorer == M.id)\
+                .order_by(Task.status)
+
+            app.logger.info(sprint_task)
             task_in_sprint_done = Task.query.filter_by(
                 sprint=current_sprint.id, status='DONE').count()
             days_remaning = abs(current_sprint.end_date - today).days
@@ -127,8 +142,14 @@ def backlog():
         else:
             sprint_task = None
 
-        backlog_task = Task.query.filter_by(
-            sprint=None).order_by(Task.status)
+        backlog_task = db_session.query(Task.id.label("id"), Task.name.label("name"), Task.description.label("description"), Task.sprint.label("sprint"), Task.monitorer.label("monitorer"), Task.signaler.label(
+            "signaler"), Task.epic.label("epic"), Task.fibonacci_points.label("fibonacci_points"), Task.status.label("status"), Epic.name.label("epic_name"), M.name.label("monitorer_name"), M.surname.label("monitorer_surname"), S.name.label("signaler_name"), S.surname.label("signaler_surname"))\
+            .filter(Task.sprint == None)\
+            .join(Epic, Task.epic == Epic.id)\
+            .join(S, Task.signaler == S.id)\
+            .join(M, Task.monitorer == M.id)\
+            .order_by(Task.status)
+
         epics = Epic.query.all()
         total_points_of_sprint = 100  # Fare SUM di sprint_task.fibonacci_points
         return render_template('backlog/backlog.html', tasks=tasks, current_sprint=current_sprint, backlog_task=backlog_task, sprint_task=sprint_task, epics=epics, total_points_of_sprint=total_points_of_sprint, is_closable=is_closable, today=today, days_remaning=days_remaning, developer=developer, isNotLogin=True)
@@ -137,7 +158,7 @@ def backlog():
         new_task = Task(request.form.get('name'),
                         request.form.get('description'),
                         None,
-                        None,
+                        0,
                         request.form.get('epic'),
                         request.form.get('signaler'),
                         request.form.get('fibonacci_points'),

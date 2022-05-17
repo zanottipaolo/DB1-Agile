@@ -59,14 +59,14 @@
                                     </span>
                                 </div>
                                 <div class="flex justify-end">
-                                    <span class="w-auto h-auto py-1 px-2 rounded bg-secondary text-secondary-content py-auto my-auto text-center inline-block align-middle">{{ task.epics_name}}</span>
+                                    <span class="w-auto h-auto py-1 px-2 rounded bg-secondary text-secondary-content py-auto my-auto text-center inline-block align-middle">{{ task.epic_name}}</span>
                                     <span class="mx-2 my-auto inline-block align-middle">{{task.id}}</span>
-                                    {% if task.monitorer != None %}
+                                    {% if task.monitorer != 0 %}
                                     <img class="mx-2 flex justify-end inline-block align-middle h-8 w-8 rounded-full ring-2 ring-white" src="/static/img/users/profile{{task.monitorer}}.jpg" alt=""/>
                                     {% else %}
                                     <img class="mx-2 flex justify-end inline-block align-middle h-8 w-8 rounded-full ring-2 ring-white" src="/static/img/users/none.jpg" alt=""/>
                                     {% endif %}
-                                    <span class="w-auto h-auto py-1 px-2 rounded bg-info text-info-content py-auto my-auto text-center inline-block align-middle">{{task.fibonacci_points}}</span>
+                                    <span class="w-auto h-auto py-1 px-2 rounded bg-info text-info-content py-auto my-auto text-center inline-block align-middle">{{task.fibonacci_points}} FB</span>
                                 </div>
                             </div>
                         </a>
@@ -124,14 +124,14 @@
                                 </span>
                             </div>
                             <div class="flex justify-end">
-                                <span class="w-auto h-auto py-1 px-2 rounded bg-secondary text-secondary-content py-auto my-auto text-center inline-block align-middle">{{task.epic}}</span>
+                                <span class="w-auto h-auto py-1 px-2 rounded bg-secondary text-secondary-content py-auto my-auto text-center inline-block align-middle">{{task.epic_name}}</span>
                                 <span class="mx-2 my-auto inline-block align-middle">{{task.id}}</span>
-                                {% if task.monitorer != None %}
+                                {% if task.monitorer != 0 %}
                                 <img class="mx-2 flex justify-end inline-block align-middle h-8 w-8 rounded-full ring-2 ring-white" src="/static/img/users/profile{{task.monitorer}}.jpg" alt=""/>
                                 {% else %}
                                 <img class="mx-2 flex justify-end inline-block align-middle h-8 w-8 rounded-full ring-2 ring-white" src="/static/img/users/none.jpg" alt=""/>
                                 {% endif %}
-                                <span class="w-auto h-auto py-1 px-2 rounded bg-info text-info-content py-auto my-auto text-center inline-block align-middle">{{task.fibonacci_points}}</span>
+                                <span class="w-auto h-auto py-1 px-2 rounded bg-info text-info-content py-auto my-auto text-center inline-block align-middle">{{task.fibonacci_points}} FB</span>
                             </div>
                         </div>
                     </a>
