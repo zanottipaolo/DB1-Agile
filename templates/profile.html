@@ -55,15 +55,23 @@
             </div>
 
             <!-- Password input -->
-            <!-- <div class="mb-6">
-                <input type="password" value="" placeholder="Password" id="current_password" name="password" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none" required />
-            </div> -->
+            <div class="mb-6">
+                <input type="password" placeholder="Password" id="current_password" name="password" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none" required />
+            </div>
 
             <!-- Check role -->
             <div class="form-control mb-6">
                 <label class="label cursor-pointer">
                 <span class="label-text text-lg font-normal">Manager?</span>
-                <input type="checkbox" value="{{ current_user.manager }}" class="toggle" id="current_manager" name="manager"/>
+                <input type="checkbox" class="toggle" id="current_manager" name="manager" />
+                
+                {# if I am a manager then check the box on load #}
+                {% if current_user.manager == 1 %}
+                    <script>
+                        document.getElementById('current_manager').checked = true;
+                    </script>
+                {% endif %}
+                
                 </label>
             </div>
 

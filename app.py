@@ -43,8 +43,8 @@ def login():
 
         # If not exists or pw not match
         if not user or not check_password_hash(user.password, password):
-            flash('Check your login details and try again.')
-            return render_template('login.html', isNotLogin=False)
+            flash('Check your login details and try again.', 'error')
+            return redirect('/')
 
         login_user(user)
         return redirect(url_for('sprint'))
@@ -66,7 +66,7 @@ def signup():
 
         if user:  # if user is found --> redirect to Sign Up
             flash('Email already exists')
-            return render_template('signup.html', isNotLogin=False)
+            return redirect(url_for('signup'))
 
         new_user = User(name=name, surname=surname, email=email, password=generate_password_hash(
             password, method='sha256'), manager=manager)
@@ -74,7 +74,7 @@ def signup():
         db_session.add(new_user)
         db_session.commit()
 
-        return render_template('login.html', isNotLogin=False)
+        return redirect('/')
     else:
         return render_template('signup.html', isNotLogin=False)
 
@@ -92,26 +92,28 @@ def profile():
 
         if user_exists and user_exists.id != current_user.id:  # if user is found --> redirect to Profile
             flash('Email already exists', 'error')
-            return render_template('profile.html', isNotLogin=True)
+            return redirect(url_for('profile'))
         
         user_to_update.name = request.form.get('name')
         user_to_update.surname = request.form.get('surname')
         user_to_update.email = request.form.get('email')
-        #user_to_update.password = request.form.get('password')
+        user_to_update.password = generate_password_hash(request.form.get('password'), method='sha256')
         user_to_update.manager = request.form.get('manager', type=bool)
         
         if user_to_update.manager == None:
             user_to_update.manager = 0
 
-        app.logger.info(user_to_update.manager)
-
-
-        #user_to_update.password=generate_password_hash(user_to_update.password, method='sha256')
-
         db_session.commit()
 
         flash('User info updated!', 'success')
-        return render_template('profile.html', isNotLogin=True)
+        return redirect(url_for('profile'))
+
+    elif request.method == 'POST' and 'deleteUser' in request.form:
+        User.query.filter_by(id=request.form.get('id')).delete()
+        db_session.commit()
+
+        flash('User has been successfully deleted', 'success')
+        return redirect(url_for('/'))
 
 
 @app.route('/logout')
