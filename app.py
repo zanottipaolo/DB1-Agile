@@ -74,6 +74,7 @@ def signup():
         db_session.add(new_user)
         db_session.commit()
 
+        flash('User has been successfully created!', 'success')
         return redirect('/')
     else:
         return render_template('signup.html', isNotLogin=False)
@@ -87,8 +88,10 @@ def profile():
     elif request.method == 'POST' and 'updateUser' in request.form:
         user_to_update = User.query.get(request.form.get('id'))
 
-        # check if a user already exists wth the new email
-        user_exists = User.query.filter_by(email=User.query.get(request.form.get('email'))).first()
+        # check if a user already exists wth the new emailù
+        user_exists = User.query.filter_by(email=request.form.get('email')).first()
+
+        app.logger.info(user_exists)
 
         if user_exists and user_exists.id != current_user.id:  # if user is found --> redirect to Profile
             flash('Email already exists', 'error')
@@ -113,7 +116,7 @@ def profile():
         db_session.commit()
 
         flash('User has been successfully deleted', 'success')
-        return redirect(url_for('/'))
+        return redirect('/')
 
 
 @app.route('/logout')
