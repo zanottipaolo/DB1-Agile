@@ -90,7 +90,7 @@ def profile():
         # check if a user already exists wth the new email
         user_exists = User.query.filter_by(email=User.query.get(request.form.get('email'))).first()
 
-        if user_exists and user_exists.id != current_user.id :  # if user is found --> redirect to Profile
+        if user_exists and user_exists.id != current_user.id:  # if user is found --> redirect to Profile
             flash('Email already exists', 'error')
             return render_template('profile.html', isNotLogin=True)
         
@@ -99,6 +99,9 @@ def profile():
         user_to_update.email = request.form.get('email')
         #user_to_update.password = request.form.get('password')
         user_to_update.manager = request.form.get('manager', type=bool)
+
+        app.logger.info(user_to_update.manager)
+
 
         #user_to_update.password=generate_password_hash(user_to_update.password, method='sha256')
 
