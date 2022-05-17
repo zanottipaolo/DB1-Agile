@@ -100,7 +100,6 @@ def profile():
         user_to_update.name = request.form.get('name')
         user_to_update.surname = request.form.get('surname')
         user_to_update.email = request.form.get('email')
-        user_to_update.password = generate_password_hash(request.form.get('password'), method='sha256')
         user_to_update.manager = request.form.get('manager', type=bool)
         
         if user_to_update.manager == None:
