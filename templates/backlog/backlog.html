@@ -59,7 +59,7 @@
                                     </span>
                                 </div>
                                 <div class="flex justify-end">
-                                    <span class="w-auto h-auto py-1 px-2 rounded bg-secondary text-secondary-content py-auto my-auto text-center inline-block align-middle">{{ task.epic}}</span>
+                                    <span class="w-auto h-auto py-1 px-2 rounded bg-secondary text-secondary-content py-auto my-auto text-center inline-block align-middle">{{ task.epics_name}}</span>
                                     <span class="mx-2 my-auto inline-block align-middle">{{task.id}}</span>
                                     {% if task.monitorer != None %}
                                     <img class="mx-2 flex justify-end inline-block align-middle h-8 w-8 rounded-full ring-2 ring-white" src="/static/img/users/profile{{task.monitorer}}.jpg" alt=""/>
@@ -184,6 +184,7 @@
         <p class="">
             Assigned to:  
             <select class="mt-2 select select-primary w-auto max-w-xs">
+                <option>{{ task.monitorer_name }} {{ task.monitorer_name }}</option>
                 {% for developer in developer %}
                     <option>{{ developer.name }} {{ developer.surname }}</option>
                 {% endfor %}
