@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Signup{% endblock %}
 
 {% block content %}
 <section class="min-h-screen">
@@ -10,9 +10,19 @@
         <img src="static/img/wallpaper_login.svg" class="w-full" alt="Login image" />
       </div>
       <div class="md:w-8/12 lg:w-5/12 lg:ml-20">
-        <h1 class="title-font text-center sm:text-4xl text-3xl mb-4">Welcome to Gira</h1>
+        <h1 class="title-font text-center sm:text-4xl text-3xl mb-4">Sign up to Gira</h1>
         
-        <form method="POST" id="loginUser">
+        <form method="POST" id="createUser">
+
+          <!-- Name input -->
+          <div class="mb-6">
+            <input type="text" placeholder="Name" name="name" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none" />
+          </div>
+
+          <!-- Surname input -->
+          <div class="mb-6">
+            <input type="text" placeholder="Surname" name="surname" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none" />
+          </div>
 
           <!-- Email input -->
           <div class="mb-6">
@@ -24,16 +34,24 @@
             <input type="password" placeholder="Password" name="password" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none" />
           </div>
 
+          <!-- Check role -->
+          <div class="form-control mb-6">
+            <label class="label cursor-pointer">
+              <span class="label-text text-lg font-normal">Manager?</span>
+              <input type="checkbox" class="toggle" name="manager" />
+            </label>
+          </div>
+
           <!-- Submit button -->
           <button type="submit" class="btn btn-primary bg-teal-500 border-teal-500 inline-block px-7 py-3 font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-teal-700 hover:shadow-lg focus:bg-teal-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-teal-700 active:shadow-lg transition duration-300 ease-in-out w-full">
-            Sign in
+            Sign up
           </button>
 
           <div class="divider">OR</div>
 
-          <!-- Signup button -->
-          <a href="{{ url_for('signup')}}" class="btn btn-primary bg-teal-500 border-teal-500 inline-block px-7 py-3 font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-teal-700 hover:shadow-lg focus:bg-teal-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-teal-700 active:shadow-lg transition duration-300 ease-in-out w-full">
-            Sign up
+          <!-- Login button -->
+          <a href="{{ url_for('login')}}" class="btn btn-primary bg-teal-500 border-teal-500 inline-block px-7 py-3 font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-teal-700 hover:shadow-lg focus:bg-teal-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-teal-700 active:shadow-lg transition duration-300 ease-in-out w-full">
+            Sign in
           </a>
 
         </form>

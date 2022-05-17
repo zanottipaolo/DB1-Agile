@@ -36,8 +36,8 @@
 
 	</head>
 	<body>
-		{# Comment: Not render Sidebar component on Login page #} {% if active_page
-		!= "login" %}
+		{# Comment: Not render Sidebar component on Login page #} 
+		{% if isNotLogin %}
 		<!-- Sidebar -->
 		<div class="drawer drawer-mobile">
 			<input id="sidebar" type="checkbox" class="drawer-toggle" />
@@ -552,8 +552,10 @@
 			</div>
 		</div>
 
-		{% else %} {# Comment: Login content #} {% block content %}{% endblock %} {%
-		endif %}
+		{% else %} 
+			{# Comment: Login content #} 
+			{% block content %}{% endblock %} 
+		{% endif %}
 
 		<!-- Footer -->
 		<footer class="footer footer-center p-6 bg-primary text-primary-content">
