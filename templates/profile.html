@@ -6,5 +6,53 @@
 {% endblock %}
 
 {% block body %}
-    <p>Ciao {{ current_user.name }}</p>
+    <div class="w-full mt-10">
+        <h1 class="title-font text-center sm:text-4xl text-3xl mb-4">Ciao {{ current_user.name }}</h1>
+        
+        <form method="POST" id="createUser" class="w-96 text-center m-auto">
+
+            <!-- Name input -->
+            <div class="mb-6">
+                <input type="text" value="{{ current_user.name }}" placeholder="Name" name="name" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none text-base-300" required />
+            </div>
+
+            <!-- Surname input -->
+            <div class="mb-6">
+                <input type="text" value="{{ current_user.surname }}" placeholder="Surname" name="surname" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none text-base-300" required />
+            </div>
+
+            <!-- Email input -->
+            <div class="mb-6">
+                <input type="email" value="{{ current_user.email }}" placeholder="Email address" name="email" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none text-base-300" required />
+            </div>
+
+            <!-- Password input -->
+            <div class="mb-6">
+                <input type="password" placeholder="Password" name="password" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none text-base-300" required />
+            </div>
+
+            <!-- Check role -->
+            <div class="form-control mb-6">
+                <label class="label cursor-pointer">
+                <span class="label-text text-lg font-normal">Manager?</span>
+                <input type="checkbox" value="{{ current_user.manager }}" class="toggle" name="manager" />
+                </label>
+            </div>
+
+            <!-- Enable update -->
+            <button onclick="enableUpdate()" class="btn btn-primary bg-teal-500 border-teal-500 inline-block px-7 py-3 font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-teal-700 hover:shadow-lg focus:bg-teal-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-teal-700 active:shadow-lg transition duration-300 ease-in-out w-full">
+                Enable Update
+            </button>
+
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary bg-teal-500 border-teal-500 inline-block px-7 py-3 font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-teal-700 hover:shadow-lg focus:bg-teal-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-teal-700 active:shadow-lg transition duration-300 ease-in-out w-full">
+                Save
+            </button>
+
+        </form>
+    </div>
+{% endblock %}
+
+{% block link_footer %}
+    <script src="{{ url_for('static', filename='script/profile.js') }}"></script>
 {% endblock %}
