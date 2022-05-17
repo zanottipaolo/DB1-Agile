@@ -7,7 +7,7 @@
 
 {% block body %}
     <div class="w-full mt-10">
-        <h1 class="title-font text-center sm:text-4xl text-3xl mb-4">Ciao {{ current_user.name }}</h1>
+        <h1 class="title-font text-center sm:text-4xl text-3xl mb-4">Profilo di {{ current_user.name }} {{ current_user.surname }}</h1>
 
         <div class="flex flex-col lg:flex-row mt-14 lg:mt-10 gap-4 mx-4">
             <!-- Update User info -->
@@ -43,17 +43,17 @@
 
                 <!-- Name input -->
                 <div class="mb-6">
-                    <input type="text" value="{{ current_user.name }}" placeholder="Name" id="current_name" name="name" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none" required />
+                    <input type="text" value="{{ current_user.name }}" placeholder="Name" id="current_name" name="name" class="form-control input input-bordered block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none" required />
                 </div>
 
                 <!-- Surname input -->
                 <div class="mb-6">
-                    <input type="text" value="{{ current_user.surname }}" placeholder="Surname" id="current_surname" name="surname" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none" required />
+                    <input type="text" value="{{ current_user.surname }}" placeholder="Surname" id="current_surname" name="surname" class="form-control input input-bordered block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none" required />
                 </div>
 
                 <!-- Email input -->
                 <div class="mb-6">
-                    <input type="email" value="{{ current_user.email }}" placeholder="Email address" id="current_email" name="email" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none" required />
+                    <input type="email" value="{{ current_user.email }}" placeholder="Email address" id="current_email" name="email" class="form-control input input-bordered block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none" required />
                 </div>
 
                 <!-- Check role -->
@@ -119,12 +119,12 @@
 
                 <!-- Current Password input -->
                 <div class="mb-6">
-                    <input type="password" placeholder="Current password" name="cur-password" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none" required />
+                    <input type="password" placeholder="Current password" name="cur-password" class="form-control input input-bordered block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none" required />
                 </div>
 
                 <!-- Password input -->
                 <div class="mb-6">
-                    <input type="password" placeholder="New password" name="new-password" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none" required />
+                    <input type="password" placeholder="New password" name="new-password" class="form-control block input input-bordered w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none" required />
                 </div>
 
                 <div class="flex w-full justify-around mb-4">
