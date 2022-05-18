@@ -160,7 +160,16 @@ def sprint():
 
         return render_template('sprint.html', current_sprint=current_sprint, sprint_task=sprint_tasks, isNotLogin=True)
     elif request.method == 'POST':
-        return True
+        required_data = ['subtask_id', 'new_status']
+        # Check data
+        for data in required_data:
+            if request.form.get(data) == None:
+                return 'missing ' + data, 400
+
+        subtask = SubTask.query.get(int(request.form.get('subtask_id')))
+        subtask.status = request.form.get('new_status')
+        db_session.commit()
+        return "success", 200
 
 
 @app.route('/backlog', methods=['POST', 'GET'])

@@ -52,16 +52,13 @@
 				</h3>
 				<div
 					id="task{{ loop.index }}-todo"
-					ondragover="onDragOver(event);"
-					ondrop="onDrop(event, this);"
+					status="TODO"
 					class="w-full h-full flex flex-col items-center gap-2"
 				>
 				{% for subtask in task.subtasks %}
 					{% if subtask.status == 'TODO' %}
 					<div
-						id="task{{ loop.index }}-sub{{subtask.id}}"
-						draggable="true"
-						ondragstart="onDragStart(event);"
+						id="{{subtask.id}}"
 						class="bg-base-100 p-5 rounded-box cursor-pointer w-4/5 text-center whitespace-nowrap"
 					>
 						{{subtask.name}}
@@ -80,23 +77,13 @@
 			</h1>
 				<div
 					id="task{{ loop.index }}-progress"
-					ondragover="onDragOver(event);"
-					ondrop="onDrop(event, this);"
-					style="
-						width: 100%;
-						height: 100%;
-						display: flex;
-						flex-direction: column;
-						align-items: center;
-						gap: 5px;
-					"
+					status="INPROGRESS"
+					class="w-full h-full flex flex-col items-center gap-2"
 				>
 				{% for subtask in task.subtasks %}
 					{% if subtask.status == 'INPROGRESS' %}
 					<div
-						id="task{{ loop.index }}-sub{{subtask.id}}"
-						draggable="true"
-						ondragstart="onDragStart(event);"
+						id="{{subtask.id}}"
 						class="bg-base-100 p-5 rounded-box cursor-pointer w-4/5 text-center whitespace-nowrap"
 					>
 						{{subtask.name}}
@@ -113,23 +100,13 @@
 				</h3>
 				<div
 					id="task{{ loop.index }}-done"
-					ondragover="onDragOver(event);"
-					ondrop="onDrop(event, this);"
-					style="
-						width: 100%;
-						height: 100%;
-						display: flex;
-						flex-direction: column;
-						align-items: center;
-						gap: 5px;
-					"
+					status="DONE"
+					class="w-full h-full flex flex-col items-center gap-2"
 				>
 				{% for subtask in task.subtasks %}
 					{% if subtask.status == 'DONE' %}
 					<div
-						id="task{{ loop.index }}-sub{{subtask.id}}"
-						draggable="true"
-						ondragstart="onDragStart(event);"
+						id="{{subtask.id}}"
 						class="bg-base-100 p-5 rounded-box cursor-pointer w-4/5 text-center whitespace-nowrap"
 					>
 						{{subtask.name}}
@@ -155,6 +132,9 @@
 			revert: true,
 			cursor: "move",
 			scrollSpeed: 5,
+			receive: function(event, ui) {
+				updateSubtask(ui.item.attr('id'), event.target.getAttribute('status') )
+			},
 		});
 	</script>
 
