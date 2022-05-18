@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Epics{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+<div class="container mx-auto p-8">
+    <div class="mb-4 p-4">
+        <p class="text-2xl text-center">Epics</p>
+    </div>
+    {% for epics in epics %}
+        <div class="my-2 card w-100 bg-{{epics.color}} text-{{epics.color}}-content">
+            <div class="card-body">
+                <h2 class="card-title">{{ epics.name }}</h2>
+                <p class="mb-2">{{ epics.description }}</p>
+                <div class="bg-{{epics.color}}-content text-{{epics.color}} p-2 rounded">
+                    <p class="mb-0">Related taks:</p>
+                    <div class="m-0 p-0">
+                        {% for tasks_with_epic in tasks_with_epic %}
+                            {% if tasks_with_epic.epic == epics.id %}
+                                <p class="pl-4 my-0 p-0">- {{ tasks_with_epic.name }}</p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="card-actions justify-end">
+                    <button class="btn bg-{{epics.color}}-content text-{{epics.color}}">Edit</button>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    <a href="#modalNewEpic" class="my-4 mx-2">
+        <button class="p-2 my-4 bg-primary text-primary-content rounded-lg transition ease-in-out delay-10 hover:-translate-y-1 hover:scale-110 hover:bg-secondary duration-50">
+            Add epic
+        </button>
+    </a>
+    
+</div>
+
+
+<!-- Modal -->
+<div class="modal" id="modalNewEpic">
+    <form class="modal-box w-100 px-8" id="create-new-task-form" action="backlog" method="post">
+        <a href="#" class="btn btn-sm btn-circle absolute btn-error right-2 top-2">✕</a>
+        <h3 class="mb-2 font-bold text-lg">New epic</h3>
+        <div class="mb-2 form-control w-full max-w-xs">
+            <input type="text" name="name" placeholder="Epic name" class="input input-bordered w-full max-w-xs" />
+        </div>
+
+        <div class="mb-2 form-control w-full max-w-xs">
+            <input type="text" name="description" placeholder="Epic description" class="input input-bordered w-full max-w-xs" />
+        </div>
+
+        <input type="hidden" name="signaler" value="1"/> <!-- WARNING ID DELL'Utente in sessione-->
+        
+        <span class="mt-1">Select epic color:</span><br>
+        <input type="radio" name="color" checked="checked" class="radio radio-primary bg-primary" value="primary"/>
+        <input type="radio" name="color" class="radio radio-secondary bg-secondary" value="secondary"/>
+        <input type="radio" name="color" class="radio radio-accent bg-accent" value="accent"/>
+        <input type="radio" name="color" class="radio radio-neutral bg-neutral" value="neutral"/>
+        <input type="radio" name="color" class="radio radio-info bg-info" value="info"/>
+        <input type="radio" name="color" class="radio radio-success bg-success" value="success"/>
+        <input type="radio" name="color" class="radio radio-warning bg-warning" value="warning"/>
+        <input type="radio" name="color" class="radio radio-error bg-error" value="error"/>
+
+        <div class="mt-0 modal-action">
+            <button class="btn btn-primary" name="create-new-epic" type="submit">Add new epic</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %} 
