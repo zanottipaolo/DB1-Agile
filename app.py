@@ -313,6 +313,25 @@ def backlog():
     shutdown_session()
 
 
+@app.route('/epics', methods=['POST', 'GET'])
+@login_required
+def epics():
+    if request.method == 'GET':
+        app.logger.info("EPICS")
+        epics = db_session.query(Epic).filter(Epic.id != 0).all()
+        tasks_with_epic = db_session.query(Task).filter(
+            Task.epic != 0, Task.status != 'DONE').all()
+        return render_template('epics.html', epics=epics, tasks_with_epic=tasks_with_epic, isNotLogin=True)
+    if request.method == 'POST' and 'create-new-epic' in request.form:
+        app.logger.info("NEW EPIC")
+        new_epic = Epic(request.form.get('name'),
+                        request.form.get('description'),
+                        request.form.get('color'))
+        db_session.add(new_epic)
+        db_session.commit()
+        return redirect('/epics')
+
+
 @ app.teardown_appcontext
 def shutdown_session(exception=None):
     db_session.remove()
