@@ -226,13 +226,13 @@ def backlog():
                         'TODO')                                 # status
         db_session.add(new_task)
         db_session.commit()
-        return redirect('/backlog', isNotLogin=True)
+        return redirect('/backlog')
     if request.method == 'POST' and 'task-delete' in request.form:
         # delete task
         app.logger.info("DELETE TASK")
         Task.query.filter_by(id=request.form.get('idTask')).delete()
         db_session.commit()
-        return redirect('/backlog', isNotLogin=True)
+        return redirect('/backlog')
     if request.method == 'POST' and 'task-changed' in request.form:
         # changed task
         app.logger.info("CHANGE TASK")
@@ -246,14 +246,14 @@ def backlog():
         task_to_change.fibonacci_points = request.form.get(
             'fibonacci_points')
         db_session.commit()
-        return redirect('/backlog', isNotLogin=True)
+        return redirect('/backlog')
     if request.method == 'POST' and 'remove-from-sprint' in request.form:
         # Remove task from sprint
         app.logger.info("REMOVE TASK FROM SPRINT")
         task_to_remove = Task.query.get(request.form.get('idTask'))
         task_to_remove.sprint = None
         db_session.commit()
-        return redirect('/backlog', isNotLogin=True)
+        return redirect('/backlog')
     if request.method == 'POST' and 'task-move-in-sprint' in request.form:
         # move task in current sprint
         app.logger.info("MOVE TASK IN CURRENT SPRINT")
@@ -261,7 +261,7 @@ def backlog():
         current_sprint = Sprint.query.filter_by(is_active=1).one()
         task_to_move.sprint = current_sprint.id
         db_session.commit()
-        return redirect('/backlog', isNotLogin=True)
+        return redirect('/backlog')
     if request.method == 'POST' and 'close-sprint' in request.form:
         app.logger.info("CLOSE SPRINT")
         current_sprint = Sprint.query.filter_by(is_active=1).one()
@@ -269,7 +269,7 @@ def backlog():
             sprint=current_sprint.id).update(dict(status='DONE'))
         current_sprint.is_active = 0
         db_session.commit()
-        return redirect('/backlog', isNotLogin=True)
+        return redirect('/backlog')
     if request.method == 'POST' and 'create-sprint' in request.form:
         app.logger.info("CREATE SPRINT")
         date_start = datetime.date(2022, 6, 1)  # da modificare
@@ -280,7 +280,7 @@ def backlog():
                             1)
         db_session.add(new_sprint)
         db_session.commit()
-        return redirect('/backlog', isNotLogin=True)
+        return redirect('/backlog')
     if request.method == 'POST' and 'update-sprint' in request.form:
         app.logger.info("UPDATE SPRINT")
         current_sprint = Sprint.query.filter_by(is_active=1).one()
@@ -288,7 +288,7 @@ def backlog():
         current_sprint.start_date = datetime.date(2022, 6, 1)  # da modificare
         current_sprint.end_date = datetime.date(2022, 6, 30)  # da modificare
         db_session.commit()
-        return redirect('/backlog', isNotLogin=True)
+        return redirect('/backlog')
     if request.method == 'POST' and 'create-new-epic' in request.form:
         app.logger.info("NEW EPIC")
         new_epic = Epic(request.form.get('name'),
