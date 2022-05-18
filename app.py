@@ -297,6 +297,17 @@ def backlog():
         db_session.add(new_epic)
         db_session.commit()
         return redirect('/backlog')
+    if request.method == 'POST' and 'modal-move-task' in request.form:
+        task_to_move = Task.query.get(request.form.get('idTaskToMove'))
+        in_sprint = request.form.get('in_sprint')
+        if int(in_sprint) == 0:  # da backlog a sprint
+            current_sprint = Sprint.query.filter_by(is_active=1).one()
+            app.logger.info(current_sprint)
+            task_to_move.sprint = current_sprint.id
+        else:  # da sprint a backlog
+            task_to_move.sprint = None
+        db_session.commit()
+        return redirect('/backlog')
 
     # Close connection to database when shutting down
     shutdown_session()

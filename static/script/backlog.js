@@ -1,4 +1,4 @@
-
+$("modalMoveTask").hide();
 
 function allowDrop(ev) {
     ev.preventDefault();
@@ -20,6 +20,12 @@ function drop_on_backlog(ev) {
     }
     else {
         console.log('Da spostare');
+        //document.getElementById('modalMoveTask').style.display("block");
+        var modal = document.getElementById("modalMoveTask");
+        document.getElementById("idTaskToMove").value = id_task_to_move;
+        document.getElementById("in_sprint").value = 1; // Muovere da sprint a backlog
+        //$(".modal-move-task-form #on_sprint").val(1);
+        modal.classList.remove('hidden');
     }
 }
 
@@ -35,5 +41,14 @@ function drop_on_sprint(ev) {
     }
     else {
         console.log('Da spostare');
+        var modal = document.getElementById("modalMoveTask");
+        document.getElementById("idTaskToMove").value = id_task_to_move;
+        document.getElementById("in_sprint").value = 0; // Muovere da backlog a sprint
+        modal.classList.remove('hidden');
     }
 } 
+
+function closeModal() {
+    var modal = document.getElementById("modalMoveTask");
+    modal.classList.add('hidden');
+}
