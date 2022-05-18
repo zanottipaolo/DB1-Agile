@@ -34,9 +34,8 @@ class Task(Base):
     epic = Column(Integer, ForeignKey('epics.id'), nullable=True)
     signaler = Column(Integer)  # diventa chiave esterna
     fibonacci_points = Column(Integer)
-    status = Column(String(15)) # TODO, INPROGESS, DONE
+    status = Column(String(15))  # TODO, INPROGESS, DONE
     subtasks = relationship("SubTask")
-
 
     def __init__(self, name, description, sprint, monitorer, epic, signaler, fibonacci_points, status):
         self.name = name
@@ -58,7 +57,7 @@ class SubTask(Base):
     name = Column(String(50))
     description = Column(Text())
     assigned_to = Column(Integer, ForeignKey('users.id'), nullable=True)
-    status = Column(String(15)) # TODO, INPROGESS, DONE
+    status = Column(String(15))  # TODO, INPROGESS, DONE
     task = Column(Integer, ForeignKey('tasks.id'))
     #task = relationship("Task", back_populates="subtasks")
 
@@ -78,10 +77,12 @@ class Epic(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(50))
     description = Column(Text())
+    color = Column(Text)
 
-    def __init__(self, name, description):
+    def __init__(self, name, description, color):
         self.name = name
         self.description = description
+        self.color = color
 
     def __repr__(self):
         return f'< Epic {self.name!r} >'

@@ -89,19 +89,20 @@ def profile():
         user_to_update = User.query.get(request.form.get('id'))
 
         # check if a user already exists wth the new emailù
-        user_exists = User.query.filter_by(email=request.form.get('email')).first()
+        user_exists = User.query.filter_by(
+            email=request.form.get('email')).first()
 
         app.logger.info(user_exists)
 
         if user_exists and user_exists.id != current_user.id:  # if user is found --> redirect to Profile
             flash('Email already exists', 'error')
             return redirect(url_for('profile'))
-        
+
         user_to_update.name = request.form.get('name')
         user_to_update.surname = request.form.get('surname')
         user_to_update.email = request.form.get('email')
         user_to_update.manager = request.form.get('manager', type=bool)
-        
+
         if user_to_update.manager == None:
             user_to_update.manager = 0
 
@@ -116,7 +117,7 @@ def profile():
 
         flash('User has been successfully deleted', 'success')
         return redirect('/')
-    
+
     elif request.method == 'POST' and 'updatePw' in request.form:
         current_password = request.form.get('cur-password')
         new_password = request.form.get('new-password')
@@ -129,7 +130,8 @@ def profile():
             flash('Wrong password, try again.', 'error-pw')
             return redirect(url_for('profile'))
 
-        user_to_update.password=generate_password_hash(new_password, method='sha256')        
+        user_to_update.password = generate_password_hash(
+            new_password, method='sha256')
 
         db_session.commit()
 
@@ -160,6 +162,7 @@ def sprint():
     elif request.method == 'POST':
         return True
 
+
 @app.route('/backlog', methods=['POST', 'GET'])
 @login_required
 def backlog():
@@ -169,7 +172,7 @@ def backlog():
         M = aliased(User)  # monitorer
 
         tasks = db_session.query(Task.id.label("id"), Task.name.label("name"), Task.description.label("description"), Task.sprint.label("sprint"), Task.monitorer.label("monitorer"), Task.signaler.label(
-            "signaler"), Task.epic.label("epic"), Task.fibonacci_points.label("fibonacci_points"), Task.status.label("status"), Epic.name.label("epic_name"), M.name.label("monitorer_name"), M.surname.label("monitorer_surname"), S.name.label("signaler_name"), S.surname.label("signaler_surname"))\
+            "signaler"), Task.epic.label("epic"), Task.fibonacci_points.label("fibonacci_points"), Task.status.label("status"), Epic.name.label("epic_name"), Epic.color.label("epic_color"), M.name.label("monitorer_name"), M.surname.label("monitorer_surname"), S.name.label("signaler_name"), S.surname.label("signaler_surname"))\
             .join(Epic, Task.epic == Epic.id)\
             .join(S, Task.signaler == S.id)\
             .join(M, Task.monitorer == M.id)
@@ -185,7 +188,7 @@ def backlog():
             current_sprint_id = current_sprint.id
 
             sprint_task = db_session.query(Task.id.label("id"), Task.name.label("name"), Task.description.label("description"), Task.sprint.label("sprint"), Task.monitorer.label("monitorer"), Task.signaler.label(
-                "signaler"), Task.epic.label("epic"), Task.fibonacci_points.label("fibonacci_points"), Task.status.label("status"), Epic.name.label("epic_name"), M.name.label("monitorer_name"), M.surname.label("monitorer_surname"), S.name.label("signaler_name"), S.surname.label("signaler_surname"))\
+                "signaler"), Task.epic.label("epic"), Task.fibonacci_points.label("fibonacci_points"), Task.status.label("status"), Epic.name.label("epic_name"), Epic.color.label("epic_color"), M.name.label("monitorer_name"), M.surname.label("monitorer_surname"), S.name.label("signaler_name"), S.surname.label("signaler_surname"))\
                 .filter(Task.sprint == current_sprint_id)\
                 .join(Epic, Task.epic == Epic.id)\
                 .join(S, Task.signaler == S.id)\
@@ -201,7 +204,7 @@ def backlog():
             sprint_task = None
 
         backlog_task = db_session.query(Task.id.label("id"), Task.name.label("name"), Task.description.label("description"), Task.sprint.label("sprint"), Task.monitorer.label("monitorer"), Task.signaler.label(
-            "signaler"), Task.epic.label("epic"), Task.fibonacci_points.label("fibonacci_points"), Task.status.label("status"), Epic.name.label("epic_name"), M.name.label("monitorer_name"), M.surname.label("monitorer_surname"), S.name.label("signaler_name"), S.surname.label("signaler_surname"))\
+            "signaler"), Task.epic.label("epic"), Task.fibonacci_points.label("fibonacci_points"), Task.status.label("status"), Epic.name.label("epic_name"), Epic.color.label("epic_color"), M.name.label("monitorer_name"), M.surname.label("monitorer_surname"), S.name.label("signaler_name"), S.surname.label("signaler_surname"))\
             .filter(Task.sprint == None)\
             .join(Epic, Task.epic == Epic.id)\
             .join(S, Task.signaler == S.id)\
@@ -286,6 +289,15 @@ def backlog():
         current_sprint.end_date = datetime.date(2022, 6, 30)  # da modificare
         db_session.commit()
         return redirect('/backlog', isNotLogin=True)
+    if request.method == 'POST' and 'create-new-epic' in request.form:
+        app.logger.info("NEW EPIC")
+        new_epic = Epic(request.form.get('name'),
+                        request.form.get('description'),
+                        request.form.get('color'))
+        db_session.add(new_epic)
+        db_session.commit()
+        return redirect('/backlog')
+
     # Close connection to database when shutting down
     shutdown_session()
 

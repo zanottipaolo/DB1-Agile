@@ -60,7 +60,7 @@
                                 </div>
                                 <div class="flex justify-end">
                                     {% if task.epic != 0 %}
-                                        <span class="w-auto h-auto py-1 px-2 rounded bg-secondary text-secondary-content py-auto my-auto text-center inline-block align-middle">{{ task.epic_name}}</span>
+                                        <span class="w-auto h-auto py-1 px-2 rounded bg-{{ task.epic_color }} text-{{ task.epic_color }}-content py-auto my-auto text-center inline-block align-middle">{{ task.epic_name}}</span>
                                     {% endif %}
                                     <span class="mx-2 my-auto inline-block align-middle">{{task.id}}</span>
                                     {% if task.monitorer != 0 %}
@@ -106,11 +106,16 @@
                         Add Task
                     </button>
                 </a>
+                <a href="#modalNewEpic" class="mx-2">
+                    <button class="p-2 bg-primary text-primary-content rounded-lg transition ease-in-out delay-10 hover:-translate-y-1 hover:scale-110 hover:bg-primary duration-50">
+                        Add epic
+                    </button>
+                </a>
             </div>
         </div>
 
         
-        <div id="currentSprint">
+        <div id="backlog">
             {% for task in backlog_task %}
                 <div class="p-2 mb-1 base-100 rounded bg-base-100 border-solid border-2 border-primary my-0" id="card">
                     <a href="#modalInfo{{task.id}}">
@@ -131,7 +136,7 @@
                             </div>
                             <div class="flex justify-end">
                                 {% if task.epic != 0 %}
-                                <span class="w-auto h-auto py-1 px-2 rounded bg-secondary text-secondary-content py-auto my-auto text-center inline-block align-middle">{{task.epic_name}}</span>
+                                    <span class="w-auto h-auto py-1 px-2 rounded bg-{{ task.epic_color }} text-{{ task.epic_color }}-content py-auto my-auto text-center inline-block align-middle">{{ task.epic_name}}</span>
                                 {% endif %}
                                 <span class="mx-2 my-auto inline-block align-middle">{{task.id}}</span>
                                 {% if task.monitorer != 0 %}
@@ -300,6 +305,7 @@
                 {% for epics in epics %}
                 <option value="{{epics.id}}">{{ epics.name }}</option>
                 {% endfor %}
+                <option value="0" class="bg-error text-error-content">No epic</option>
             </select><br>
         </div>
 
@@ -401,6 +407,37 @@
         </div>
     </form>     
 </div>
+
+<div class="modal" id="modalNewEpic">
+    <form class="modal-box w-100 px-8" id="create-new-task-form" action="backlog" method="post">
+        <a href="#" class="btn btn-sm btn-circle absolute btn-error right-2 top-2">✕</a>
+        <h3 class="mb-2 font-bold text-lg">New epic</h3>
+        <div class="mb-2 form-control w-full max-w-xs">
+            <input type="text" name="name" placeholder="Epic name" class="input input-bordered w-full max-w-xs" />
+        </div>
+
+        <div class="mb-2 form-control w-full max-w-xs">
+            <input type="text" name="description" placeholder="Epic description" class="input input-bordered w-full max-w-xs" />
+        </div>
+
+        <input type="hidden" name="signaler" value="1"/> <!-- WARNING ID DELL'Utente in sessione-->
+        
+        <span class="mt-1">Select epic color:</span><br>
+        <input type="radio" name="color" class="radio radio-primary bg-primary" value="primary"/>
+        <input type="radio" name="color" class="radio radio-secondary bg-secondary" value="secondary"/>
+        <input type="radio" name="color" class="radio radio-accent bg-accent" value="accent"/>
+        <input type="radio" name="color" class="radio radio-neutral bg-neutral" value="neutral"/>
+        <input type="radio" name="color" class="radio radio-info bg-info" value="info"/>
+        <input type="radio" name="color" class="radio radio-success bg-success" value="success"/>
+        <input type="radio" name="color" class="radio radio-warning bg-warning" value="warning"/>
+        <input type="radio" name="color" class="radio radio-error bg-error" value="error"/>
+
+        <div class="mt-0 modal-action">
+            <button class="btn btn-primary" name="create-new-epic" type="submit">Add new epic</button>
+        </div>
+    </form>
+</div>
+
 {% endif %}
 
 {% endblock %} 
