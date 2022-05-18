@@ -2,6 +2,13 @@
 
 {% block title %}Backlog{% endblock %}
 
+{% block head %}
+<!-- JQuery -->
+<script src="{{ url_for('static', filename='lib/jquery-3.6.0.js') }}"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+<script src="{{ url_for('static', filename='script/backlog.js') }}"></script>
+{% endblock %}
+
 {% block body %}
 <div class="container mx-auto p-8">
     <div id="pageTop">
@@ -14,7 +21,7 @@
                     <p class="m-3">Total points: <span class="w-auto h-auto py-1 px-2 rounded bg-info text-info-content py-auto my-auto text-center inline-block align-middle">{{total_points_of_sprint}}</span></p>
                 </div>
             </div>
-            <div class="p-4 mx-1 bg-base-200 rounded-lg">
+            <div class="p-4 mx-1 bg-base-200 rounded-lg" ondrop="drop_on_sprint(event)" ondragover="allowDrop(event)">
                 <div class="mb-2" style="display: flex; flex-direction: row; align-items: center;">
                     {% if current_sprint != None %}
                     <span class="py-1 px-2 rounded-lg bg-primary text-primary-content" class="bg-info">Active</span>
@@ -41,7 +48,7 @@
                 </div>
                 {% if current_sprint != None %}
                 {% for task in sprint_task %}
-                    <div class="p-2 mb-1 base-100 rounded bg-base-100 border-solid border-2 border-primary my-0" id="card">
+                    <div draggable="true" ondragstart="drag(event, {{ task.id }}, 0)" class="p-2 mb-1 base-100 rounded bg-base-100 border-solid border-2 border-primary my-0" id="{{task.id}}">
                         <a href="#modalInfo{{task.id}}">
                             <div class=" grid grid-cols-2">
                                 <div class=" text-left align-middle">
@@ -114,10 +121,9 @@
             </div>
         </div>
 
-        
-        <div id="backlog">
+        <div id="backlog" ondrop="drop_on_backlog(event)" ondragover="allowDrop(event)">
             {% for task in backlog_task %}
-                <div class="p-2 mb-1 base-100 rounded bg-base-100 border-solid border-2 border-primary my-0" id="card">
+                <div draggable="true" ondragstart="drag(event, {{ task.id }}, 1)" class="p-2 mb-1 base-100 rounded bg-base-100 border-solid border-2 border-primary my-0" id="{{task.id}}">
                     <a href="#modalInfo{{task.id}}">
                         <div class=" grid grid-cols-2">
                             <div class=" text-left align-middle">
@@ -435,6 +441,13 @@
         <div class="mt-0 modal-action">
             <button class="btn btn-primary" name="create-new-epic" type="submit">Add new epic</button>
         </div>
+    </form>
+</div>
+
+<div class="modal" id="modalMoveTask">
+    <form class="modal-box w-100 px-8" id="create-new-task-form" action="backlog" method="post">
+        <a href="#" class="btn btn-sm btn-circle absolute btn-error right-2 top-2">✕</a>
+        <h3 class="mb-2 font-bold text-lg">Move task?</h3>
     </form>
 </div>
 
