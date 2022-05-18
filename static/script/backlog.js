@@ -52,3 +52,17 @@ function closeModal() {
     var modal = document.getElementById("modalMoveTask");
     modal.classList.add('hidden');
 }
+
+function open_new_subtask(father_task) {
+    console.log(father_task);
+    document.getElementById("title_modal_subtask").innerHTML = "New subtask related to Task with id: " + father_task + "";
+    var modal = document.getElementById("modalNewSubTask");
+    document.getElementById("father_task").value = father_task;
+    location.href="#";
+    modal.classList.remove('hidden');
+}
+
+function closeModal_subtask() {
+    var modal = document.getElementById("modalNewSubTask");
+    modal.classList.add('hidden');
+}

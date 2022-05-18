@@ -222,7 +222,8 @@ def backlog():
 
         epics = Epic.query.filter(Epic.id != 0).all()
         total_points_of_sprint = 100  # Fare SUM di sprint_task.fibonacci_points
-        return render_template('backlog.html', tasks=tasks, current_sprint=current_sprint, backlog_task=backlog_task, sprint_task=sprint_task, epics=epics, total_points_of_sprint=total_points_of_sprint, is_closable=is_closable, today=today, days_remaning=days_remaning, developer=developer, isNotLogin=True)
+        subtasks = SubTask.query.all()
+        return render_template('backlog.html', subtasks=subtasks, tasks=tasks, current_sprint=current_sprint, backlog_task=backlog_task, sprint_task=sprint_task, epics=epics, total_points_of_sprint=total_points_of_sprint, is_closable=is_closable, today=today, days_remaning=days_remaning, developer=developer, isNotLogin=True)
     if request.method == 'POST' and 'create-new-task' in request.form:
         # add new task
         new_task = Task(request.form.get('name'),               # name
@@ -311,10 +312,18 @@ def backlog():
         in_sprint = request.form.get('in_sprint')
         if int(in_sprint) == 0:  # da backlog a sprint
             current_sprint = Sprint.query.filter_by(is_active=1).one()
-            app.logger.info(current_sprint)
             task_to_move.sprint = current_sprint.id
         else:  # da sprint a backlog
             task_to_move.sprint = None
+        db_session.commit()
+    if request.method == 'POST' and 'create-new-subtask' in request.form:
+        app.logger.info("Create new subtask")
+        father_task = request.form.get('father_task')
+        name = request.form.get('name')
+        description = request.form.get('description')
+        assigned_to = request.form.get('assigned_to')
+        new_subtask = SubTask(name, description, father_task, assigned_to)
+        db_session.add(new_subtask)
         db_session.commit()
         return redirect('/backlog')
 

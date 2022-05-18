@@ -236,11 +236,21 @@
         <div class="grid grid-cols-2">
             <div>
                 <p class="mt-1">Subtask:</p>
-                <ul class="ml-6 list-disc">
-                    <li>Subtask 1</li>
-                    <li>Subtask 2</li>
-                    <li>Subtask 3</li>
+                <ul class="ml-6 mb-2 list-disc">
+                    {% for subtasks in subtasks %}
+                        {% if subtasks.task == task.id %}
+                            {% if subtasks.status == 'TODO'%}
+                                <li class="mb-2">{{ subtasks.name }} <span class="rounded p-1 bg-error text-error-content">{{ subtasks.status }}</span></li>
+                            {% elif subtasks.status == 'INPROGRESS'%}
+                                <li class="mb-2">{{ subtasks.name }} <span class="rounded p-1 bg-warning text-warning-content">{{ subtasks.status }}</span></li>
+                            {% elif subtasks.status == 'DONE'%}
+                                <li class="mb-2">{{ subtasks.name }} <span class="rounded p-1 bg-success text-success-content">{{ subtasks.status }}</span></li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
                 </ul>
+                <a class="btn-sm py-1 px-2 btn-primary text-primary-content m-1 mt-2 rounded" onclick="open_new_subtask({{ task.id }})">Add subtask</a>
+
             </div>
             <div>
                 <p class="mb-2">Epic:</p>
@@ -453,6 +463,37 @@
         <div class="mt-0 modal-action">
             <button class="btn btn-primary text-base-content hover:text-primary-content" name="modal-move-task" type="submit">Move</button>
         </div>
+    </form>
+</div>
+
+<div class="flex items-center justify-center fixed inset-0 overflow-y-auto w-auto hidden" id="modalNewSubTask">
+    <form class="border-2 border-primary modal-box w-100 px-8" id="create-new-subtask-form" action="backlog" method="post">
+        <a onclick="closeModal_subtask()" class="btn btn-sm btn-circle absolute btn-error right-2 top-2">✕</a>
+        
+        <input type="hidden" id="father_task" name="father_task"/>
+        
+        <h3 class="mb-2 font-bold text-lg" id="title_modal_subtask"></h3>
+        
+        <div class="mb-2 form-control w-full max-w-xs">
+            <input type="text" name="name" placeholder="Subtask name" class="input input-bordered w-full max-w-xs" />
+        </div>
+
+        <div class="mb-2 form-control w-full max-w-xs">
+            <input type="text" name="description" placeholder="Subtask description" class="input input-bordered w-full max-w-xs" />
+        </div>
+
+        Assigned to:  
+        <select name="assigned_to" class="ml-2 mt-2 select select-primary w-auto max-w-xs">
+            <option value="0">No one selected</option>
+            {% for developer in developer %}
+                <option value="{{ developer.id }}">{{ developer.name }} {{ developer.surname }}</option>
+            {% endfor %}
+        </select><br>
+
+        <div class="mt-2 modal-action">
+            <button type="submit" class="btn btn-primary" name="create-new-subtask" type="submit">Add new subtask</button>
+        </div>
+
     </form>
 </div>
 
