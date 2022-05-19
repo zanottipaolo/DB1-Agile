@@ -36,7 +36,12 @@ function drop_on_sprint(ev) {
     }
     else {
         console.log('Da spostare');
-        updateTask(id_task_to_move, currentSprint);
+        if (currentSprint != "") {
+            updateTask(id_task_to_move, currentSprint);
+        }
+        else {
+            document.getElementById('error_nosprint').classList.remove('hidden');
+        }
     }
 } 
 
