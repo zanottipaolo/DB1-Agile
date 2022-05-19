@@ -361,6 +361,13 @@ def epics():
         db_session.add(new_epic)
         db_session.commit()
         return redirect('/epics')
+    if request.method == 'POST' and 'epic-changed' in request.form:
+        app.logger.info("EPIC EDIT")
+        epic = Epic.query.get(request.form.get('idEpic'))
+        epic.name = request.form.get('name')
+        epic.description = request.form.get('description')
+        db_session.commit()
+        return redirect('/epics')
 
 
 @ app.teardown_appcontext

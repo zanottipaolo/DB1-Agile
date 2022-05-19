@@ -27,7 +27,9 @@
                     </div>
                 </div>
                 <div class="card-actions justify-end">
-                    <button class="btn bg-{{epics.color}}-content text-{{epics.color}}">Edit</button>
+                    <a href="#editEpic{{epics.id}}">
+                        <span class="btn bg-{{epics.color}}-content text-{{epics.color}}">Edit</span>
+                    </a>
                 </div>
             </div>
         </div>
@@ -44,7 +46,7 @@
 
 <!-- Modal -->
 <div class="modal" id="modalNewEpic">
-    <form class="modal-box w-100 px-8" id="create-new-task-form" action="backlog" method="post">
+    <form class="modal-box w-100 px-8" id="create-new-task-form" action="epics" method="post">
         <a href="#" class="btn btn-sm btn-circle absolute btn-error right-2 top-2">✕</a>
         <h3 class="mb-2 font-bold text-lg">New epic</h3>
         <div class="mb-2 form-control w-full max-w-xs">
@@ -72,5 +74,32 @@
         </div>
     </form>
 </div>
+
+{% for epics in epics %}
+<div class="modal" id="editEpic{{epics.id}}">
+    <form class="max-w-3xl modal-box w-100" name="epicsEdit" action="epics" method="post">
+        <input type="hidden" name="idEpic" value="{{ epics.id }}"/>
+        <a href="#" class="btn btn-sm btn-circle absolute btn-error right-2 top-2">✕</a>
+
+        <div class="form-control">
+            <label class="label">
+                <span class="mt-2 label-text">Epic title:</span>
+            </label> 
+            <input type="text" required name="name" value="{{epics.name}}" class="input input-bordered input-primary w-full max-w-xs" />
+        </div>
+
+        <div class="form-control">
+            <label class="label">
+                <span class="mt-2 label-text">Description:</span>
+            </label> 
+            <textarea class="textarea textarea-primary" name="description">{{epics.description}}</textarea>
+        </div>
+
+        <div class="modal-action">
+            <button class="btn btn-primary text-base-content hover:text-primary-content" name="epic-changed" type="submit">Save and close</button> 
+        </div>
+    </form>     
+</div>
+{% endfor %}
 
 {% endblock %} 
