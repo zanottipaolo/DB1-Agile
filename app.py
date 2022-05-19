@@ -326,6 +326,19 @@ def backlog():
         db_session.add(new_subtask)
         db_session.commit()
         return redirect('/backlog')
+    if request.method == 'POST' and 'move_task' in request.form:
+        required_data = ['task_id', 'new_status']
+        # Check data
+        for data in required_data:
+            if request.form.get(data) == None:
+                return 'missing ' + data, 400
+        task = Task.query.get(int(request.form.get('task_id')))
+        if request.form.get('new_status') == '-1':
+            task.sprint = None
+        else:
+            task.sprint = request.form.get('new_status')
+        db_session.commit()
+        return "success", 200
 
     # Close connection to database when shutting down
     shutdown_session()
