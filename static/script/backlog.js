@@ -40,11 +40,6 @@ function drop_on_sprint(ev) {
     }
 } 
 
-function closeModal() {
-    var modal = document.getElementById("modalMoveTask");
-    modal.classList.add('hidden');
-}
-
 function open_new_subtask(father_task) {
     console.log(father_task);
     document.getElementById("title_modal_subtask").innerHTML = "New subtask related to Task with id: " + father_task + "";
