@@ -122,7 +122,7 @@
             </div>
         </div>
 
-        <div id="backlog" ondrop="drop_on_backlog(event)" ondragover="allowDrop(event)">
+        <div id="backlog" class="pb-2" ondrop="drop_on_backlog(event)" ondragover="allowDrop(event)">
             {% for task in backlog_task %}
                 <div draggable="true" ondragstart="drag(event, {{ task.id }}, 1)" class="p-2 mb-1 base-100 rounded bg-base-100 border-solid border-2 border-primary my-0" id="{{task.id}}">
                     <a href="#modalInfo{{task.id}}">
@@ -191,7 +191,7 @@
             <label class="label">
                 <span class="mt-2 label-text">Task title:</span>
             </label> 
-            <input type="text" name="name" value="{{task.name}}" class="input input-bordered input-primary w-full max-w-xs" />
+            <input type="text" required name="name" value="{{task.name}}" class="input input-bordered input-primary w-full max-w-xs" />
         </div>
 
         <div class="form-control">
@@ -289,11 +289,11 @@
         <a href="#" class="btn btn-sm btn-circle absolute btn-error right-2 top-2">✕</a>
         <h3 class="mb-2 font-bold text-lg">New task</h3>
         <div class="mb-2 form-control w-full max-w-xs">
-            <input type="text" name="name" placeholder="Task name" class="input input-bordered w-full max-w-xs" />
+            <input type="text" name="name" required placeholder="Task name" class="input input-bordered w-full max-w-xs" />
         </div>
 
         <div class="mb-2 form-control w-full max-w-xs">
-            <input type="text" name="description" placeholder="Task description" class="input input-bordered w-full max-w-xs" />
+            <input type="text" name="description" required placeholder="Task description" class="input input-bordered w-full max-w-xs" />
         </div>
 
         <input type="hidden" name="signaler" value="1"/> <!-- WARNING ID DELL'Utente in sessione-->
@@ -353,7 +353,7 @@
             <label class="label">
               <span class="label-text">Sprint name:</span>
             </label>
-            <input type="text" name="name" placeholder="Sprint name" class="input input-bordered w-full max-w-xs" />
+            <input type="text" name="name" required placeholder="Sprint name" class="input input-bordered w-full max-w-xs" />
         </div>
 
         <div class="w-100 w-full">
@@ -362,13 +362,13 @@
                     <label class="label">
                         <span class="label-text">Date start:</span>
                       </label>
-                      <input type="date" name="date_start" class="input input-bordered w-full max-w-xs" />
+                      <input type="date" required name="date_start" class="input input-bordered w-full max-w-xs" />
                 </div>
                 <div class="mx-2">
                     <label class="label">
                         <span class="label-text">Date end:</span>
                       </label>
-                      <input type="date" name="date_end" class="input input-bordered w-full max-w-xs" />
+                      <input type="date" required name="date_end" class="input input-bordered w-full max-w-xs" />
                 </div>
             </div>
         </div>
@@ -387,7 +387,7 @@
             <label class="label">
               <span class="label-text">Sprint name:</span>
             </label>
-            <input type="text" name="name" value="{{ current_sprint.name }}" class="input input-bordered w-full max-w-xs" />
+            <input type="text" required name="name" value="{{ current_sprint.name }}" class="input input-bordered w-full max-w-xs" />
         </div>
 
         <div class="w-100 w-full">
@@ -396,13 +396,13 @@
                     <label class="label">
                         <span class="label-text">Date start:</span>
                       </label>
-                      <input type="date" name="date_start" value="{{ current_sprint.start_date }}" class="input input-bordered w-full max-w-xs" />
+                      <input required type="date" name="date_start" value="{{ current_sprint.start_date }}" class="input input-bordered w-full max-w-xs" />
                 </div>
                 <div class="mx-2">
                     <label class="label">
                         <span class="label-text">Date end:</span>
                       </label>
-                      <input type="date" name="date_end" value="{{ current_sprint.end_date }}" class="input input-bordered w-full max-w-xs" />
+                      <input required type="date" name="date_end" value="{{ current_sprint.end_date }}" class="input input-bordered w-full max-w-xs" />
                 </div>
             </div>
         </div>
@@ -430,14 +430,12 @@
         <a href="#" class="btn btn-sm btn-circle absolute btn-error right-2 top-2">✕</a>
         <h3 class="mb-2 font-bold text-lg">New epic</h3>
         <div class="mb-2 form-control w-full max-w-xs">
-            <input type="text" name="name" placeholder="Epic name" class="input input-bordered w-full max-w-xs" />
+            <input type="text" required name="name" placeholder="Epic name" class="input input-bordered w-full max-w-xs" />
         </div>
 
         <div class="mb-2 form-control w-full max-w-xs">
-            <input type="text" name="description" placeholder="Epic description" class="input input-bordered w-full max-w-xs" />
+            <input type="text" required name="description" placeholder="Epic description" class="input input-bordered w-full max-w-xs" />
         </div>
-
-        <input type="hidden" name="signaler" value="1"/> <!-- WARNING ID DELL'Utente in sessione-->
         
         <span class="mt-1">Select epic color:</span><br>
         <input type="radio" checked="checked" name="color" class="radio radio-primary bg-primary" value="primary"/>
@@ -464,11 +462,11 @@
         <h3 class="mb-2 font-bold text-lg" id="title_modal_subtask"></h3>
         
         <div class="mb-2 form-control w-full max-w-xs">
-            <input type="text" name="name" placeholder="Subtask name" class="input input-bordered w-full max-w-xs" />
+            <input type="text" required name="name" placeholder="Subtask name" class="input input-bordered w-full max-w-xs" />
         </div>
 
         <div class="mb-2 form-control w-full max-w-xs">
-            <input type="text" name="description" placeholder="Subtask description" class="input input-bordered w-full max-w-xs" />
+            <input type="text" required name="description" placeholder="Subtask description" class="input input-bordered w-full max-w-xs" />
         </div>
 
         Assigned to:  
