@@ -367,6 +367,7 @@ def epics():
         db_session.commit()
         return redirect('/epics')
 
+
 @app.route('/roadmap', methods=['POST', 'GET'])
 @login_required
 def roadmap():
@@ -382,6 +383,7 @@ def timesheet():
         developer = User.query.filter(User.manager == 0, User.id != 0).all()
         current_sprint = Sprint.query.filter_by(
             is_active=1).first()
+
         start_date = current_sprint.start_date
         end_date = current_sprint.end_date
         delta = end_date - start_date
