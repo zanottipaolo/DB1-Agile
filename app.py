@@ -88,11 +88,9 @@ def profile():
     elif request.method == 'POST' and 'updateUser' in request.form:
         user_to_update = User.query.get(request.form.get('id'))
 
-        # check if a user already exists wth the new emailù
+        # check if a user already exists wth the new email
         user_exists = User.query.filter_by(
             email=request.form.get('email')).first()
-
-        app.logger.info(user_exists)
 
         if user_exists and user_exists.id != current_user.id:  # if user is found --> redirect to Profile
             flash('Email already exists', 'error')
@@ -368,6 +366,12 @@ def epics():
         epic.description = request.form.get('description')
         db_session.commit()
         return redirect('/epics')
+
+@app.route('/roadmap', methods=['POST', 'GET'])
+@login_required
+def roadmap():
+    if request.method == 'GET':
+        return render_template('roadmap.html', isNotLogin=True)
 
 
 @ app.teardown_appcontext
