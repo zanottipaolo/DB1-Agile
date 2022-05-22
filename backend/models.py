@@ -113,7 +113,7 @@ class Work(Base):
     __tablename__ = 'works'
     id = Column(Integer, primary_key=True)
     timeStamp_start = Column(String(50))
-    timeStam_end = Column(Text())
+    duration = Column(Integer)
     developer = Column(Integer, ForeignKey('users.id'), nullable=True)
     subtask = Column(Integer, ForeignKey('subtasks.id'))
 

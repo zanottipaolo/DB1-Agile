@@ -15,7 +15,7 @@ from sqlalchemy.orm import aliased
 from backend.database import db_session
 
 # Models
-from backend.models import Sprint, Task, SubTask, Epic, User
+from backend.models import Sprint, Task, SubTask, Epic, User, Work
 
 app = Flask(__name__)
 
@@ -389,7 +389,10 @@ def timesheet():
         delta = end_date - start_date
         days = delta.days
         plus_one_day = datetime.timedelta(days=1)
-        return render_template('timesheet.html', isNotLogin=True, developer=developer, days=days, start_date=start_date, end_date=end_date, plus_one_day=plus_one_day)
+
+        all_work = Work.query.all()
+
+        return render_template('timesheet.html', all_work=all_work, isNotLogin=True, developer=developer, days=days, start_date=start_date, end_date=end_date, plus_one_day=plus_one_day)
 
 
 @ app.teardown_appcontext
