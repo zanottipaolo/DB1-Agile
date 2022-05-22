@@ -374,6 +374,22 @@ def roadmap():
         return render_template('roadmap.html', isNotLogin=True)
 
 
+@app.route('/timesheet', methods=['POST', 'GET'])
+@login_required
+def timesheet():
+    if request.method == 'GET':
+        app.logger.info("TIMESHEET")
+        developer = User.query.filter(User.manager == 0, User.id != 0).all()
+        current_sprint = Sprint.query.filter_by(
+            is_active=1).first()
+        start_date = current_sprint.start_date
+        end_date = current_sprint.end_date
+        delta = end_date - start_date
+        days = delta.days
+        plus_one_day = datetime.timedelta(days=1)
+        return render_template('timesheet.html', isNotLogin=True, developer=developer, days=days, start_date=start_date, plus_one_day=plus_one_day)
+
+
 @ app.teardown_appcontext
 def shutdown_session(exception=None):
     db_session.remove()

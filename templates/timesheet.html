@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Timesheet{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+<div class="container mx-auto p-8">
+    <div class="mb-4 p-4">
+        <p class="text-2xl text-center">Timesheet</p>
+    </div>
+
+    <div class="grid grid-cols-2 columns-auto">
+
+
+
+    <div class="overflow-x-auto w-100 p-2 m-1 snap-x snap-proximity">
+        <table class="border-separate border border-slate-500 table-auto">
+            <thead class="p-2 m-2">
+                <tr class="p-2 m-2">
+                    <th>Developer</th>
+                    <th>Total Point</th>
+                    <th>Logged</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for developer in developer %}
+                <tr class="snap-always p-2 m-2">
+                    <td>{{ developer.name }} {{ developer.surname }}</td>
+                    <td>{{ developer.totalpoint }}</td>
+                    <td>{{ developer.logged }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="overflow-x-auto w-100 p-2 m-1 snap-x snap-proximity">
+        <table class="border-separate border border-slate-500 table-auto">
+            <thead class="p-2 m-2">
+                <tr class="p-2 m-2">
+                    {% for i in range(days) %}
+                        <th>{{ start_date + i*plus_one_day }}</th>
+                    {% endfor %}
+                    <th>{{ end_date }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for developer in developer %}
+                <tr class="snap-always p-2 m-2">
+                    {% for i in range(days) %}
+                        <th>bla</th>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>  
+        
+</div>
+    
+</div>
+
+{% endblock %} 
