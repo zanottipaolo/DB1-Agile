@@ -3,6 +3,9 @@
 {% block title %}Timesheet{% endblock %}
 
 {% block head %}
+<!-- Style -->
+<link rel="stylesheet" href="{{ url_for('static', filename='style/timesheet.css') }}">
+
 <!-- JQuery -->
 <script src="{{ url_for('static', filename='lib/jquery-3.6.0.js') }}"></script>
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
