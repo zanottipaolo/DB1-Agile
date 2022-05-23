@@ -371,7 +371,9 @@ def epics():
 @login_required
 def roadmap():
     if request.method == 'GET':
-        return render_template('roadmap.html', isNotLogin=True)
+        sprints = Sprint.query.all()
+
+        return render_template('roadmap.html', sprints=sprints, isNotLogin=True)
 
 
 @ app.teardown_appcontext

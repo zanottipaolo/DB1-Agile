@@ -6,5 +6,10 @@
 {% endblock %}
 
 {% block body %}
-<p>Roadmap works!</p>
+<h1 class="title-font text-center sm:text-4xl text-3xl mb-4">Roadmap works!</h1>
+
+
+{% for sprint in sprints %}
+<p>{{ sprint.name }} : {{ sprint.start_date }} / {{ sprint.end_date }}</p>
+{% endfor %}
 {% endblock %}
