@@ -5,7 +5,7 @@ from time import strptime
 from webbrowser import get
 from flask import Flask, flash, redirect, render_template, request, url_for
 import flask_login
-from sqlalchemy import desc
+from sqlalchemy import all_, desc, select
 from sqlalchemy import desc, func, true
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
@@ -390,9 +390,27 @@ def timesheet():
         days = delta.days
         plus_one_day = datetime.timedelta(days=1)
 
-        all_work = Work.query.all()
+        current_sprint = Sprint.query.filter_by(
+            is_active=1).first()
+        if current_sprint != None:
+            sprint_tasks = Task.query.filter_by(
+                sprint=current_sprint.id).order_by(Task.status).all()
+        else:
+            sprint_tasks = None
 
-        return render_template('timesheet.html', all_work=all_work, isNotLogin=True, developer=developer, days=days, start_date=start_date, end_date=end_date, plus_one_day=plus_one_day)
+        # SELECT * FROM subtasks WHERE task IN (SELECT id FROM tasks WHERE sprint IN (SELECT id FROM sprints WHERE is_active = 1));
+        active_subtask = db_session.query(SubTask.name.label("name"), SubTask.id.label("id")).filter(SubTask.task.in_(
+            db_session.query(Task.id.label("id")).filter(Task.sprint.in_(db_session.query(Sprint.id.label("id")).filter_by(is_active=1))))).all()
+
+        all_work = Work.query.all()
+        return render_template('timesheet.html', active_subtask=active_subtask, all_work=all_work, isNotLogin=True, developer=developer, days=days, start_date=start_date, end_date=end_date, plus_one_day=plus_one_day)
+    if request.method == 'POST' and 'log_tempo' in request.form:
+        app.logger.info("NEW LOG TEMPO")
+        new_log = Work(request.form.get('date'), request.form.get(
+            'duration'), request.form.get('user'), request.form.get('subtask_id'))
+        db_session.add(new_log)
+        db_session.commit()
+        return redirect('/timesheet')
 
 
 @ app.teardown_appcontext

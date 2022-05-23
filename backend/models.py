@@ -117,9 +117,9 @@ class Work(Base):
     developer = Column(Integer, ForeignKey('users.id'), nullable=True)
     subtask = Column(Integer, ForeignKey('subtasks.id'))
 
-    def __init__(self, timeStamp_start, timeStam_end, developer=developer, subtask=subtask):
+    def __init__(self, timeStamp_start, duration=duration, developer=developer, subtask=subtask):
         self.timeStamp_start = timeStamp_start
-        self.timeStam_end = timeStam_end
+        self.duration = duration
         self.developer = developer
         self.subtask = subtask
 
