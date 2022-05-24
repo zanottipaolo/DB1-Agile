@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}Timesheet{% endblock %}
+
+{% block head %}
+<!-- Style -->
+<link rel="stylesheet" href="{{ url_for('static', filename='style/timesheet.css') }}">
+
+<!-- JQuery -->
+<script src="{{ url_for('static', filename='lib/jquery-3.6.0.js') }}"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+<script src="{{ url_for('static', filename='script/timesheet.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+<div class="container mx-auto p-8">
+    <div class="mb-4 p-4">
+        <p class="text-2xl text-center">Timesheet</p>
+    </div>
+
+    <div class="overflow-x-auto w-full">
+        <table class="table w-full">
+          <!-- head -->
+          <thead>
+            <tr>
+                <th>Developer</th>
+                {% for i in range(days) %}
+                    <th>{{ start_date + i*plus_one_day }}</th>
+                {% endfor %}
+                <th>{{ end_date }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for developer in developer %}
+            <!-- row 2 -->
+            <tr class="text-center">
+                <th>
+                    <div class="flex items-center space-x-3">
+                    <div class="avatar">
+                        <div class="mask mask-squircle w-12 h-12">
+                        <img src="/static/img/users/profile{{developer.id}}.jpg" alt="" />
+                        </div>
+                    </div>
+                    <div>
+                        <div class="font-bold">{{ developer.name }} {{ developer.surname }}</div>
+                        <div class="text-sm opacity-50">Developer</div>
+                    </div>
+                    </div>
+                </th>
+                {% for i in range(days) %}                    
+                    <th onclick="openModal('{{developer.id}}', '{{(start_date + i*plus_one_day)}}')" class="hover:bg-primary hover:text-primary-content">
+                        {% set total = namespace(value="")%}
+                        {% for work in all_work %}
+                            {% if work.developer == developer.id and work.timeStamp_start == (start_date + i*plus_one_day).strftime('%Y-%m-%d') %}
+                                {% set total.value = total.value | int + work.duration | int%}
+                            {% endif %}  
+                        {% endfor %}
+                        {{total.value}}
+                    </th>
+                {% endfor %}
+                <th>
+                    end
+                </th>
+            </tr>
+            {% endfor %}
+          </tbody>
+          <!-- foot -->
+          <tfoot>
+            <tr>
+                <th>Developer</th>
+                {% for i in range(days) %}
+                    <th>{{ start_date + i*plus_one_day }}</th>
+                {% endfor %}
+                <th>{{ end_date }}</th>
+            </tr>
+          </tfoot>
+          
+        </table>
+      </div>
+    
+</div>
+
+<!-- Modal -->
+<div class="flex items-center justify-center fixed inset-0 overflow-y-auto w-auto hidden" id="workInfo">
+    <form class="border-2 border-primary modal-box w-100 px-8" action="timesheet" method="post">
+        <a onclick="closeModal()" class="btn btn-sm btn-circle absolute btn-error right-2 top-2">✕</a>
+        
+        <input type="hidden" id="user" name="user"/>
+        <input type="hidden" id="date" name="date"/>
+
+        <h3 class="mb-2 font-bold text-lg" id="title_workInfo">Log time</h3>
+
+        <div class="form-control w-full max-w-xs">
+            <label class="label">
+                <span class="label-text">Select issues</span>
+            </label>
+            <select name="subtask_id" class="select select-bordered">
+                <option disabled selected>Pick one</option>
+                {% for active_subtask in active_subtask %}
+                <option value="{{active_subtask.id}}">{{active_subtask.name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <input type="number" placeholder="Duration" name="duration" class="my-2 input input-bordered w-full max-w-xs" />  Hours
+
+        <div class="mt-2 modal-action">
+            <button type="submit" class="btn btn-primary text-base-content hover:text-primary-content" name="log_tempo" type="submit">Log time</button>
+        </div>
+    </form>
+</div>
+
+
+{% endblock %} 

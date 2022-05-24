@@ -108,3 +108,21 @@ class User(UserMixin, Base):
 
     def __repr__(self):
         return f'< User {self.email!r} >'
+
+
+class Work(Base):
+    __tablename__ = 'works'
+    id = Column(Integer, primary_key=True)
+    timeStamp_start = Column(String(50))
+    duration = Column(Integer)
+    developer = Column(Integer, ForeignKey('users.id'), nullable=True)
+    subtask = Column(Integer, ForeignKey('subtasks.id'))
+
+    def __init__(self, timeStamp_start, duration=duration, developer=developer, subtask=subtask):
+        self.timeStamp_start = timeStamp_start
+        self.duration = duration
+        self.developer = developer
+        self.subtask = subtask
+
+    def __repr__(self):
+        return f'< Work {self.name!r} >'
