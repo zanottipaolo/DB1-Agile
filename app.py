@@ -12,6 +12,9 @@ from flask_login import LoginManager, login_user, login_required, current_user, 
 from sqlalchemy.orm import aliased
 from sqlalchemy import func
 
+import json
+
+
 # Database
 from backend.database import db_session
 
@@ -144,8 +147,16 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-
-@app.route('/sprint', methods=['POST', 'GET'])
+@app.route('/users', methods=['GET'])
+@login_required
+def users():
+    to_return = []
+    users = User.query.all()
+    for user in users:
+        to_return.append({'name': user.name, 'surname': user.surname})
+    return json.dumps(to_return)
+    
+@app.route('/sprint', methods=['GET', 'POST', 'PUT', 'DELETE'])
 @login_required
 def sprint():
     if request.method == 'GET':
@@ -156,10 +167,32 @@ def sprint():
                 sprint=current_sprint.id).order_by(Task.status)
         else:
             sprint_tasks = None
+        
+        users = User.query.all()
 
-        return render_template('sprint.html', current_sprint=current_sprint, sprint_task=sprint_tasks, isNotLogin=True)
+        return render_template('sprint.html', current_sprint=current_sprint, sprint_task=sprint_tasks, users=users, isNotLogin=True)
+    
     elif request.method == 'POST':
-        required_data = ['subtask_id', 'new_status']
+        required_data = ['name', 'description', 'task']
+        # Check data
+        for data in required_data:
+            if request.form.get(data) == None:
+                return 'missing ' + data, 400
+
+        s = SubTask(
+            name = request.form.get('name'),
+            description = request.form.get('description'),
+            assigned_to = request.form.get('assigned_to'),
+            task = request.form.get('task'),
+        )
+
+        db_session.add(s)
+        db_session.commit()
+
+        return str(s.id)
+    
+    elif request.method == 'PUT':
+        required_data = ['subtask_id']
         # Check data
         for data in required_data:
             if request.form.get(data) == None:
@@ -170,6 +203,16 @@ def sprint():
         db_session.commit()
         return "success", 200
 
+    elif request.method == 'DELETE':
+        required_data = ['subtask_id']
+        # Check data
+        for data in required_data:
+            if request.form.get(data) == None:
+                return 'missing ' + data, 400
+        
+        db_session.delete(SubTask.query.get(int(request.form.get('subtask_id'))))
+        db_session.commit()
+        return "success", 200
 
 @app.route('/backlog', methods=['POST', 'GET'])
 @login_required
