@@ -10,10 +10,8 @@ from sqlalchemy import desc, func, true
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from sqlalchemy.orm import aliased
-from sqlalchemy import func
-
 import json
-
+import os
 
 # Database
 from backend.database import db_session
@@ -107,6 +105,12 @@ def profile():
 
         if user_to_update.manager == None:
             user_to_update.manager = 0
+
+        # avatar
+        if request.files:
+            img = request.files['avatar']  
+            img.filename = 'profile' + str(user_to_update.id) + '.jpg'
+            img.save(os.path.join("static/img/users", img.filename))
 
         db_session.commit()
 

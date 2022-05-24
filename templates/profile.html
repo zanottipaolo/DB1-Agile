@@ -7,11 +7,11 @@
 
 {% block body %}
     <div class="w-full mt-10">
-        <h1 class="title-font text-center sm:text-4xl text-3xl mb-4">Profilo di {{ current_user.name }} {{ current_user.surname }}</h1>
+        <h1 class="title-font text-center sm:text-4xl text-3xl mb-4">{{ current_user.name }} {{ current_user.surname }}'s profile</h1>
 
         <div class="flex flex-col lg:flex-row mt-14 lg:mt-10 gap-4 mx-4">
             <!-- Update User info -->
-            <form method="POST" id="updateUserForm" action="profile" class="w-4/5 lg:w-96 text-center mx-auto">
+            <form method="POST" id="updateUserForm" action="profile" class="w-4/5 lg:w-96 text-center mx-auto" enctype="multipart/form-data">
                 <h2 class="sm:text-2xl text-xl mb-4">Information</h2>
 
                 {# If error --> show alert error #}
@@ -40,6 +40,19 @@
 
                 <!-- id user -->
                 <input type="hidden" value="{{ current_user.id }}" id="current_id" name="id" class="form-control block w-full px-4 py-2 text-lg font-normal bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:border-teal-500 focus:outline-none" />
+
+                <!-- Avatar input -->
+                <div class="avatar mb-6">
+                    <div class="w-24 rounded-full ring ring-primary ring-offset-1 hover:ring-offset-4 transition duration-300 ease-in-out">
+                        <label for="avatar_upload">
+                            <img src="/static/img/users/profile{{current_user.id}}.jpg" id="avatar_img" class="cursor-pointer">
+                        </label>
+                      
+                        <input type="file" id="avatar_upload" name="avatar" class="hidden" accept="image/png, image/jpeg, image/jpg"/>
+                    </img>
+                    </div>
+                  </div>
+                  
 
                 <!-- Name input -->
                 <div class="mb-6">
@@ -138,4 +151,8 @@
         </div>
         
     </div>
+{% endblock %}
+
+{% block link_footer %}
+<script src="{{ url_for('static', filename='script/profile.js') }}"></script>
 {% endblock %}
