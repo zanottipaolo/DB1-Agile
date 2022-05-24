@@ -55,12 +55,15 @@
                             <th onclick="openModal('{{developer.id}}', '{{(start_date + i*plus_one_day)}}')" class="hover:bg-primary hover:text-primary-content"></th>
                         {% endif %}
                     {% endfor %} -->
+                    
                     <th onclick="openModal('{{developer.id}}', '{{(start_date + i*plus_one_day)}}')" class="hover:bg-primary hover:text-primary-content">
-                        {% for all_work in all_work %}
-                            {% if all_work.developer == developer.id and all_work.timeStamp_start == (start_date + i*plus_one_day).strftime('%Y-%m-%d') %}
-                                {{ all_work.duration }}
+                        {% set total = namespace(value="")%}
+                        {% for work in all_work %}
+                            {% if work.developer == developer.id and work.timeStamp_start == (start_date + i*plus_one_day).strftime('%Y-%m-%d') %}
+                                {% set total.value = total.value | int + work.duration | int%}
                             {% endif %}  
-                        {% endfor %}    
+                        {% endfor %}
+                        {{total.value}}
                     </th>
                 {% endfor %}
             </tr>
