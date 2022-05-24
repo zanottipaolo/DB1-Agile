@@ -57,6 +57,7 @@ class SubTask(Base):
     name = Column(String(50))
     description = Column(Text())
     assigned_to = Column(Integer, ForeignKey('users.id'), nullable=True)
+    assigned_user = relationship("User")
     status = Column(String(15))  # TODO, INPROGESS, DONE
     task = Column(Integer, ForeignKey('tasks.id'))
     #task = relationship("Task", back_populates="subtasks")

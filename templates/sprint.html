@@ -1,12 +1,16 @@
-{% extends 'base.html' %} {% block title %}Sprint{% endblock %}
+{% extends 'base.html' %}
+{% block title %}Sprint{% endblock %}
+
 {% block head %}
 <!-- JQuery -->
 <script src="{{ url_for('static', filename='lib/jquery-3.6.0.js') }}"></script>
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 <script src="{{ url_for('static', filename='script/sprint.js') }}"></script>
 {% endblock %}
-{% block body %} {% if current_sprint != None %}
-<h1 class="font-bold leading-tight text-3xl mt-6 ml-6">
+
+{% block body %}
+{% if current_sprint != None %}
+<h1 class="font-bold leading-tight text-3xl ml-6 mt-6">
 	Active Sprint:
 	<span class="italic"
 		>{{ current_sprint.name }} ({{current_sprint.start_date}} /
@@ -16,9 +20,10 @@
 
 {% for task in sprint_task %}
 
-<div
-	class="collapse w-full overflow-visible collapse-arrow transform duration-300"
->
+	<div
+		class="collapse w-full overflow-visible collapse-arrow transform duration-300"
+	>
+
 	{% if loop.first%}
 	<input type="checkbox" checked />
 	{% else %}
@@ -27,47 +32,75 @@
 
 	<div class="collapse-title">
 		<!-- Task -->
-		<h2 class="font-medium leading-tight text-2xl mt-6 ml-6">
-			{% if task.status == 'TODO' %}
-			<span class="badge badge-error">{{task.status}}</span>
-			{% elif task.status == 'INPROGRESS' %}
-			<span class="badge badge-warning">{{task.status}}</span>
-			{% elif task.status == 'DONE' %}
-			<span class="badge badge-success">{{task.status}}</span>
-			{% endif %} {{ task.name }}:
+		<div style="display: grid; grid-template-columns: auto auto 7em; align-items: center;">
+			<div style="display: flex; flex-direction: column; margin-left: .5em;">
+				<span style="font-weight: bold; font-size: 1.3em;">{{ task.name }}</span>
+				<span>{{ task.description }}</span>
+			</div>
 
-			<span class="text-lg">{{ task.description }}</span>
+			<div style="display: flex; width: 100%; height: 100%; justify-content: right; align-items: center;">
+				{% if task.status == 'TODO' %}
+				<span class="badge badge-error">{{task.status}}</span>
+				{% elif task.status == 'INPROGRESS' %}
+				<span class="badge badge-warning">{{task.status}}</span>
+				{% elif task.status == 'DONE' %}
+				<span class="badge badge-success">{{task.status}}</span>
+				{% endif %}
+			</div>
+		</div>
 		</h2>
 	</div>
 
-	<div class="collapse-content">
-		{% if task.subtasks|length > 0 %}
-		<div class="flex flex-col lg:w-full lg:flex-row m-6 items-center mx-auto">
+	<!-- Subtasks -->
+	<div class="collapse-content" style="padding: 0 1.5em 0 1.5em">
+		<div class="flex flex-col lg:w-full lg:flex-row items-center mx-auto">
 			<!-- TODO -->
 			<div
 				class="flex flex-col w-full lg:w-1/3 h-64 bg-red-700 bg-opacity-25 rounded-box place-items-center m-4 overflow-auto"
-			>
+				>
 				<h3 style="padding: 10px; font-weight: bold; font-size: 1.2em">
 					TO DO
 				</h3>
+				<!-- Add subtask button -->
 				<div
-					id="task{{ loop.index }}-todo"
+						class="bg-base-100 p-5 rounded-box cursor-pointer w-4/5 text-center whitespace-nowrap"
+						style="
+							opacity: 0.7;
+							margin-bottom: 8px;
+							transition: .1s;
+							padding: 0
+						"
+						onmouseover="this.style.opacity=1"
+						onmouseleave="this.style.opacity=0.7"
+						>
+					<a href="#newSubtaskModal-{{task.id}}" style="display:block; padding: 10px;">
+						<button>
+							➕ Add Subtask
+						</button>
+					</a>
+				</div>
+
+				<!-- ⚠️ don't change id structure!, JQuery refercence! -->
+				<div
+					id="task{{ task.id }}-todo" 
 					status="TODO"
 					class="w-full h-full flex flex-col items-center gap-2"
 				>
-				{% for subtask in task.subtasks %}
-					{% if subtask.status == 'TODO' %}
-					<div
-						id="{{subtask.id}}"
-						class="bg-base-100 p-5 rounded-box cursor-pointer w-4/5 text-center whitespace-nowrap"
-					>
-						{{subtask.name}}
-					</div>
-					{% endif %}
-				{% endfor %}
+					{% for subtask in task.subtasks %}
+						{% if subtask.status == 'TODO' %}
+						<div
+							id="subtask-{{subtask.id}}"
+							class="bg-base-100 rounded-box cursor-pointer w-4/5 text-center whitespace-nowrap"
+						>
+							<a href="#subtaskDetailModal-{{subtask.id}}" style="display:block; padding: 20px">
+								<span>{{subtask.name}}</span>
+							</a>
+						</div>
+						{% endif %}
+					{% endfor %}
 				</div>
 			</div>
-			
+		
 			<!-- IN PROGRESS -->
 			<div
 				class="flex flex-col w-full lg:w-1/3 h-64 bg-yellow-700 bg-opacity-25 rounded-box place-items-center m-4 overflow-auto"
@@ -76,17 +109,19 @@
 				IN PROGRESS
 			</h1>
 				<div
-					id="task{{ loop.index }}-progress"
+					id="task{{ task.id }}-progress"
 					status="INPROGRESS"
 					class="w-full h-full flex flex-col items-center gap-2"
 				>
 				{% for subtask in task.subtasks %}
 					{% if subtask.status == 'INPROGRESS' %}
 					<div
-						id="{{subtask.id}}"
-						class="bg-base-100 p-5 rounded-box cursor-pointer w-4/5 text-center whitespace-nowrap"
+						id="subtask-{{subtask.id}}"
+						class="bg-base-100 rounded-box cursor-pointer w-4/5 text-center whitespace-nowrap"
 					>
-						{{subtask.name}}
+						<a href="#subtaskDetailModal-{{subtask.id}}" style="display:block; padding: 20px">
+							<span>{{subtask.name}}</span>
+						</a>
 					</div>
 					{% endif %}
 				{% endfor %}
@@ -99,36 +134,125 @@
 					DONE
 				</h3>
 				<div
-					id="task{{ loop.index }}-done"
+					id="task{{ task.id }}-done"
 					status="DONE"
 					class="w-full h-full flex flex-col items-center gap-2"
 				>
 				{% for subtask in task.subtasks %}
 					{% if subtask.status == 'DONE' %}
 					<div
-						id="{{subtask.id}}"
-						class="bg-base-100 p-5 rounded-box cursor-pointer w-4/5 text-center whitespace-nowrap"
+						id="subtask-{{subtask.id}}"
+						class="bg-base-100 rounded-box cursor-pointer w-4/5 text-center whitespace-nowrap"
 					>
-						{{subtask.name}}
+						<a href="#subtaskDetailModal-{{subtask.id}}" style="display:block; padding: 20px">
+							<span>{{subtask.name}}</span>
+						</a>
 					</div>
 					{% endif %}
 				{% endfor %}
 				</div>
 			</div>
-			</div>
-			{% else %}
-				<h1>Non ci sono ancora subtask</h1>
-			{% endif %}
 		</div>
+		</div>
+	</div>
+
+	<!-- MODALS SECTION -->
+
+	<!-- Subtask Detail Modal -->
+	<div id="subtaskDetailModals">
+
+	{% for subtask in task.subtasks %}
+	
+		<div class="modal" id="subtaskDetailModal-{{subtask.id}}">
+			<div
+				class="modal-box w-100 px-8"
+				style="overflow: visible;"
+				>
+					<a href="#" class="btn btn-sm btn-circle absolute btn-error right-2 top-2"
+					>✕</a
+				>
+				<h3 class="mb-2 font-bold text-lg">{{ subtask.name }}</h3>
+				<div style="display: flex; flex-direction: column; gap: 10px; height: 7em">
+					<span>{{ subtask.description }}</span>
+					<div>
+						<span class="badge badge-lg" style="font-weight: bold; padding: 5px;" >
+							{% if subtask.assigned_user != None %}
+								{{ subtask.assigned_user }}
+							{% else %}
+								Not assigned
+							{% endif %}
+						</span>
+						<div class="dropdown">
+							<label tabindex="0" class="btn m-1">Change</label>
+							<ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+								{% for user in users %}
+									<li><a>{{ user.name }} {{ user.surname }}</a></li>
+								{% endfor %}
+							</ul>
+						</div>
+					</div>
+				</div>
+				
+				<div class="mt-0 modal-action">
+					<button class="btn btn-warning" onclick="deleteSubtask({{ subtask.id }})">
+						Delete Subtask
+					</button>
+				</div>
+			</div>
+		</div>
+	
+	{% endfor %}
+</div>
+	<!-- Subtask Create Modal -->
+	<div class="modal" id="newSubtaskModal-{{task.id}}">
+		<form
+			class="modal-box w-100 px-8"
+			id="create-new-subtask-form-{{task.id}}"
+		>
+			<a href="#" class="btn btn-sm btn-circle absolute btn-error right-2 top-2"
+				>✕</a
+			>
+			<h3 class="mb-2 font-bold text-lg">New Subtask</h3>
+			<div class="mb-2 form-control w-full max-w-xs">
+				<input
+					type="text"
+					name="name"
+					required
+					placeholder="Subtask name"
+					class="input input-bordered w-full max-w-xs"
+				/>
+			</div>
+	
+			<div class="mb-2 form-control w-full max-w-xs">
+				<input
+					type="text"
+					name="description"
+					required
+					placeholder="Subtask description"
+					class="input input-bordered w-full max-w-xs"
+				/>
+			</div>
+	
+			<input type="hidden" name="task" value={{task.id}} />
+			<!-- WARNING ID DELL'Utente in sessione-->
+	
+			<div class="mt-0 modal-action">
+				<button class="btn btn-primary" name="create-new-task" onclick="createSubtask({{task.id}})">
+					Add Subtask
+				</button>
+			</div>
+		</form>
 	</div>
 
 	{% if not loop.last %}
 	<div class="divider"></div>
+	{% else %}
+	<div style="padding: 10px"></div>
 	{% endif %}
 
 	<script>
-		$("#task{{ loop.index }}-todo, #task{{ loop.index }}-progress, #task{{ loop.index }}-done").sortable({
-			connectWith: "#task{{ loop.index }}-todo, #task{{ loop.index }}-progress, #task{{ loop.index }}-done",
+		$("#task{{ task.id }}-todo, #task{{ task.id }}-progress, #task{{ task.id }}-done").sortable({
+			connectWith: "#task{{ task.id }}-todo, #task{{ task.id }}-progress, #task{{ task.id }}-done",
 			revert: true,
 			cursor: "move",
 			scrollSpeed: 5,
