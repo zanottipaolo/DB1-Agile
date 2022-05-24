@@ -6,10 +6,10 @@
 {% endblock %}
 
 {% block body %}
-<h1 class="title-font text-center sm:text-4xl text-3xl mb-4">Roadmap</h1>
+<h1 class="title-font text-center sm:text-4xl text-3xl mb-4 mt-5">Roadmap</h1>
 
 <div class="overflow-x-auto w-full">
-    <table class="table w-full">
+    <table class="table w-full m-4">
         <!-- head -->
         <thead>
             <tr>
@@ -19,9 +19,8 @@
                     </label>
                 </th>
                 {% for i in range(days) %}
-                    <th>{{ min.start_date + i*plus_one_day }}</th>
+                    <th>{{ min.start_date + i*plus_one_day + plus_one_day}}</th>
                 {% endfor %}
-                <th>{{max.end_date}}</th>
             </tr>
         </thead>
         <tbody>
@@ -34,14 +33,20 @@
                 </th>
 
                 {% for i in range(days) %}
-                <td>
-                    <button class="btn btn-primary w-32"></button>
+                <td class="p-0">
+                    {% if (sprint.start_date <= min.start_date + i*plus_one_day + plus_one_day) and (sprint.end_date >= min.start_date + i*plus_one_day + plus_one_day) %}
+                        {% if sprint.end_date ==  min.start_date + i*plus_one_day + plus_one_day%}
+                            <button class="btn-primary w-full rounded-r-lg">✅</button>
+                        {% else %}
+                            {% if loop.first %}
+                                <button class="btn-primary w-full rounded-l-lg">👁👄👁</button>
+                            {% else %}
+                                <button class="btn-primary w-full rounded-l-r-lg">👁👄👁</button>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
                 </td>
                 {% endfor %}
-
-                <td>
-                    end
-                </td>
             </tr>
             {% endfor %}
         </tbody>
@@ -55,9 +60,8 @@
                 </label>
             </th>
             {% for i in range(days) %}
-                <th>{{ min.start_date + i*plus_one_day }}</th>
+                <th>{{ min.start_date + i*plus_one_day + plus_one_day}}</th>
             {% endfor %}
-            <th>{{max.end_date}}</th>
         </tr>
       </tfoot>
       
