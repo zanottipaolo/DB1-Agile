@@ -10,6 +10,7 @@ from sqlalchemy import desc, func, true
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from sqlalchemy.orm import aliased
+from sqlalchemy import func
 
 # Database
 from backend.database import db_session
@@ -373,8 +374,13 @@ def epics():
 def roadmap():
     if request.method == 'GET':
         sprints = Sprint.query.all()
+        max = Sprint.query.filter_by().order_by(desc(Sprint.end_date)).first()
+        min = Sprint.query.filter_by().order_by(Sprint.start_date).first()
 
-        return render_template('roadmap.html', sprints=sprints, isNotLogin=True)
+        days = (max.end_date - min.start_date).days
+        plus_one_day = datetime.timedelta(days=1)
+
+        return render_template('roadmap.html', max=max, min=min, days=days, plus_one_day=plus_one_day, sprints=sprints, isNotLogin=True)
 
 
 @app.route('/timesheet', methods=['POST', 'GET'])

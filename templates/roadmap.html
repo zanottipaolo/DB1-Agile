@@ -6,10 +6,62 @@
 {% endblock %}
 
 {% block body %}
-<h1 class="title-font text-center sm:text-4xl text-3xl mb-4">Roadmap works!</h1>
+<h1 class="title-font text-center sm:text-4xl text-3xl mb-4">Roadmap</h1>
 
+<div class="overflow-x-auto w-full">
+    <table class="table w-full">
+        <!-- head -->
+        <thead>
+            <tr>
+                <th>
+                    <label>
+                        Sprint
+                    </label>
+                </th>
+                {% for i in range(days) %}
+                    <th>{{ min.start_date + i*plus_one_day }}</th>
+                {% endfor %}
+                <th>{{max.end_date}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sprint in sprints %}
+            <tr>
+                <th>
+                    <label>
+                        {{ sprint.name }}
+                    </label>
+                </th>
 
-{% for sprint in sprints %}
-<p>{{ sprint.name }} : {{ sprint.start_date }} / {{ sprint.end_date }}</p>
-{% endfor %}
+                {% for i in range(days) %}
+                <td>
+                    <button class="btn btn-primary w-32"></button>
+                </td>
+                {% endfor %}
+
+                <td>
+                    end
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+      <!-- foot -->
+      <tfoot>
+        <tr>
+            <th>
+                <label>
+                    Sprint
+                </label>
+            </th>
+            {% for i in range(days) %}
+                <th>{{ min.start_date + i*plus_one_day }}</th>
+            {% endfor %}
+            <th>{{max.end_date}}</th>
+        </tr>
+      </tfoot>
+      
+    </table>
+  </div>
+
 {% endblock %}
