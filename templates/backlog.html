@@ -48,7 +48,7 @@
                         {% for developer in developer %}
                             <div class="avatar">
                                 <div class="w-9">
-                                    <img src="static/img/users/{{ developer.url_profile_image }}.jpg"/>
+                                    <img src="static/img/users/{{ developer.url_profile_image }}.jpg" alt="profile image" onerror="this.src='/static/img/users/none.jpg'"/>
                                 </div>
                             </div>
                         {% endfor %}

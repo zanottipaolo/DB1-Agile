@@ -76,7 +76,7 @@
 							class="w-24 rounded-full m-5 ring ring-primary ring-offset-1 hover:ring-offset-4 transition duration-300 ease-in-out"
 						>
 							<a href="{{ url_for('profile') }}">
-								<img src="/static/img/users/profile{{current_user.id}}.jpg" />
+								<img src="/static/img/users/profile{{current_user.id}}.jpg" alt="Image profile" onerror="this.src='/static/img/users/none.jpg'"/>
 							</a>
 						</div>
 						<p class="flex items-center font-bold text-2xl whitespace-nowrap">
@@ -91,7 +91,6 @@
 						<li><a href="{{ url_for('epics') }}"> Epics</a></li>
 						<li><a href="{{ url_for('roadmap') }}">Roadmap</a></li>
 						<li><a href="{{ url_for('timesheet') }}"> Timesheet</a></li>
-						<li><a href="#">Statistics</a></li>
 					</ul>
 
 					<!-- Change Theme -->

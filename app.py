@@ -1,6 +1,7 @@
 from cProfile import label
 from datetime import date
 import datetime
+from pathlib import Path
 from time import strptime
 from webbrowser import get
 from flask import Flask, flash, redirect, render_template, request, url_for
@@ -120,6 +121,11 @@ def profile():
     elif request.method == 'POST' and 'deleteUser' in request.form:
         User.query.filter_by(id=request.form.get('id')).delete()
         db_session.commit()
+
+        # Delete avatar profile
+        profile = Path('static/img/users/profile' + request.form.get('id') + ".jpg")
+        if profile.is_file():
+            os.remove(profile)
 
         flash('User has been successfully deleted', 'success')
         return redirect('/')

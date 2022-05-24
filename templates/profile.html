@@ -45,7 +45,7 @@
                 <div class="avatar mb-6">
                     <div class="w-24 rounded-full ring ring-primary ring-offset-1 hover:ring-offset-4 transition duration-300 ease-in-out">
                         <label for="avatar_upload">
-                            <img src="/static/img/users/profile{{current_user.id}}.jpg" id="avatar_img" class="cursor-pointer">
+                            <img src="/static/img/users/profile{{current_user.id}}.jpg" id="avatar_img" class="cursor-pointer" alt="Profile image" onerror="this.src='/static/img/users/none.jpg'">
                         </label>
                       
                         <input type="file" id="avatar_upload" name="avatar" class="hidden" accept="image/png, image/jpeg, image/jpg"/>
