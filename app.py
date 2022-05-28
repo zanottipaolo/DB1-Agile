@@ -1,6 +1,7 @@
 from cProfile import label
 from datetime import date
 import datetime
+from pathlib import Path
 from time import strptime
 from webbrowser import get
 from flask import Flask, flash, redirect, render_template, request, url_for
@@ -10,9 +11,8 @@ from sqlalchemy import desc, func, true
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from sqlalchemy.orm import aliased
-
 import json
-
+import os
 
 # Database
 from backend.database import db_session
@@ -107,6 +107,12 @@ def profile():
         if user_to_update.manager == None:
             user_to_update.manager = 0
 
+        # avatar
+        if request.files:
+            img = request.files['avatar']  
+            img.filename = 'profile' + str(user_to_update.id) + '.jpg'
+            img.save(os.path.join("static/img/users", img.filename))
+
         db_session.commit()
 
         flash('User info updated!', 'success')
@@ -115,6 +121,11 @@ def profile():
     elif request.method == 'POST' and 'deleteUser' in request.form:
         User.query.filter_by(id=request.form.get('id')).delete()
         db_session.commit()
+
+        # Delete avatar profile
+        profile = Path('static/img/users/profile' + request.form.get('id') + ".jpg")
+        if profile.is_file():
+            os.remove(profile)
 
         flash('User has been successfully deleted', 'success')
         return redirect('/')
@@ -430,8 +441,13 @@ def epics():
 def roadmap():
     if request.method == 'GET':
         sprints = Sprint.query.all()
+        max = Sprint.query.filter_by().order_by(desc(Sprint.end_date)).first()
+        min = Sprint.query.filter_by().order_by(Sprint.start_date).first()
 
-        return render_template('roadmap.html', sprints=sprints, isNotLogin=True)
+        days = (max.end_date - min.start_date).days
+        plus_one_day = datetime.timedelta(days=1)
+
+        return render_template('roadmap.html', max=max, min=min, days=days, plus_one_day=plus_one_day, sprints=sprints, isNotLogin=True)
 
 
 @app.route('/timesheet', methods=['POST', 'GET'])
