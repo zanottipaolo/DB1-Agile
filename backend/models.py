@@ -71,6 +71,17 @@ class SubTask(Base):
 
     def __repr__(self):
         return f'< Subtask {self.name!r} >'
+    
+    # Serialization
+    def as_dict(self):
+        to_return = { c.name: getattr(self, c.name) for c in self.__table__.columns }
+        if self.assigned_user: 
+            to_return['assigned_user'] = {
+                'id': self.assigned_user.id,
+                'name': self.assigned_user.name,
+                'surname': self.assigned_user.surname,
+            }
+        return to_return
 
 
 class Epic(Base):
@@ -108,6 +119,7 @@ class User(UserMixin, Base):
 
     def __repr__(self):
         return f'< User {self.email!r} >'
+
 
 
 class Work(Base):

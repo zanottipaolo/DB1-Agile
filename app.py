@@ -146,14 +146,26 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-@app.route('/users', methods=['GET'])
+# Json view
+@app.route('/subtask-detail', methods=['GET'])
 @login_required
-def users():
-    to_return = []
+def subtaskDetail():
+    subtask_id = request.args.get('id', type=int)
+    if not subtask_id:
+        return 'missing parameter id', 400
+
+    to_return = {
+        'subtask': SubTask.query.get(subtask_id).as_dict(),
+        'available_users': []
+    }
     users = User.query.all()
     for user in users:
-        to_return.append({'name': user.name, 'surname': user.surname})
-    return json.dumps(to_return)
+        to_return['available_users'].append({
+            'id': user.id,
+            'name': user.name,
+            'surname': user.surname
+        })
+    return to_return
     
 @app.route('/sprint', methods=['GET', 'POST', 'PUT', 'DELETE'])
 @login_required
@@ -178,17 +190,17 @@ def sprint():
             if request.form.get(data) == None:
                 return 'missing ' + data, 400
 
-        s = SubTask(
+        subtask = SubTask(
             name = request.form.get('name'),
             description = request.form.get('description'),
             assigned_to = request.form.get('assigned_to'),
             task = request.form.get('task'),
         )
 
-        db_session.add(s)
+        db_session.add(subtask)
         db_session.commit()
 
-        return str(s.id)
+        return subtask.as_dict(), 201
     
     elif request.method == 'PUT':
         required_data = ['subtask_id']
@@ -196,11 +208,13 @@ def sprint():
         for data in required_data:
             if request.form.get(data) == None:
                 return 'missing ' + data, 400
-
+        
         subtask = SubTask.query.get(int(request.form.get('subtask_id')))
-        subtask.status = request.form.get('new_status')
+        for key in request.form.keys():
+            setattr(subtask, key, request.form.get(key))
+
         db_session.commit()
-        return "success", 200
+        return subtask.as_dict(), 200
 
     elif request.method == 'DELETE':
         required_data = ['subtask_id']

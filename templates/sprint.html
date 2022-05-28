@@ -8,6 +8,24 @@
 <script src="{{ url_for('static', filename='script/sprint.js') }}"></script>
 {% endblock %}
 
+<!-- subtask component -->
+{% macro subtaskComponent(subtask) -%}
+	<div
+		id="subtask-{{subtask.id}}"
+		class="bg-base-100 rounded-box cursor-pointer w-4/5 text-center whitespace-nowrap p-3"
+		style="display: grid; grid-template-columns: 1fr 3fr 1fr; align-items: center;"
+		>
+		<div></div>
+		<span style="padding: 0px 1em 0px 1em;">{{subtask.name}}</span>
+		<button
+				onclick="openSubtaskDetailModal({{ subtask.id }})"
+				class="p-2 bg-base-300 rounded-box"
+			>
+			<i class="fa-solid fa-ellipsis-vertical"></i>
+		</button>
+	</div>
+{%- endmacro %}
+
 {% block body %}
 {% if current_sprint != None %}
 <h1 class="font-bold leading-tight text-3xl ml-6 mt-6">
@@ -75,7 +93,7 @@
 						>
 					<a href="#newSubtaskModal-{{task.id}}" style="display:block; padding: 10px;">
 						<button>
-							➕ Add Subtask
+							<i class="fa-solid fa-plus"></i> Add Subtask
 						</button>
 					</a>
 				</div>
@@ -88,14 +106,7 @@
 				>
 					{% for subtask in task.subtasks %}
 						{% if subtask.status == 'TODO' %}
-						<div
-							id="subtask-{{subtask.id}}"
-							class="bg-base-100 rounded-box cursor-pointer w-4/5 text-center whitespace-nowrap"
-						>
-							<a href="#subtaskDetailModal-{{subtask.id}}" style="display:block; padding: 20px">
-								<span>{{subtask.name}}</span>
-							</a>
-						</div>
+							{{ subtaskComponent(subtask) }}
 						{% endif %}
 					{% endfor %}
 				</div>
@@ -115,14 +126,7 @@
 				>
 				{% for subtask in task.subtasks %}
 					{% if subtask.status == 'INPROGRESS' %}
-					<div
-						id="subtask-{{subtask.id}}"
-						class="bg-base-100 rounded-box cursor-pointer w-4/5 text-center whitespace-nowrap"
-					>
-						<a href="#subtaskDetailModal-{{subtask.id}}" style="display:block; padding: 20px">
-							<span>{{subtask.name}}</span>
-						</a>
-					</div>
+						{{ subtaskComponent(subtask) }}
 					{% endif %}
 				{% endfor %}
 				</div>
@@ -140,14 +144,7 @@
 				>
 				{% for subtask in task.subtasks %}
 					{% if subtask.status == 'DONE' %}
-					<div
-						id="subtask-{{subtask.id}}"
-						class="bg-base-100 rounded-box cursor-pointer w-4/5 text-center whitespace-nowrap"
-					>
-						<a href="#subtaskDetailModal-{{subtask.id}}" style="display:block; padding: 20px">
-							<span>{{subtask.name}}</span>
-						</a>
-					</div>
+						{{ subtaskComponent(subtask) }}
 					{% endif %}
 				{% endfor %}
 				</div>
@@ -159,50 +156,7 @@
 	<!-- MODALS SECTION -->
 
 	<!-- Subtask Detail Modal -->
-	<div id="subtaskDetailModals">
-
-	{% for subtask in task.subtasks %}
-	
-		<div class="modal" id="subtaskDetailModal-{{subtask.id}}">
-			<div
-				class="modal-box w-100 px-8"
-				style="overflow: visible;"
-				>
-					<a href="#" class="btn btn-sm btn-circle absolute btn-error right-2 top-2"
-					>✕</a
-				>
-				<h3 class="mb-2 font-bold text-lg">{{ subtask.name }}</h3>
-				<div style="display: flex; flex-direction: column; gap: 10px; height: 7em">
-					<span>{{ subtask.description }}</span>
-					<div>
-						<span class="badge badge-lg" style="font-weight: bold; padding: 5px;" >
-							{% if subtask.assigned_user != None %}
-								{{ subtask.assigned_user }}
-							{% else %}
-								Not assigned
-							{% endif %}
-						</span>
-						<div class="dropdown">
-							<label tabindex="0" class="btn m-1">Change</label>
-							<ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-								{% for user in users %}
-									<li><a>{{ user.name }} {{ user.surname }}</a></li>
-								{% endfor %}
-							</ul>
-						</div>
-					</div>
-				</div>
-				
-				<div class="mt-0 modal-action">
-					<button class="btn btn-warning" onclick="deleteSubtask({{ subtask.id }})">
-						Delete Subtask
-					</button>
-				</div>
-			</div>
-		</div>
-	
-	{% endfor %}
-</div>
+	<div id="subtaskDetailModals"></div>
 	<!-- Subtask Create Modal -->
 	<div class="modal" id="newSubtaskModal-{{task.id}}">
 		<form
