@@ -1,4 +1,5 @@
-# :construction: Work in progress :construction:
+# Web app Agile :calendar:
+Web app for project management that using agile Scrum methodology
 
 ### How to run
 
