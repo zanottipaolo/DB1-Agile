@@ -80,7 +80,8 @@
                                     {% else %}
                                     <img class="mx-2 flex justify-end inline-block align-middle h-8 w-8 rounded-full ring-2 ring-white" src="/static/img/users/none.jpg" alt=""/>
                                     {% endif %}
-                                    <span class="w-auto h-auto py-1 px-2 rounded bg-info text-info-content py-auto my-auto text-center inline-block align-middle">{{task.fibonacci_points}} FB</span>
+                                    <span id="currentFB{{task.id}}" class="w-auto h-auto py-1 px-2 rounded bg-info text-info-content py-auto my-auto text-center inline-block align-middle">{{task.fibonacci_points}} FB</span>
+                                    <script>convert_fibonacci({{task.fibonacci_points}}, {{task.id}})</script>
                                 </div>
                             </div>
                         </a>
@@ -130,7 +131,7 @@
             {% for task in backlog_task %}
                 <div draggable="true" ondragstart="drag(event, {{ task.id }}, 1)" class="p-2 mb-1 base-100 rounded bg-base-100 border-solid border-2 border-primary my-0" id="{{task.id}}">
                     <a href="#modalInfo{{task.id}}">
-                        <div class=" grid grid-cols-2" onload="convert_fibonacci({{task.fibonacci_points}}, {{task.id}})">
+                        <div class=" grid grid-cols-2">
                             <div class=" text-left align-middle">
                                 <span class="w-auto inline-block align-middle">
                                     <span class="w-auto h-auto py-1 px-2 rounded 
@@ -156,6 +157,7 @@
                                 <img class="mx-2 flex justify-end inline-block align-middle h-8 w-8 rounded-full ring-2 ring-white" src="/static/img/users/none.jpg" alt=""/>
                                 {% endif %}
                                 <span id="currentFB{{task.id}}" class="w-auto h-auto py-1 px-2 rounded bg-info text-info-content py-auto my-auto text-center inline-block align-middle">{{task.fibonacci_points}} FB</span>
+                                <script>convert_fibonacci({{task.fibonacci_points}}, {{task.id}})</script>
                             </div>
                         </div>
                     </a>

@@ -81,6 +81,7 @@ const updateTask = (task_id, new_status) => {
 };
 
 function convert_fibonacci(value, taskid) {
+    console.log("Start convertion");
     switch(value) {
         case 0:
             document.getElementById("currentFB" + taskid).innerHTML = "0 FB";
