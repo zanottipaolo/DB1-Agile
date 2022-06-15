@@ -71,8 +71,7 @@ def signup():
             flash('Email already exists')
             return redirect(url_for('signup'))
 
-        new_user = User(name=name, surname=surname, email=email, password=generate_password_hash(
-            password, method='sha256'), manager=manager)
+        new_user = User(name=name, surname=surname, email=email, password=generate_password_hash(password, method='sha256'), manager=manager)
 
         db_session.add(new_user)
         db_session.commit()
@@ -354,12 +353,14 @@ def backlog():
         return redirect('/backlog')
     if request.method == 'POST' and 'create-sprint' in request.form:
         app.logger.info("CREATE SPRINT")
-        date_start = datetime.date(2022, 6, 1)  # da modificare
-        date_end = datetime.date(2022, 6, 30)  # da modificare
-        new_sprint = Sprint(request.form.get('name'),
-                            date_start,
-                            date_end,
-                            1)
+
+        new_sprint = Sprint(
+            request.form.get('name'),
+            datetime.datetime.strptime(request.form.get('date_start'), '%Y-%m-%d').date(),
+            datetime.datetime.strptime(request.form.get('date_end'), '%Y-%m-%d').date(),
+            1
+        )
+        print(new_sprint)
         db_session.add(new_sprint)
         db_session.commit()
         return redirect('/backlog')
@@ -367,8 +368,8 @@ def backlog():
         app.logger.info("UPDATE SPRINT")
         current_sprint = Sprint.query.filter_by(is_active=1).one()
         current_sprint.name = request.form.get('name')
-        current_sprint.start_date = datetime.date(2022, 6, 1)  # da modificare
-        current_sprint.end_date = datetime.date(2022, 6, 30)  # da modificare
+        current_sprint.start_date = datetime.datetime.strptime(request.form.get('date_start'), '%Y-%m-%d').date()
+        current_sprint.end_date = datetime.datetime.strptime(request.form.get('date_end'), '%Y-%m-%d').date()
         db_session.commit()
         return redirect('/backlog')
     if request.method == 'POST' and 'create-new-epic' in request.form:
