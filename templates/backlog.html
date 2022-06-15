@@ -25,9 +25,6 @@
                     <p class="text-2xl p-4">Sprint</p>
                     <span class="hidden" id="idCurrentSprint">{{ current_sprint.id }}</span>
                 </div>
-                <div class="place-self-end items-center text-right inline-block align-middle">
-                    <p class="m-3">Total points: <span class="w-auto h-auto py-1 px-2 rounded bg-info text-info-content py-auto my-auto text-center inline-block align-middle">{{total_points_of_sprint}}</span></p>
-                </div>
             </div>
             <div class="p-4 mx-1 bg-base-200 rounded-lg" ondrop="drop_on_sprint(event)" ondragover="allowDrop(event)">
                 <div class="mb-2" style="display: flex; flex-direction: row; align-items: center;">
@@ -83,7 +80,8 @@
                                     {% else %}
                                     <img class="mx-2 flex justify-end inline-block align-middle h-8 w-8 rounded-full ring-2 ring-white" src="/static/img/users/none.jpg" alt=""/>
                                     {% endif %}
-                                    <span class="w-auto h-auto py-1 px-2 rounded bg-info text-info-content py-auto my-auto text-center inline-block align-middle">{{task.fibonacci_points}} FB</span>
+                                    <span id="currentFB{{task.id}}" class="w-auto h-auto py-1 px-2 rounded bg-info text-info-content py-auto my-auto text-center inline-block align-middle">{{task.fibonacci_points}} FB</span>
+                                    <script>convert_fibonacci({{task.fibonacci_points}}, {{task.id}})</script>
                                 </div>
                             </div>
                         </a>
@@ -158,7 +156,8 @@
                                 {% else %}
                                 <img class="mx-2 flex justify-end inline-block align-middle h-8 w-8 rounded-full ring-2 ring-white" src="/static/img/users/none.jpg" alt=""/>
                                 {% endif %}
-                                <span class="w-auto h-auto py-1 px-2 rounded bg-info text-info-content py-auto my-auto text-center inline-block align-middle">{{task.fibonacci_points}} FB</span>
+                                <span id="currentFB{{task.id}}" class="w-auto h-auto py-1 px-2 rounded bg-info text-info-content py-auto my-auto text-center inline-block align-middle">{{task.fibonacci_points}} FB</span>
+                                <script>convert_fibonacci({{task.fibonacci_points}}, {{task.id}})</script>
                             </div>
                         </div>
                     </a>
@@ -303,7 +302,7 @@
             <input type="text" name="description" required placeholder="Task description" class="input input-bordered w-full max-w-xs" />
         </div>
 
-        <input type="hidden" name="signaler" value="1"/> <!-- WARNING ID DELL'Utente in sessione-->
+        <input type="hidden" name="signaler" value="{{current_user.id}}"/> <!-- WARNING ID DELL'Utente in sessione-->
         
         <div class="m-2 form-control w-full max-w-xs">
             Fibonacci points:</p>

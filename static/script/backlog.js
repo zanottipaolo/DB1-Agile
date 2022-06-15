@@ -79,3 +79,37 @@ const updateTask = (task_id, new_status) => {
 		});
 	console.log(task_id, new_status);
 };
+
+function convert_fibonacci(value, taskid) {
+    console.log("Start convertion");
+    switch(value) {
+        case 0:
+            document.getElementById("currentFB" + taskid).innerHTML = "0 FB";
+        break;
+        case 1:
+            document.getElementById("currentFB" + taskid).innerHTML = "0.5 FB";
+        break;
+        case 2:
+            document.getElementById("currentFB" + taskid).innerHTML = "1 FB";
+        break;
+        case 3:
+            document.getElementById("currentFB" + taskid).innerHTML = "2 FB";
+        break;
+        case 4:
+            document.getElementById("currentFB" + taskid).innerHTML = "3 FB";
+        break;
+        case 5:
+            document.getElementById("currentFB" + taskid).innerHTML = "5 FB";
+        break;
+        case 6:
+            document.getElementById("currentFB" + taskid).innerHTML = "8 FB";
+        break;
+        case 7:
+            document.getElementById("currentFB" + taskid).innerHTML = "13 FB";
+        break;
+        case 8:
+            document.getElementById("currentFB" + taskid).innerHTML = "21 FB";
+        break;
+
+    }
+}
