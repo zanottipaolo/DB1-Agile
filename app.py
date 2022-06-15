@@ -109,7 +109,7 @@ def profile():
 
         # avatar
         if request.files:
-            img = request.files['avatar']  
+            img = request.files['avatar']
             img.filename = 'profile' + str(user_to_update.id) + '.jpg'
             img.save(os.path.join("static/img/users", img.filename))
 
@@ -123,7 +123,8 @@ def profile():
         db_session.commit()
 
         # Delete avatar profile
-        profile = Path('static/img/users/profile' + request.form.get('id') + ".jpg")
+        profile = Path('static/img/users/profile' +
+                       request.form.get('id') + ".jpg")
         if profile.is_file():
             os.remove(profile)
 
@@ -158,6 +159,8 @@ def logout():
     return redirect(url_for('login'))
 
 # Json view
+
+
 @app.route('/subtask-detail', methods=['GET'])
 @login_required
 def subtaskDetail():
@@ -177,7 +180,8 @@ def subtaskDetail():
             'surname': user.surname
         })
     return to_return
-    
+
+
 @app.route('/sprint', methods=['GET', 'POST', 'PUT', 'DELETE'])
 @login_required
 def sprint():
@@ -189,11 +193,11 @@ def sprint():
                 sprint=current_sprint.id).order_by(Task.status)
         else:
             sprint_tasks = None
-        
+
         users = User.query.all()
 
         return render_template('sprint.html', current_sprint=current_sprint, sprint_task=sprint_tasks, users=users, isNotLogin=True)
-    
+
     elif request.method == 'POST':
         required_data = ['name', 'description', 'task']
         # Check data
@@ -202,24 +206,24 @@ def sprint():
                 return 'missing ' + data, 400
 
         subtask = SubTask(
-            name = request.form.get('name'),
-            description = request.form.get('description'),
-            assigned_to = request.form.get('assigned_to'),
-            task = request.form.get('task'),
+            name=request.form.get('name'),
+            description=request.form.get('description'),
+            assigned_to=request.form.get('assigned_to'),
+            task=request.form.get('task'),
         )
 
         db_session.add(subtask)
         db_session.commit()
 
         return subtask.as_dict(), 201
-    
+
     elif request.method == 'PUT':
         required_data = ['subtask_id']
         # Check data
         for data in required_data:
             if request.form.get(data) == None:
                 return 'missing ' + data, 400
-        
+
         subtask = SubTask.query.get(int(request.form.get('subtask_id')))
         for key in request.form.keys():
             setattr(subtask, key, request.form.get(key))
@@ -233,10 +237,12 @@ def sprint():
         for data in required_data:
             if request.form.get(data) == None:
                 return 'missing ' + data, 400
-        
-        db_session.delete(SubTask.query.get(int(request.form.get('subtask_id'))))
+
+        db_session.delete(SubTask.query.get(
+            int(request.form.get('subtask_id'))))
         db_session.commit()
         return "success", 200
+
 
 @app.route('/backlog', methods=['POST', 'GET'])
 @login_required
@@ -297,7 +303,7 @@ def backlog():
                         None,                                   # sprint
                         0,                                      # monitorer
                         request.form.get('epic'),               # epic
-                        request.form.get('signaler'),           # signaler
+                        current_user.id,                        # signaler
                         request.form.get('fibonacci_points'),   # f. points
                         'TODO')                                 # status
         db_session.add(new_task)
